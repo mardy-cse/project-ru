@@ -1,10 +1,10 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SpeakerController;
+use App\Http\Controllers\SpeakersController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/speaker_content', [SpeakerController::class, 'showContent']);
+Route::get('/speaker_content', [SpeakersController::class, 'showContent']);
 
 Route::get('/', function () {
     return view('welcome');
