@@ -61,18 +61,60 @@ class SpeakersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+//    public function edit($id)
+// {
+//     $speaker = Speakers::findOrFail($id);
+//     return view('layouts.edit_speaker', compact('speaker'));
+// }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    // public function update(Request $request, string $id)
+    // {
+    //     //
+    // }
+
+
+    public function edit($id)
+{
+    $speaker = Speakers::findOrFail($id);
+    return view('layouts.edit_speaker', compact('speaker'));
+}
+
+public function update(Request $request, $id)
+{
+    $speaker = Speakers::findOrFail($id);
+    $validated = $request->validate([
+        'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:speakers,email,' . $speaker->id,
+        'phone' => 'required|string|max:20',
+        'designation' => 'required|string|max:255',
+        'gender' => 'required|in:male,female,other',
+        'organization' => 'required|string|max:255',
+        'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
+        'status' => 'required|in:active,inactive',
+        'link' => 'nullable|url|max:255',
+    ]);
+
+    // Upload new profile image
+    if ($request->hasFile('profile_image')) {
+        $imagePath = $request->file('profile_image')->store('public/speakers/profiles');
+        $validated['profile_image'] = basename($imagePath);
     }
+
+    // Upload new signature
+    if ($request->hasFile('signature')) {
+        $signaturePath = $request->file('signature')->store('public/speakers/signatures');
+        $validated['signature'] = basename($signaturePath);
+    }
+
+    $speaker->update($validated);
+
+    return redirect('/speaker_content')->with('success', 'Speaker updated successfully!');
+}
 
     /**
      * Remove the specified resource from storage.
@@ -92,6 +134,13 @@ class SpeakersController extends Controller
     {
         return view('layouts.add_speaker');
     }
+
+     public function showEditSpeakerForm()
+    {
+        return view('layouts.edit_speaker');
+    }
+
+    
 
     // app/Http/Controllers/SpeakerController.php
 

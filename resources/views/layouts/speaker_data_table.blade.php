@@ -28,9 +28,9 @@
                     @endif
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-primary me-1" onclick="editSpeaker({{ $speaker->id }})" title="Edit">
+                    <a class="btn btn-sm btn-primary me-1" title="Edit" href="{{ url('/speaker/' . $speaker->id . '/edit') }}">
                         <i class="fas fa-edit"></i> Edit
-                    </button>
+                    </a>
                     @if($speaker->status == 'active')
                         <a href="{{ url('/speaker/' . $speaker->id . '/toggle') }}" class="btn btn-sm btn-warning" title="Deactivate">
                             <i class="fas fa-ban"></i> Deactivate
