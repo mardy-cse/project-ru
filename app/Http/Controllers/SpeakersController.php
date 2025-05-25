@@ -45,71 +45,10 @@ class SpeakersController extends Controller
 
         Speakers::create($validated);
 
-        return redirect()->back()->with('success', 'Speaker added successfully!');
+        // return redirect()->back()->with('success', 'Speaker added successfully!');
+         return redirect('/speaker_content')->with('success', 'Speaker added successfully!');
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function create(Request $request)
-    // {
-    //     $speakers = new Speakers;
-    //     $speakers->name = $request->name;
-    // }
-
-    
-
-//     public function create(Request $request)
-// {
-//     // Validate the form input
-//     $validated = $request->validate([
-//         'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-//         'name' => 'required|string|max:255',
-//         'email' => 'required|email|unique:speakers,email',
-//         'phone' => 'required|string|max:20',
-//         'designation' => 'required|string|max:255',
-//         'experience_years' => 'required|integer|min:0|max:50',
-//         'total_projects' => 'nullable|integer|min:0',
-//         'status' => 'required|in:active,inactive,pending',
-//         // 'expertise' => 'required|string', // expected as comma-separated or JSON
-//         'bio' => 'nullable|string',
-//     ]);
-
-//     // Handle profile image upload
-//     $profileImagePath = null;
-//     if ($request->hasFile('profile_image')) {
-//         $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
-//     }
-
-//     // Create new speaker record
-//     $speaker = new Speakers;
-//     $speaker->profile_image = $profileImagePath;
-//     $speaker->name = $validated['name'];
-//     $speaker->email = $validated['email'];
-//     $speaker->phone = $validated['phone'];
-//     $speaker->designation = $validated['designation'];
-//     $speaker->experience_years = $validated['experience_years'];
-//     $speaker->total_projects = $validated['total_projects'] ?? 0;
-//     $speaker->status = $validated['status'];
-    
-//     // Store expertise as JSON if needed
-//     // $speaker->expertise = json_encode(explode(',', $validated['expertise'])); // expects comma-separated skills
-//     $speaker->bio = $validated['bio'] ?? null;
-
-//     $speaker->save();
-
-//     return redirect()->back()->with('success', 'Speaker added successfully.');
-// }
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
 
     /**
      * Display the specified resource.
@@ -145,7 +84,7 @@ class SpeakersController extends Controller
 
     public function showContent()
     {
-        $speakers = Speakers::all(); // Fetch all speakers from database
+        $speakers = Speakers::all();
         return view('layouts.speaker_content', compact('speakers'));
     }
 
@@ -153,6 +92,27 @@ class SpeakersController extends Controller
     {
         return view('layouts.add_speaker');
     }
+
+    // app/Http/Controllers/SpeakerController.php
+
+public function activate($id)
+{
+    $speaker = Speakers::findOrFail($id);
+    $speaker->status = 'active';
+    $speaker->save();
+
+    return response()->json(['success' => true, 'status' => 'active']);
+}
+
+public function deactivate($id)
+{
+    $speaker = Speakers::findOrFail($id);
+    $speaker->status = 'inactive';
+    $speaker->save();
+
+    return response()->json(['success' => true, 'status' => 'inactive']);
+}
+
 
     
 }
