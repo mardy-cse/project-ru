@@ -21,7 +21,7 @@ return new class extends Migration
         $table->unsignedTinyInteger('experience_years');
         $table->unsignedInteger('total_projects')->nullable();
         $table->enum('status', ['active', 'inactive', 'pending']);
-        $table->text('expertise'); // store as comma-separated string or consider JSON
+        $table->text('expertise');
         $table->text('bio')->nullable();
         $table->timestamps();
     });

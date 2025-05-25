@@ -12,20 +12,21 @@ class Speakers extends Model
     protected $fillable = [
         'name',
         'email',
-        'phone',
+        'phone', 
         'designation',
-        'experience_years',
-        'total_projects',
+        'profile_image',
+        'gender',
+        'organization',
+        'signature',
         'status',
-        'expertise',
-        'bio',
-        'profile_image'
+        'link',
     ];
 
     protected $casts = [
-        'expertise' => 'array',
-        'experience_years' => 'integer',
-        'total_projects' => 'integer',
+        // If you are using these:
+        // 'expertise' => 'array',
+        // 'experience_years' => 'integer',
+        // 'total_projects' => 'integer',
     ];
 
     public function getProfileImageUrlAttribute()
@@ -33,6 +34,14 @@ class Speakers extends Model
         if ($this->profile_image) {
             return asset('storage/' . $this->profile_image);
         }
-        return 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150';
+        return 'https://via.placeholder.com/70x70?text=Photo';
+    }
+
+    public function getSignatureUrlAttribute()
+    {
+        if ($this->signature) {
+            return asset('storage/' . $this->signature);
+        }
+        return 'https://via.placeholder.com/80x40?text=Sign';
     }
 }

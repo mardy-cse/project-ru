@@ -143,5 +143,10 @@ class SpeakersController extends Controller
         return view('layouts.speaker_content');
     }
 
+     public function showAddSpeakerForm()
+    {
+        return view('layouts.add_speaker');
+    }
+
     
 }

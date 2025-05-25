@@ -1,85 +1,48 @@
 @extends('dashboard')
 
 @section('content')
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="//cdn.datatables.net/2.3.1/css/dataTables.dataTables.min.css">
+
 <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
   <div class="max-w-7xl mx-auto">
-    
-    <!-- Header Section -->
-    <div class="flex justify-between items-center mb-8 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-      <div>
-        <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Speaker Management
-        </h1>
-        <p class="text-gray-600 mt-2 text-lg">Manage and organize your speakers efficiently</p>
-      </div>
-      <button class="px-8 py-3 rounded-xl flex items-center gap-3 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-black font-semibold border-2 border-gray-200 hover:border-gray-300" style="background-color: #DBF5D0;" onmouseover="this.style.backgroundColor='#c3e6b0'" onmouseout="this.style.backgroundColor='#DBF5D0'" onclick="openAddModal()">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-        </svg>
-        <span class="font-semibold">Add Speaker</span>
-      </button>
-    </div>
+
 
     <!-- Main Table Card -->
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-      <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
-        <h2 class="text-xl font-bold text-gray-900">All Speakers</h2>
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+  <div class="px-6 py-2 border-b border-gray-200 bg-green-200" style="background-color: green; color: white;">
+    <div class="flex justify-between items-center">
+      <!-- Left side: icon + title -->
+      <div class="flex items-center gap-2">
+        <!-- Hamburger icon -->
+        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: white;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <h4 class="text-xl font-bold text-gray-900" style="color:white">Speaker List</h4>
       </div>
+
+      <!-- Right side: button -->
+    <a href="/add_speaker" style="text-decoration: none;">
+  <button class="px-6 py-2 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-black font-semibold border-2 border-gray-300 hover:border-gray-400 bg-white">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+    </svg>
+    <span class="font-semibold">Add New</span>
+  </button>
+</a>
+
+    </div>
+  </div>
+</div>
+
+
       
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Speaker</th>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Expertise</th>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Experience</th>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <!-- Sample Speaker Row -->
-            <tr class="hover:bg-blue-50 transition-all duration-200">
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 h-14 w-14">
-                    <img class="h-14 w-14 rounded-full object-cover ring-4 ring-blue-100 shadow-lg" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Speaker">
-                  </div>
-                  <div class="ml-4">
-                    <div class="text-sm font-bold text-gray-900">John Doe</div>
-                    <div class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded-full inline-block">Senior Developer</div>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900 font-medium">john.doe@example.com</div>
-                <div class="text-sm text-gray-500">+880 1712-345678</div>
-              </td>
-              <td class="px-6 py-4">
-                <div class="flex flex-wrap gap-1">
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Laravel</span>
-                  <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Vue.js</span>
-                </div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <div class="text-sm text-gray-900 font-bold">5 Years</div>
-                <div class="text-xs text-gray-500">15+ Projects</div>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                  <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-                  Active
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <button class="text-indigo-600 hover:text-indigo-900 mr-3" onclick="viewSpeaker(1)">View</button>
-                <button class="text-blue-600 hover:text-blue-900 mr-3" onclick="editSpeaker(1)">Edit</button>
-                <button class="text-red-600 hover:text-red-900" onclick="deleteSpeaker(1)">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="overflow-x-auto p-6">
+        @include('layouts.speaker_data_table')
+        {{-- @include('layouts.add_speaker') --}}
       </div>
     </div>
   </div>
@@ -171,18 +134,6 @@
             </select>
           </div>
 
-          <!-- Expertise -->
-          {{-- <div class="md:col-span-2">
-            <label for="expertise" class="block text-sm font-medium text-gray-700 mb-3">Expertise/Skills <span class="text-red-500">*</span></label>
-            <div class="space-y-4">
-              <input type="text" id="expertiseInput" placeholder="Type skill and press Enter (e.g., Laravel, PHP, JavaScript)" class="w-full px-5 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
-              <div id="expertiseContainer" class="flex flex-wrap gap-3 min-h-[60px] p-4 border border-gray-300 rounded-lg bg-white">
-                <span class="text-sm text-gray-500 italic">Add skills by typing and pressing Enter</span>
-              </div>
-              <input type="hidden" id="expertise" name="expertise">
-            </div>
-          </div> --}}
-
           <!-- Bio -->
           <div class="md:col-span-2">
             <label for="bio" class="block text-sm font-medium text-gray-700 mb-3">Bio/Description</label>
@@ -192,23 +143,43 @@
         
         <!-- Form Footer with Submit Button -->
         <div class="mt-8 flex justify-end space-x-4 border-t pt-6">
-            <button type="button" onclick="closeAddModal()" class="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300 font-medium">
+          <button type="button" onclick="closeAddModal()" class="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300 font-medium">
             Cancel
           </button>
           
-          {{-- <button type="button" onclick="closeAddModal()" class="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300 font-medium">
-            Add Speaker
-          </button> --}}
           <button type="submit" class="px-6 py-3 rounded-lg border border-gray-300 text-white bg-blue-600 hover:bg-blue-700 transition-all font-medium">
-  Add Speaker
-</button>
+            Add Speaker
+          </button>
         </div>
       </form>
     </div>
   </div>
 </div>
 
+<!-- DataTables JavaScript -->
+<script src="//cdn.datatables.net/2.3.1/js/dataTables.min.js"></script>
+
 <script>
+// Initialize DataTable
+$(document).ready(function() {
+    let table = new DataTable('#myTable', {
+        responsive: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        language: {
+            search: "Search speakers:",
+            lengthMenu: "Show _MENU_ speakers per page",
+            info: "Showing _START_ to _END_ of _TOTAL_ speakers",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "Next",
+                previous: "Previous"
+            }
+        }
+    });
+});
+
 function openAddModal() {
     document.getElementById('addSpeakerModal').classList.remove('hidden');
 }
@@ -244,43 +215,5 @@ document.getElementById('profile_image').addEventListener('change', function(e) 
         reader.readAsDataURL(file);
     }
 });
-
-// Expertise tags functionality
-document.getElementById('expertiseInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        const skill = this.value.trim();
-        if (skill) {
-            addSkillTag(skill);
-            this.value = '';
-        }
-    }
-});
-
-function addSkillTag(skill) {
-    const container = document.getElementById('expertiseContainer');
-    const italicText = container.querySelector('span.text-gray-500');
-    if (italicText) italicText.remove();
-    
-    const tag = document.createElement('span');
-    tag.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800';
-    tag.textContent = skill;
-    
-    const removeBtn = document.createElement('button');
-    removeBtn.className = 'ml-1.5 text-blue-600 hover:text-blue-900';
-    removeBtn.innerHTML = '&times;';
-    removeBtn.onclick = function() { tag.remove(); updateExpertiseInput(); };
-    
-    tag.appendChild(removeBtn);
-    container.appendChild(tag);
-    updateExpertiseInput();
-}
-
-function updateExpertiseInput() {
-    const container = document.getElementById('expertiseContainer');
-    const tags = container.querySelectorAll('span:not(.text-gray-500)');
-    const skills = Array.from(tags).map(tag => tag.textContent.replace('×', '').trim());
-    document.getElementById('expertise').value = skills.join(',');
-}
 </script>
 @endsection
