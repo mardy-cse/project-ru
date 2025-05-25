@@ -1,52 +1,287 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        <title>Register</title>
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+        <style>
+            :root {
+                --primary: #4f46e5;
+                --primary-light: #6366f1;
+                --secondary: #10b981;
+                --dark: #1e293b;
+                --light: #f8fafc;
+                --error: #ef4444;
+                --success: #10b981;
+            }
+            
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            
+            body {
+                font-family: 'Poppins', 'Instrument Sans', sans-serif;
+                background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                padding: 20px;
+            }
+            
+            .register-container {
+                background-color: white;
+                padding: 2.5rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+                width: 100%;
+                max-width: 480px;
+                position: relative;
+                overflow: hidden;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            
+            .register-container:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            }
+            
+            .register-container::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 5px;
+                background: linear-gradient(90deg, var(--primary), var(--secondary));
+            }
+            
+            .register-title {
+                text-align: center;
+                font-size: 1.75rem;
+                font-weight: 600;
+                margin-bottom: 2rem;
+                color: var(--primary);
+                position: relative;
+            }
+            
+            .register-title::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 50px;
+                height: 3px;
+                background: linear-gradient(90deg, var(--primary), var(--secondary));
+                border-radius: 3px;
+            }
+            
+            .form-group {
+                margin-bottom: 1.75rem;
+                position: relative;
+            }
+            
+            label {
+                display: block;
+                margin-bottom: 0.75rem;
+                font-weight: 500;
+                color: var(--dark);
+                font-size: 0.9375rem;
+            }
+            
+            input {
+                width: 100%;
+                padding: 0.875rem 1rem;
+                border: 2px solid #e2e8f0;
+                border-radius: 8px;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+                background-color: var(--light);
+            }
+            
+            input:focus {
+                outline: none;
+                border-color: var(--primary-light);
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            }
+            
+            .register-btn {
+                width: 100%;
+                padding: 0.875rem;
+                background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-top: 1rem;
+                box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+            }
+            
+            .register-btn:hover {
+                background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(79, 70, 229, 0.25);
+            }
+            
+            .register-btn:active {
+                transform: translateY(0);
+            }
+            
+            .links-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 1.5rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid #e2e8f0;
+            }
+            
+            .auth-link {
+                color: #64748b;
+                text-decoration: none;
+                font-size: 0.875rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+            }
+            
+            .auth-link:hover {
+                color: var(--primary);
+                transform: translateX(2px);
+            }
+            
+            .auth-link svg {
+                width: 14px;
+                height: 14px;
+                margin-right: 6px;
+            }
+            
+            .error-message {
+                color: var(--error);
+                font-size: 0.8125rem;
+                margin-top: 0.5rem;
+                display: flex;
+                align-items: center;
+            }
+            
+            .error-message svg {
+                width: 14px;
+                height: 14px;
+                margin-right: 4px;
+            }
+            
+            .branding {
+                text-align: center;
+                margin-top: 2rem;
+                font-size: 0.875rem;
+                color: #64748b;
+            }
+            
+            .branding a {
+                color: var(--primary);
+                text-decoration: none;
+                font-weight: 600;
+            }
+            
+            @media (max-width: 480px) {
+                .register-container {
+                    padding: 1.75rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="register-container">
+            <h1 class="register-title">Create Account</h1>
+            
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" placeholder="John Doe">
+                    @error('name')
+                        <span class="error-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
+                <!-- Email Address -->
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email" placeholder="john@example.com">
+                    @error('email')
+                        <span class="error-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" required autocomplete="new-password" placeholder="••••••••">
+                    @error('password')
+                        <span class="error-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="••••••••">
+                    @error('password_confirmation')
+                        <span class="error-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+
+                <button type="submit" class="register-btn">Register</button>
+
+                <div class="links-container">
+                    <a href="{{ route('login') }}" class="auth-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        </svg>
+                        Already registered?
+                    </a>
+                </div>
+            </form>
+            
+            <div class="branding">
+                © {{ date('Y') }} Mardy. All rights reserved.
+            </div>
         </div>
-
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </body>
+</html>
