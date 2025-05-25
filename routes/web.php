@@ -15,10 +15,6 @@ Route::get('/dashboardcontent', function () {
     return view('layouts.dashboardcontent');
 });
 
-// Route::get('/speaker_content', function () {
-//     return view('layouts.speaker_content');
-// });
-
 
 
 Route::get('/dashboard', function () {
@@ -33,6 +29,14 @@ Route::middleware('auth')->group(function () {
 
 //  Route::post('/speakers/create', [SpeakersController::class, 'create'])->name('speakers.create');
 Route::post('/speakers', [SpeakersController::class, 'store'])->name('speakers.store');
+
+
+
+Route::post('/speakers/{id}/activate', [SpeakersController::class, 'activate'])->name('speakers.activate');
+Route::post('/speakers/{id}/deactivate', [SpeakersController::class, 'deactivate'])->name('speakers.deactivate');
+
+Route::get('/speaker/{id}/toggle', [SpeakersController::class, 'toggleStatus']);
+
 
 
 

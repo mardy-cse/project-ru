@@ -114,5 +114,22 @@ public function deactivate($id)
 }
 
 
+public function toggleStatus($id)
+{
+    $speaker = Speakers::findOrFail($id);
+
+    if ($speaker->status === 'active') {
+        $speaker->status = 'inactive';
+    } else {
+        $speaker->status = 'active';
+    }
+
+    $speaker->save();
+
+    return redirect()->back()->with('success', 'Speaker status updated successfully.');
+}
+
+
+
     
 }
