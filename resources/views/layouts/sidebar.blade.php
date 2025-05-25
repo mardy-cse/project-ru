@@ -2,7 +2,8 @@
       <div class="menu-conteiner h-full overflow-y-auto font-normal">
         <nav class="relative">
           <div class="relative block w-full">
-            <a class="dash-sb-menu-item active w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/dashboardcontent">
+
+            <a class="dash-sb-menu-item {{ request()->is('dashboardcontent') || request()->is('dashboard') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/dashboardcontent">
 
             
               <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
@@ -23,7 +24,8 @@
 
 
            <div class="relative block w-full">
-            <a class="dash-sb-menu-item w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/speaker_content">
+
+            <a class="dash-sb-menu-item {{ request()->is('speaker_content') || request()->is('speakers*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/speaker_content">
               <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
                 <svg class="sb-menu-icon h-[50px] w-[50px]" xmlns="http://www.w3.org/2000/svg" width="94" height="75" viewBox="0 0 94 75" fill="none">
                   <g clip-path="url(#clip0_6_47)">
@@ -42,7 +44,8 @@
 
 
           <div class="relative block w-full">
-            <a class="dash-sb-menu-item w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="dash-training-course.html">
+
+            <a class="dash-sb-menu-item {{ request()->is('dash-training-course*') || request()->is('training*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="dash-training-course.html">
               <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
                 <svg class="sb-menu-icon h-[50px] w-[50px]" xmlns="http://www.w3.org/2000/svg" width="94" height="75" viewBox="0 0 94 75" fill="none">
                   <g clip-path="url(#clip0_6_47)">
