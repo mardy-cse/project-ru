@@ -17,31 +17,36 @@ class SpeakersController extends Controller
 
 
     public function store(Request $request)
-{
+    {
+        $validated = $request->validate([
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:speakers,email',
+            'phone' => 'required|string|max:20',
+            'designation' => 'required|string|max:255',
+            'gender' => 'required|in:male,female,other',
+            'organization' => 'required|string|max:255',
+            'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
+            'status' => 'required|in:active,inactive',
+            'link' => 'nullable|url|max:255',
+        ]);
 
-    $validated = $request->validate([
-        'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:speakers,email',
-        'phone' => 'required|string|max:20',
-        'designation' => 'required|string|max:255',
-        'experience_years' => 'required|integer|min:0',
-        'total_projects' => 'nullable|integer|min:0',
-        'status' => 'required|in:active,inactive,pending',
-        // 'expertise' => 'required|string',
-        'bio' => 'nullable|string',
-    ]);
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('public/speakers/profiles');
+            $validated['profile_image'] = basename($imagePath);
+        }
 
-    // Handle profile image upload
-    if ($request->hasFile('profile_image')) {
-        $imagePath = $request->file('profile_image')->store('public/speakers');
-        $validated['profile_image'] = basename($imagePath);
+        // Handle signature upload
+        if ($request->hasFile('signature')) {
+            $signaturePath = $request->file('signature')->store('public/speakers/signatures');
+            $validated['signature'] = basename($signaturePath);
+        }
+
+        Speakers::create($validated);
+
+        return redirect()->back()->with('success', 'Speaker added successfully!');
     }
-
-    Speakers::create($validated);
-
-    return redirect()->back()->with('success', 'Speaker added successfully!');
-}
 
 
     /**

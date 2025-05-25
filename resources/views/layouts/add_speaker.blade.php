@@ -21,6 +21,10 @@
   .required {
     color: red;
   }
+  .is-invalid {
+    border-color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+  }
 </style>
 
 <div class=" border border-success rounded" style="margin: 20px">
@@ -28,62 +32,93 @@
     Add Speaker Information
   </div>
 
-  <form class="p-4">
+  <!-- Display Validation Errors -->
+
+
+  <form class="p-4" enctype="multipart/form-data" method="POST" action="{{ route('speakers.store') }}">
+    @csrf
     <div class="row g-3">
       <!-- Left Column -->
       <div class="col-md-6">
         <label class="form-label">Name <span class="required">*</span></label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Enter full name">
+
+
+          <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" placeholder="Enter full name" value="{{ old('name') }}">
           <span class="input-group-text">
             <div class="form-check form-switch m-0">
               <input class="form-check-input" type="checkbox" checked>
             </div>
           </span>
         </div>
+        @error('name')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
 
         <label class="form-label mt-3">Mobile No <span class="required">*</span></label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Enter mobile number">
+
+
+          <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" placeholder="Enter mobile number" value="{{ old('phone') }}">
           <span class="input-group-text">
             <div class="form-check form-switch m-0">
               <input class="form-check-input" type="checkbox" checked>
             </div>
           </span>
         </div>
+        @error('phone')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
 
         <label class="form-label mt-3">Designation <span class="required">*</span></label>
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Enter designation">
+
+
+          <input type="text" name="designation" class="form-control @error('designation') is-invalid @enderror" placeholder="Enter designation" value="{{ old('designation') }}">
           <span class="input-group-text">
             <div class="form-check form-switch m-0">
               <input class="form-check-input" type="checkbox" checked>
             </div>
           </span>
         </div>
+        @error('designation')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
 
         <label class="form-label mt-3">Profile Image <span class="required">*</span></label>
         <div class="d-flex align-items-center">
-          <input type="file" class="form-control" accept=".jpg,.jpeg">
+
+
+          <input type="file" name="profile_image" class="form-control @error('profile_image') is-invalid @enderror" accept=".jpg,.jpeg">
           <img src="https://via.placeholder.com/70x70?text=Photo" alt="Profile" class="preview-img">
           <div class="form-check form-switch ms-3">
             <input class="form-check-input" type="checkbox" checked>
           </div>
         </div>
         <small class="text-danger">[File Format: *.jpg/.jpeg]</small>
+        @error('profile_image')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
 
         <div class="mt-4">
           <label class="form-label">Status <span class="required">*</span>:</label>
           <div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="status" id="active" checked>
+
+
+              <input class="form-check-input @error('status') is-invalid @enderror" type="radio" name="status" id="active" value="active" {{ old('status', 'active') == 'active' ? 'checked' : '' }}>
               <label class="form-check-label" for="active">Active</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="status" id="inactive">
+
+
+              <input class="form-check-input @error('status') is-invalid @enderror" type="radio" name="status" id="inactive" value="inactive" {{ old('status') == 'inactive' ? 'checked' : '' }}>
               <label class="form-check-label" for="inactive">Inactive</label>
             </div>
           </div>
+          @error('status')
+            <div class="text-danger small">{{ $message }}</div>
+          @enderror
         </div>
       </div>
 
@@ -91,28 +126,48 @@
       <div class="col-md-6">
         <label class="form-label">Email <span class="required">*</span></label>
         <div class="input-group">
-          <input type="email" class="form-control" placeholder="Enter email address">
+
+
+          <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="Enter email address" value="{{ old('email') }}">
           <span class="input-group-text">
             <div class="form-check form-switch m-0">
               <input class="form-check-input" type="checkbox" checked>
             </div>
           </span>
         </div>
+        @error('email')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
 
         <label class="form-label mt-3">Gender <span class="required">*</span></label>
-        <select class="form-select">
+
+
+        <select name="gender" class="form-select @error('gender') is-invalid @enderror">
           <option value="" selected>Select Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
+
+
+
+          <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+          <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+          <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
         </select>
+        @error('gender')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
 
         <label class="form-label mt-3">Organization <span class="required">*</span></label>
-        <input type="text" class="form-control" placeholder="Enter organization name">
+
+
+        <input type="text" name="organization" class="form-control @error('organization') is-invalid @enderror" placeholder="Enter organization name" value="{{ old('organization') }}">
+        @error('organization')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
 
         <label class="form-label mt-3">Signature <span class="required">*</span></label>
         <div class="d-flex align-items-center">
-          <input type="file" class="form-control" accept=".jpg,.jpeg,.png">
+
+
+          <input type="file" name="signature" class="form-control @error('signature') is-invalid @enderror" accept=".jpg,.jpeg,.png">
           <img src="https://via.placeholder.com/80x40?text=Sign" alt="Signature" class="preview-img ms-2">
           <div class="form-check form-switch ms-3">
             <input class="form-check-input" type="checkbox" checked>
@@ -123,16 +178,24 @@
           [File Size: <100KB]<br>
           [File Dimension: Height: 80, Width: 300]
         </small>
+        @error('signature')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
 
         <label class="form-label mt-3">Link</label>
         <div class="input-group">
-          <input type="url" class="form-control" placeholder="Enter website/social media link">
+
+
+          <input type="url" name="link" class="form-control @error('link') is-invalid @enderror" placeholder="Enter website/social media link" value="{{ old('link') }}">
           <span class="input-group-text">
             <div class="form-check form-switch m-0">
               <input class="form-check-input" type="checkbox" checked>
             </div>
           </span>
         </div>
+        @error('link')
+          <div class="text-danger small">{{ $message }}</div>
+        @enderror
       </div>
     </div>
 
