@@ -145,7 +145,8 @@ class SpeakersController extends Controller
 
     public function showContent()
     {
-        return view('layouts.speaker_content');
+        $speakers = Speakers::all(); // Fetch all speakers from database
+        return view('layouts.speaker_content', compact('speakers'));
     }
 
      public function showAddSpeakerForm()
