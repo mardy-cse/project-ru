@@ -30,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+//  Route::post('/speakers/create', [SpeakersController::class, 'create'])->name('speakers.create');
+Route::post('/speakers', [SpeakersController::class, 'store'])->name('speakers.store');
+
+
 
 
 

@@ -106,7 +106,7 @@
     <!-- Modal Body (Scrollable) with Extra Padding -->
     <div class="p-8 overflow-y-auto max-h-[calc(90vh-250px)]">
       <!-- FORM STARTS HERE with Padding -->
-      <form id="addSpeakerForm" enctype="multipart/form-data" method="POST" action="#" class="p-6 bg-gray-50 rounded-xl">
+      <form id="addSpeakerForm" enctype="multipart/form-data" method="POST" action="{{ route('speakers.store') }}" class="p-6 bg-gray-50 rounded-xl">
         @csrf
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           
@@ -172,7 +172,7 @@
           </div>
 
           <!-- Expertise -->
-          <div class="md:col-span-2">
+          {{-- <div class="md:col-span-2">
             <label for="expertise" class="block text-sm font-medium text-gray-700 mb-3">Expertise/Skills <span class="text-red-500">*</span></label>
             <div class="space-y-4">
               <input type="text" id="expertiseInput" placeholder="Type skill and press Enter (e.g., Laravel, PHP, JavaScript)" class="w-full px-5 py-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
@@ -181,7 +181,7 @@
               </div>
               <input type="hidden" id="expertise" name="expertise">
             </div>
-          </div>
+          </div> --}}
 
           <!-- Bio -->
           <div class="md:col-span-2">
@@ -196,9 +196,12 @@
             Cancel
           </button>
           
-          <button type="button" onclick="closeAddModal()" class="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300 font-medium">
+          {{-- <button type="button" onclick="closeAddModal()" class="px-6 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-all duration-300 font-medium">
             Add Speaker
-          </button>
+          </button> --}}
+          <button type="submit" class="px-6 py-3 rounded-lg border border-gray-300 text-white bg-blue-600 hover:bg-blue-700 transition-all font-medium">
+  Add Speaker
+</button>
         </div>
       </form>
     </div>
