@@ -52,7 +52,7 @@
 
         <label class="form-label mt-3">Profile Image</label>
         <input type="file" name="profile_image" id="profileImage" class="form-control" accept=".jpg,.jpeg">
-        <img src="{{ asset($speaker->profile_image ?? 'https://via.placeholder.com/70x70?text=Photo') }}" alt="Profile" class="preview-img" id="profilePreview">
+        <img src="{{ $speaker->profile_image ? asset('storage/' . $speaker->profile_image) : 'https://via.placeholder.com/70x70?text=Photo' }}" alt="Profile" class="preview-img" id="profilePreview">
         <small class="text-danger">[File Format: *.jpg/.jpeg]</small>
 
         <div class="mt-4">
@@ -92,7 +92,8 @@
 
         <label class="form-label mt-3">Signature</label>
         <input type="file" name="signature" id="signatureFile" class="form-control" accept=".jpg,.jpeg,.png">
-        <img src="{{ asset($speaker->signature ?? 'https://via.placeholder.com/300x80?text=Sign') }}" alt="Signature" class="signature-img" id="signaturePreview">
+        {{-- <img src="{{ asset($speaker->signature ?? 'https://via.placeholder.com/300x80?text=Sign') }}" alt="Signature" class="signature-img" id="signaturePreview"> --}}
+         <img src="{{ $speaker->signature ? asset('storage/' . $speaker->signature) : 'https://via.placeholder.com/70x70?text=Photo' }}" alt="Profile" class="preview-img" id="profilePreview">
         <small class="text-danger d-block">
           [File Format: *.jpg/.jpeg/.png]<br>
           [File Size: &lt;100KB]<br>

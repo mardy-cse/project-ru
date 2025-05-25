@@ -31,17 +31,27 @@ class SpeakersController extends Controller
             'link' => 'nullable|url|max:255',
         ]);
 
-        // Handle profile image upload
-        if ($request->hasFile('profile_image')) {
-            $imagePath = $request->file('profile_image')->store('public/speakers/profiles');
-            $validated['profile_image'] = basename($imagePath);
-        }
+        // // Handle profile image upload
+        // if ($request->hasFile('profile_image')) {
+        //     $imagePath = $request->file('profile_image')->store('public/speakers/profiles');
+        //     $validated['profile_image'] = basename($imagePath);
+        // }
 
-        // Handle signature upload
-        if ($request->hasFile('signature')) {
-            $signaturePath = $request->file('signature')->store('public/speakers/signatures');
-            $validated['signature'] = basename($signaturePath);
-        }
+        // // Handle signature upload
+        // if ($request->hasFile('signature')) {
+        //     $signaturePath = $request->file('signature')->store('public/speakers/signatures');
+        //     $validated['signature'] = basename($signaturePath);
+        // }
+        if ($request->hasFile('profile_image')) {
+    $imagePath = $request->file('profile_image')->store('speakers/profiles', 'public');
+    $validated['profile_image'] = $imagePath; // or basename($imagePath) if you prefer
+}
+
+if ($request->hasFile('signature')) {
+    $signaturePath = $request->file('signature')->store('speakers/signatures', 'public');
+    $validated['signature'] = $signaturePath; // or basename($signaturePath)
+}
+
 
         Speakers::create($validated);
 
