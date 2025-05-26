@@ -141,7 +141,7 @@
         </div>
         
         <!-- Menu Items -->
-        <div class="py-1">
+        {{-- <div class="py-1">
           <a href="#" 
              class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#DBF5D0] hover:text-[#000B8C] transition-colors">
             <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +163,22 @@
               Logout
             </button>
           </form>
-        </div>
+        </div> --}}
+
+        <x-dropdown-link :href="route('profile.edit')">
+                            {{ __('Profile') }}
+                        </x-dropdown-link>
+
+
+         <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+
+                            <x-dropdown-link :href="route('logout')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('Log Out') }}
+                            </x-dropdown-link>
+                        </form>
         
       </div>
     </div>

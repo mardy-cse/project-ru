@@ -106,7 +106,7 @@
     </div>
 
     <div class="mt-4 d-flex justify-content-between">
-      <a href="/speaker_content" class="btn btn-secondary">✖ Close</a>
+      <a href="/speaker/list" class="btn btn-secondary">✖ Close</a>
       <button type="submit" class="btn btn-success">Update</button>
     </div>
   </form>

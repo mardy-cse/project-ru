@@ -115,10 +115,10 @@
 
     <!-- Action Buttons -->
     <div class="mt-4 d-flex justify-content-between">
-      <a href="/speaker_content">
+      <a href="/speaker/list">
         <button type="button" class="btn btn-secondary">✖ Close</button>
       </a>
-      <a href="/speaker_content">
+      <a href="/speaker/list">
       <button type="submit" class="btn btn-success">Save</button>
       </a>
       

@@ -25,7 +25,7 @@
 
            <div class="relative block w-full">
 
-            <a class="dash-sb-menu-item {{ request()->is('speaker_content') || request()->is('speakers*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/speaker_content">
+            <a class="dash-sb-menu-item {{ request()->is('speaker_content') || request()->is('add_speaker') || request()->is('speaker/*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/speaker/list">
               <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
                 <svg class="sb-menu-icon h-[50px] w-[50px]" xmlns="http://www.w3.org/2000/svg" width="94" height="75" viewBox="0 0 94 75" fill="none">
                   <g clip-path="url(#clip0_6_47)">

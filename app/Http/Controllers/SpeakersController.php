@@ -56,7 +56,7 @@ if ($request->hasFile('signature')) {
         Speakers::create($validated);
 
         // return redirect()->back()->with('success', 'Speaker added successfully!');
-         return redirect('/speaker_content')->with('success', 'Speaker added successfully!');
+         return redirect('speaker/list')->with('success', 'Speaker added successfully!');
     }
 
 
@@ -123,7 +123,7 @@ public function update(Request $request, $id)
 
     $speaker->update($validated);
 
-    return redirect('/speaker_content')->with('success', 'Speaker updated successfully!');
+    return redirect('speaker/list')->with('success', 'Speaker updated successfully!');
 }
 
     /**

@@ -4,8 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpeakersController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/speaker_content', [SpeakersController::class, 'showContent']);
-Route::get('/add_speaker', [SpeakersController::class, 'showAddSpeakerForm']);
+Route::get('/speaker/list', [SpeakersController::class, 'showContent']);
+Route::get('/speaker/add_new', [SpeakersController::class, 'showAddSpeakerForm']);
 // Route::get('/edit_speaker/{id}/editSpeaker', [SpeakersController::class, 'showEditSpeakerForm']);
 // Route::get('/edit_speaker/{id}/edit', [SpeakersController::class, 'edit'])->name('speakers.edit');
 
@@ -20,8 +20,8 @@ Route::get('/dashboardcontent', function () {
 
 
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboardcontent', function () {
+    return view('layouts.dashboardcontent');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -41,6 +41,8 @@ Route::post('/speakers/{id}/deactivate', [SpeakersController::class, 'deactivate
 Route::get('/speaker/{id}/toggle', [SpeakersController::class, 'toggleStatus']);
 Route::get('/speaker/{id}/edit', [SpeakersController::class, 'edit']);
 Route::put('/speakers/{id}', [SpeakersController::class, 'update'])->name('speakers.update');
+
+
 
 
 
