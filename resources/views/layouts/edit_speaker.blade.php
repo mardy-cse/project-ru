@@ -118,24 +118,45 @@
   const form = document.getElementById('speakerForm');
 
   form.addEventListener('submit', function (event) {
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+    let isValid = true;
 
+    // Custom manual validation
+    const requiredFields = form.querySelectorAll('[required]');
+
+    requiredFields.forEach(field => {
+      const feedback = field.nextElementSibling;
+      
+      if (!field.checkValidity()) {
+        field.classList.add('is-invalid');
+        if (feedback && feedback.classList.contains('invalid-feedback')) {
+          feedback.style.display = 'block';
+        }
+        isValid = false;
+      } else {
+        field.classList.remove('is-invalid');
+        if (feedback && feedback.classList.contains('invalid-feedback')) {
+          feedback.style.display = 'none';
+        }
+      }
+    });
+
+    // Signature file size validation
     const signatureInput = document.getElementById('signatureFile');
     if (signatureInput.files.length) {
       const file = signatureInput.files[0];
       if (file.size > 100 * 1024) {
         alert('Signature file must be less than 100KB');
-        event.preventDefault();
-        return false;
+        isValid = false;
       }
     }
 
-    form.classList.add('was-validated');
+    if (!isValid) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   });
 
+  // Image preview
   document.getElementById('profileImage').addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
@@ -146,9 +167,13 @@
   document.getElementById('signatureFile').addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
-      document.getElementById('signaturePreview').src = URL.createObjectURL(file);
+      const signaturePreview = document.getElementById('signaturePreview');
+      if (signaturePreview) {
+        signaturePreview.src = URL.createObjectURL(file);
+      }
     }
   });
 })();
 </script>
+
 @endsection

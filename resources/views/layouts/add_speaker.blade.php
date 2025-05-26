@@ -129,7 +129,7 @@
 </div>
 
 <!-- JavaScript for form validation and image preview -->
-<script>
+{{-- <script>
 (() => {
   'use strict';
   const form = document.getElementById('speakerForm');
@@ -169,5 +169,62 @@
     }
   });
 })();
+</script> --}}
+
+<script>
+(() => {
+  'use strict';
+  const form = document.getElementById('speakerForm');
+
+  form.addEventListener('submit', function (event) {
+    let isValid = true;
+
+    // Loop through all input/select/textarea fields
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+      // Remove existing invalid classes first
+      input.classList.remove('is-invalid');
+
+      // Check if required and invalid
+      if (!input.checkValidity()) {
+        input.classList.add('is-invalid');
+        isValid = false;
+      }
+    });
+
+    // Signature size check
+    const signatureInput = document.getElementById('signatureFile');
+    if (signatureInput.files.length) {
+      const file = signatureInput.files[0];
+      if (file.size > 100 * 1024) {
+        alert('Signature file must be less than 100KB');
+        signatureInput.classList.add('is-invalid');
+        isValid = false;
+      }
+    }
+
+    if (!isValid) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  });
+
+  // Profile image preview
+  document.getElementById('profileImage').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      document.getElementById('profilePreview').src = URL.createObjectURL(file);
+    }
+  });
+
+  // Signature preview
+  document.getElementById('signatureFile').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      document.getElementById('signaturePreview').src = URL.createObjectURL(file);
+    }
+  });
+})();
 </script>
+
 @endsection
