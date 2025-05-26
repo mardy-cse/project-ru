@@ -39,7 +39,7 @@
       <!-- Left Column -->
       <div class="col-md-6">
         <label class="form-label">Name <span class="required">*</span></label>
-        <input type="text" name="name" class="form-control" placeholder="Enter full name" value="{{ old('name', $speaker->name) }}" required>
+        <input type="text" name="name" class="form-control" placeholder="Enter full name" maxlength="255" value="{{ old('name', $speaker->name) }}" required>
         <div class="invalid-feedback">Name is required.</div>
 
         <label class="form-label mt-3">Mobile No <span class="required">*</span></label>

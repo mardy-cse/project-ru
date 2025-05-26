@@ -37,9 +37,18 @@
       <!-- Left Column -->
       <div class="col-md-6">
         <!-- Name -->
-        <label class="form-label">Name <span class="required">*</span></label>
-        <input type="text" name="name" class="form-control" placeholder="Enter full name" pattern="[A-Za-z\s]+" title="Only alphabetic characters and spaces are allowed" value="{{ old('name') }}" required>
-        <div class="invalid-feedback">Only alphabetic characters and spaces are allowed</div>
+       <label class="form-label">Name <span class="required">*</span></label>
+<input type="text"
+       name="name"
+       class="form-control"
+       placeholder="Enter full name"
+       pattern="[A-Za-z\s]+"
+       title="Only alphabetic characters and spaces are allowed"
+       value="{{ old('name') }}"
+       maxlength="255"
+       required>
+<div class="invalid-feedback">Only alphabetic characters and spaces are allowed, maximum 255 characters.</div>
+
 
         <!-- Mobile No -->
         <label class="form-label mt-3">Mobile No <span class="required">*</span></label>
@@ -48,7 +57,7 @@
 
         <!-- Designation -->
         <label class="form-label mt-3">Designation <span class="required">*</span></label>
-        <input type="text" name="designation" class="form-control" placeholder="Enter designation" value="{{ old('designation') }}" required>
+        <input type="text" name="designation" class="form-control" placeholder="Enter designation" maxlength="255" value="{{ old('designation') }}" required>
         <div class="invalid-feedback">Designation is required.</div>
 
         <!-- Profile Image -->
@@ -127,50 +136,7 @@
     </div>
   </form>
 </div>
-
-<!-- JavaScript for form validation and image preview -->
-{{-- <script>
-(() => {
-  'use strict';
-  const form = document.getElementById('speakerForm');
-
-  form.addEventListener('submit', function (event) {
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    const signatureInput = document.getElementById('signatureFile');
-    if (signatureInput.files.length) {
-      const file = signatureInput.files[0];
-      if (file.size > 100 * 1024) {
-        alert('Signature file must be less than 100KB');
-        event.preventDefault();
-        return false;
-      }
-    }
-
-    form.classList.add('was-validated');
-  });
-
-  // Profile image preview
-  document.getElementById('profileImage').addEventListener('change', function (e) {
-    const file = e.target.files[0];
-    if (file) {
-      document.getElementById('profilePreview').src = URL.createObjectURL(file);
-    }
-  });
-
-  // Signature preview
-  document.getElementById('signatureFile').addEventListener('change', function (e) {
-    const file = e.target.files[0];
-    if (file) {
-      document.getElementById('signaturePreview').src = URL.createObjectURL(file);
-    }
-  });
-})();
-</script> --}}
-
+<!-- JavaScript for form validation -->
 <script>
 (() => {
   'use strict';
