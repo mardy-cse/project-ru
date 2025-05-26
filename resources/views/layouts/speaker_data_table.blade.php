@@ -19,10 +19,10 @@
                 <td>{{ $speaker->phone }}</td>
                 <td>{{ $speaker->designation }}</td>
                 <td>
-                    @if($speaker->status == 'active')
+                    @if($speaker->status == 'active')s
                         <span class="badge bg-success">Active</span>
-                    @elseif($speaker->status == 'inactive')
-                        <span class="badge bg-danger">Inactive</span>
+                    @elseif($speaker->status == 'deactive')
+                        <span class="badge bg-danger">Deactive</span>
                     @else
                         <span class="badge bg-warning">Pending</span>
                     @endif

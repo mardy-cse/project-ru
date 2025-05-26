@@ -66,8 +66,8 @@
               <label class="form-check-label">Active</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="status" value="inactive" {{ old('status') == 'inactive' ? 'checked' : '' }}>
-              <label class="form-check-label">Inactive</label>
+              <input class="form-check-input" type="radio" name="status" value="deactive" {{ old('status') == 'deactive' ? 'checked' : '' }}>
+              <label class="form-check-label">deactive</label>
             </div>
           </div>
           <div class="invalid-feedback d-block">Please select a status.</div>

@@ -27,7 +27,7 @@ class SpeakersController extends Controller
             'gender' => 'required|in:male,female,other',
             'organization' => 'required|string|max:255',
             'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
-            'status' => 'required|in:active,inactive',
+            'status' => 'required|in:active,deactive',
             'link' => 'nullable|url|max:255',
         ]);
 
@@ -105,7 +105,7 @@ public function update(Request $request, $id)
         'gender' => 'required|in:male,female,other',
         'organization' => 'required|string|max:255',
         'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
-        'status' => 'required|in:active,inactive',
+        'status' => 'required|in:active,deactive',
         'link' => 'nullable|url|max:255',
     ]);
 
@@ -166,10 +166,10 @@ public function activate($id)
 public function deactivate($id)
 {
     $speaker = Speakers::findOrFail($id);
-    $speaker->status = 'inactive';
+    $speaker->status = 'deactive';
     $speaker->save();
 
-    return response()->json(['success' => true, 'status' => 'inactive']);
+    return response()->json(['success' => true, 'status' => 'deactive']);
 }
 
 
@@ -178,7 +178,7 @@ public function toggleStatus($id)
     $speaker = Speakers::findOrFail($id);
 
     if ($speaker->status === 'active') {
-        $speaker->status = 'inactive';
+        $speaker->status = 'deactive';
     } else {
         $speaker->status = 'active';
     }

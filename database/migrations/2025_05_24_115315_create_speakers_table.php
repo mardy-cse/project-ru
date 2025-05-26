@@ -20,7 +20,7 @@ return new class extends Migration
         $table->string('designation');
         $table->unsignedTinyInteger('experience_years');
         $table->unsignedInteger('total_projects')->nullable();
-        $table->enum('status', ['active', 'inactive', 'pending']);
+        $table->enum('status', ['active', 'deactive', 'pending']);
         $table->text('expertise');
         $table->text('bio')->nullable();
         $table->timestamps();
