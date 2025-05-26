@@ -98,7 +98,9 @@ public function update(Request $request, $id)
     $speaker = Speakers::findOrFail($id);
     $validated = $request->validate([
         'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'name' => 'required|string|max:255',
+        // 'name' => 'required|string|max:255',
+        'name' => 'required', 'string', 'regex:/^[A-Za-z\s]+$/', 'max:255',
+
         'email' => 'required|email|unique:speakers,email,' . $speaker->id,
         'phone' => 'required|string|max:20',
         'designation' => 'required|string|max:255',

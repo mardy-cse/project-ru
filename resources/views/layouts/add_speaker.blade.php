@@ -37,8 +37,8 @@
       <div class="col-md-6">
         <!-- Name -->
         <label class="form-label">Name <span class="required">*</span></label>
-        <input type="text" name="name" class="form-control" placeholder="Enter full name" value="{{ old('name') }}" required>
-        <div class="invalid-feedback">Name is required.</div>
+        <input type="text" name="name" class="form-control" placeholder="Enter full name" pattern="[A-Za-z\s]+" title="Only alphabetic characters and spaces are allowed" value="{{ old('name') }}" required>
+        <div class="invalid-feedback">Only alphabetic characters and spaces are allowed</div>
 
         <!-- Mobile No -->
         <label class="form-label mt-3">Mobile No <span class="required">*</span></label>
@@ -70,7 +70,7 @@
               <label class="form-check-label">deactive</label>
             </div>
           </div>
-          <div class="invalid-feedback d-block">Please select a status.</div>
+          {{-- <div class="invalid-feedback d-block">Please select a status.</div> --}}
         </div>
       </div>
 

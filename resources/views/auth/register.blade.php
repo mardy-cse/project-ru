@@ -212,7 +212,7 @@
                 @csrf
 
                 <!-- Name -->
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="name">Full Name</label>
                     <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" placeholder="John Doe">
                     @error('name')
@@ -223,7 +223,21 @@
                             {{ $message }}
                         </span>
                     @enderror
-                </div>
+                </div> --}}
+
+                <div class="form-group">
+    <label for="name">Full Name</label>
+    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" 
+           placeholder="John Doe" pattern="[A-Za-z\s]+" title="Only alphabetic characters and spaces are allowed">
+    @error('name')
+        <span class="error-message">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {{ $message }}
+        </span>
+    @enderror
+</div>
 
                 <!-- Email Address -->
                 <div class="form-group">
