@@ -103,16 +103,27 @@ public function update(Request $request, $id)
     ]);
 
     // Upload new profile image
-    if ($request->hasFile('profile_image')) {
-        $imagePath = $request->file('profile_image')->store('public/speakers/profiles');
-        $validated['profile_image'] = basename($imagePath);
-    }
+    // if ($request->hasFile('profile_image')) {
+    //     $imagePath = $request->file('profile_image')->store('public/speakers/profiles');
+    //     $validated['profile_image'] = basename($imagePath);
+    // }
 
-    // Upload new signature
-    if ($request->hasFile('signature')) {
-        $signaturePath = $request->file('signature')->store('public/speakers/signatures');
-        $validated['signature'] = basename($signaturePath);
-    }
+    // // Upload new signature
+    // if ($request->hasFile('signature')) {
+    //     $signaturePath = $request->file('signature')->store('public/speakers/signatures');
+    //     $validated['signature'] = basename($signaturePath);
+    // }
+
+            if ($request->hasFile('profile_image')) {
+    $imagePath = $request->file('profile_image')->store('speakers/profiles', 'public');
+    $validated['profile_image'] = $imagePath; 
+}
+
+if ($request->hasFile('signature')) {
+    $signaturePath = $request->file('signature')->store('speakers/signatures', 'public');
+    $validated['signature'] = $signaturePath; 
+}
+
 
     $speaker->update($validated);
 
