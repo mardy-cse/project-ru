@@ -30,6 +30,7 @@
     Add Speaker Information
   </div>
 
+
   <form class="p-4 needs-validation" enctype="multipart/form-data" method="POST" action="{{ route('speakers.store') }}" novalidate id="speakerForm">
     @csrf
     <div class="row g-3">
@@ -80,6 +81,7 @@
         <label class="form-label">Email <span class="required">*</span></label>
         <input type="email" name="email" class="form-control" placeholder="Enter email address" value="{{ old('email') }}" required>
         <div class="invalid-feedback">Enter a valid email address.</div>
+    
 
         <!-- Gender -->
         <label class="form-label mt-3">Gender <span class="required">*</span></label>

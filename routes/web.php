@@ -43,11 +43,4 @@ Route::get('/speaker/{id}/edit', [SpeakersController::class, 'edit']);
 Route::put('/speakers/{id}', [SpeakersController::class, 'update'])->name('speakers.update');
 
 
-
-
-
-
-
-
-
 require __DIR__.'/auth.php';
