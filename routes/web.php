@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
 
 //  Route::post('/speakers/create', [SpeakersController::class, 'create'])->name('speakers.create');
 Route::post('/speakers', [SpeakersController::class, 'store'])->name('speakers.store');
+Route::post('/training', [TrainingController::class, 'store'])->name('training.store');
 
 
 

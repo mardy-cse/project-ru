@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Training;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Training;
 
 class TrainingController extends Controller
 {
@@ -26,10 +26,89 @@ class TrainingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+
+     public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'training_category_id' => 'required|integer',
+        'training_overview' => 'required|string',
+        'course_qualification' => 'required|string',
+        'training_objective' => 'required|string',
+        // 'course_thumbnail' => 'nullable|file|image|max:2048',
+        'course_thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'status' => 'required|integer',
+    ]);
+
+    // Handle thumbnail
+    $thumbnailPath = null;
+    if ($request->hasFile('course_thumbnail')) {
+        $thumbnailPath = $request->file('course_thumbnail')->store('training/thumbnail', 'public');
     }
+
+    $training = new Training;
+    $training->name = $validated['name'];
+    $training->training_category_id = $validated['training_category_id'];
+    $training->training_overview = $validated['training_overview'];
+    $training->course_qualification = $validated['course_qualification'];
+    $training->training_objective = $validated['training_objective'];
+    $training->course_thumbnail = $thumbnailPath;
+    $training->status = $validated['status'];
+    $training->created_by = Auth::id() ?? 0;
+    $training->updated_by = Auth::id() ?? 0;
+    $training->created_at = now();
+    $training->updated_at = now();
+
+    $training->save();
+
+    return redirect('/training/list')->with('success', 'Training created successfully!');
+}
+
+//  public function store(Request $request)
+// {
+//     // dd($request->all());
+//     // Validate the request
+//     $request->validate([
+//         'name' => 'required|string|max:255',
+//         'training_category_id' => 'required|integer',
+//         'training_overview' => 'required|string',
+//         'course_qualification' => 'required|string',
+//         'training_objective' => 'required|string',
+//         // 'training_outline' => 'nullable|string',
+//         'course_thumbnail' => 'nullable|string|max:255',
+//         'status' => 'required|integer',
+//         'created_by' => 'nullable|integer',
+//         'updated_by' => 'nullable|integer',
+//     ]);
+
+// $courseThumbnailPath = null;
+// if ($request->hasFile('course_thumbnail')) {
+//     $courseThumbnailPath = $request->file('course_thumbnail')->store('training/thumbnail', 'public');
+// }
+
+
+ 
+
+ 
+//     $training = new Training;
+//     $training->name = $request->name;
+//     $training->training_category_id = $request->training_category_id;
+//     $training->training_overview = $request->training_overview;
+//     $training->course_qualification = $request->course_qualification;
+//     $training->training_objective = $request->training_objective;
+//     // $training->course_thumbnail = $request->course_thumbnail;
+//     $training->course_thumbnail = $courseThumbnailPath;
+//     $training->status = $request->status;
+//     $training->created_by = Auth::id() ?? 0; 
+//     $training->updated_by = Auth::id() ?? 0;
+//     $training->created_at = now(); 
+//     $training->updated_at = now(); 
+
+//     $training->save();
+//     return redirect('/training/list')->with('success', 'Training created successfully!');
+
+// }
+
 
     /**
      * Display the specified resource.
@@ -63,8 +142,7 @@ class TrainingController extends Controller
         //
     }
 
-    
-    public function showContent()
+        public function showContent()
     {
         return view('layouts.training');
     }
@@ -72,11 +150,4 @@ class TrainingController extends Controller
     {
         return view('layouts.add_training');
     }
-
-    //     public function showContent()
-    // {
-    //     $training = Training::all();
-    //     dd($training);
-    //     return view('layouts.training', compact('training'));
-    // }
 }

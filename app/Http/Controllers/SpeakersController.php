@@ -46,7 +46,6 @@ if ($request->hasFile('signature')) {
 
         Speakers::create($validated);
 
-        // return redirect()->back()->with('success', 'Speaker added successfully!');
          return redirect('speaker/list')->with('success', 'Speaker added successfully!');
     }
 
@@ -58,24 +57,6 @@ if ($request->hasFile('signature')) {
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-//    public function edit($id)
-// {
-//     $speaker = Speakers::findOrFail($id);
-//     return view('layouts.edit_speaker', compact('speaker'));
-// }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, string $id)
-    // {
-    //     //
-    // }
 
 
     public function edit($id)
@@ -102,17 +83,6 @@ public function update(Request $request, $id)
         'link' => 'nullable|url|max:255',
     ]);
 
-    // Upload new profile image
-    // if ($request->hasFile('profile_image')) {
-    //     $imagePath = $request->file('profile_image')->store('public/speakers/profiles');
-    //     $validated['profile_image'] = basename($imagePath);
-    // }
-
-    // // Upload new signature
-    // if ($request->hasFile('signature')) {
-    //     $signaturePath = $request->file('signature')->store('public/speakers/signatures');
-    //     $validated['signature'] = basename($signaturePath);
-    // }
 
             if ($request->hasFile('profile_image')) {
     $imagePath = $request->file('profile_image')->store('speakers/profiles', 'public');
