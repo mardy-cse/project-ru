@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpeakersController;
+use App\Http\Controllers\TrainingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/speaker/list', [SpeakersController::class, 'showContent']);
@@ -41,6 +42,12 @@ Route::post('/speakers/{id}/deactivate', [SpeakersController::class, 'deactivate
 Route::get('/speaker/{id}/toggle', [SpeakersController::class, 'toggleStatus']);
 Route::get('/speaker/{id}/edit', [SpeakersController::class, 'edit']);
 Route::put('/speakers/{id}', [SpeakersController::class, 'update'])->name('speakers.update');
+
+
+
+Route::get('/training/list', [TrainingController::class, 'showContent']);
+Route::get('/training/add_training', [TrainingController::class, 'showAddTrainingForm']);
+
 
 
 require __DIR__.'/auth.php';

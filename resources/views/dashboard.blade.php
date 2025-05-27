@@ -74,6 +74,16 @@
     	
 let table = new DataTable('#myTable');
   </script>
+ {{-- <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script> --}}
+
+ {{-- CKEditor CDN --}}
+{{-- <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+<script>
+  CKEDITOR.replace('overview');
+  CKEDITOR.replace('why_join');
+  CKEDITOR.replace('best_suited_for');
+</script> --}}
+
 </body>
 
 </html>
