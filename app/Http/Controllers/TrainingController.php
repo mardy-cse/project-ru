@@ -144,10 +144,31 @@ class TrainingController extends Controller
 
         public function showContent()
     {
-        return view('layouts.training');
+        $training = Training::all();
+        return view('layouts.training', compact('training'));
     }
+
+
+    //  public function showContent()
+    // {
+    //     $speakers = Speakers::all();
+    //     return view('layouts.speaker_content', compact('speakers'));
+    // }
+
+
     public function showAddTrainingForm()
     {
         return view('layouts.add_training');
     }
+
+public function toggleStatus($id)
+{
+    $training = Training::findOrFail($id);
+    $training->status = $training->status == 1 ? 0 : 1;
+    $training->save();
+    return redirect()->back()->with('success', 'Training status updated successfully.');
 }
+
+}
+
+

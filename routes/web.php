@@ -48,6 +48,8 @@ Route::put('/speakers/{id}', [SpeakersController::class, 'update'])->name('speak
 
 Route::get('/training/list', [TrainingController::class, 'showContent']);
 Route::get('/training/add_training', [TrainingController::class, 'showAddTrainingForm']);
+Route::get('/training/{id}/toggle', [TrainingController::class, 'toggleStatus']);
+
 
 
 
