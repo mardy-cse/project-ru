@@ -55,6 +55,8 @@ Route::put('/training/{id}', [TrainingController::class, 'update'])->name('train
 Route::post('/batch', [BatchesController::class, 'store'])->name('batch.store');
 Route::get('/batch/list', [BatchesController::class, 'showContent']);
 Route::get('/batch/add_new_batch', [BatchesController::class, 'showCreateNewBatchForm']);
+Route::get('/batch/{id}/togglePublishStatus', [BatchesController::class, 'togglePublishStatus']);
+
 
 
 

@@ -146,13 +146,6 @@ if ($request->hasFile('course_thumbnail')) {
     }
 
 
-    //  public function showContent()
-    // {
-    //     $speakers = Speakers::all();
-    //     return view('layouts.speaker_content', compact('speakers'));
-    // }
-
-
     public function showAddTrainingForm()
     {
         return view('layouts.add_training');

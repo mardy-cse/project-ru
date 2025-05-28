@@ -17,54 +17,63 @@
             <th>Action</th>
         </tr>
     </thead>
+
+     @foreach ($batch as $index => $batch)
+
+        <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ $batch->training->name ?? 'N/A' }}</td>
+            <td>{{ $batch->name }}</td>
+            <td>{{ $batch->start_date }}</td>
+            <td>{{ $batch->end_date }}</td>
+            <td>{{ \Carbon\Carbon::parse($batch->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($batch->end_time)->format('g:i A') }}</td>
+            <td>{{ $batch->number_of_sessions }}</td>
+            <td>{{ $batch->venue }}</td>
+            <td>
+    @if ($batch->publication_status == 1)
+        <span class="text-green-600">Published</span>
+    @else
+        <span class="text-gray-500">Unpublished</span>
+    @endif
+</td>
+
+{{-- <td>
+                <a class="btn btn-sm btn-primary me-1" title="Edit" href="#">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                @if($speaker->status == 'active')
+                    <a href="#" class="btn btn-sm btn-warning" title="Deactivate">
+                        <i class="fas fa-ban"></i> Deactivate
+                    </a>
+                @else
+                    <a href="#" class="btn btn-sm btn-success" title="Activate">
+                        <i class="fas fa-check"></i> Activate
+                    </a>
+                @endif
+            </td> --}}
+
+             <td>
+                 <a class="btn btn-sm btn-info me-1" title="Open" href="#">
+        <i class="fas fa-eye"></i> Open
+    </a>
+                <a class="btn btn-sm btn-primary me-1" title="Edit" href="#">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                @if($batch->publication_status == '1')
+                    <a href="{{ url('/batch/' . $batch->id . '/togglePublishStatus') }}" class="btn btn-sm btn-warning" title="Deactivate">
+                        <i class="fas fa-ban"></i> Unpublished
+                    </a>
+                @else
+                    <a href="{{ url('/batch/' . $batch->id . '/togglePublishStatus') }}" class="btn btn-sm btn-success" title="Activate">
+                        <i class="fas fa-check"></i> Published
+                    </a>
+                @endif
+            </td>
+
+        </tr>
+    @endforeach
     <tbody>
-        <tr>
-            <td>1</td>
-            <td>Laravel Fundamentals</td>
-            <td>Batch A</td>
-            <td>2025-06-01</td>
-            <td>2025-06-15</td>
-            <td>10:00 AM - 12:00 PM</td>
-            <td>10</td>
-            <td>Room 101</td>
-            <td><span class="text-green-600">Active</span></td>
-            <td>
-                <a href="#" class="text-blue-600 hover:underline">View</a> |
-                <a href="#" class="text-yellow-600 hover:underline">Edit</a> |
-                <a href="#" class="text-red-600 hover:underline">Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Advanced PHP</td>
-            <td>Batch B</td>
-            <td>2025-07-10</td>
-            <td>2025-07-25</td>
-            <td>2:00 PM - 4:00 PM</td>
-            <td>8</td>
-            <td>Lab 202</td>
-            <td><span class="text-green-600">Active</span></td>
-            <td>
-                <a href="#" class="text-blue-600 hover:underline">View</a> |
-                <a href="#" class="text-yellow-600 hover:underline">Edit</a> |
-                <a href="#" class="text-red-600 hover:underline">Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>Vue.js with Laravel</td>
-            <td>Batch C</td>
-            <td>2025-08-05</td>
-            <td>2025-08-20</td>
-            <td>3:00 PM - 5:00 PM</td>
-            <td>12</td>
-            <td>Virtual</td>
-            <td><span class="text-gray-500">Inactive</span></td>
-            <td>
-                <a href="#" class="text-blue-600 hover:underline">View</a> |
-                <a href="#" class="text-yellow-600 hover:underline">Edit</a> |
-                <a href="#" class="text-red-600 hover:underline">Delete</a>
-            </td>
-        </tr>
-    </tbody>
+   
+</tbody>
+
 </table>

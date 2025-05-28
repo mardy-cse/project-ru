@@ -31,13 +31,13 @@
   }
 </style>
 
-<div class="p-4">
-  <div class="border border-success rounded">
+<div  style="border: 2px solid red">
+  <div class="border border-success rounded my-4">
   <div class="form-section-header">
     New Batch
   </div>
 
-  <form class="p-4" enctype="multipart/form-data" method="POST" action="#" novalidate id="batchForm">
+  <form class="p-4" enctype="multipart/form-data" method="POST" action="{{ route('batch.store') }}" novalidate id="batchForm">
     @csrf
 
     <div class="row g-4">
