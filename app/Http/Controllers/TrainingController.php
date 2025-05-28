@@ -64,51 +64,6 @@ class TrainingController extends Controller
     return redirect('/training/list')->with('success', 'Training created successfully!');
 }
 
-//  public function store(Request $request)
-// {
-//     // dd($request->all());
-//     // Validate the request
-//     $request->validate([
-//         'name' => 'required|string|max:255',
-//         'training_category_id' => 'required|integer',
-//         'training_overview' => 'required|string',
-//         'course_qualification' => 'required|string',
-//         'training_objective' => 'required|string',
-//         // 'training_outline' => 'nullable|string',
-//         'course_thumbnail' => 'nullable|string|max:255',
-//         'status' => 'required|integer',
-//         'created_by' => 'nullable|integer',
-//         'updated_by' => 'nullable|integer',
-//     ]);
-
-// $courseThumbnailPath = null;
-// if ($request->hasFile('course_thumbnail')) {
-//     $courseThumbnailPath = $request->file('course_thumbnail')->store('training/thumbnail', 'public');
-// }
-
-
- 
-
- 
-//     $training = new Training;
-//     $training->name = $request->name;
-//     $training->training_category_id = $request->training_category_id;
-//     $training->training_overview = $request->training_overview;
-//     $training->course_qualification = $request->course_qualification;
-//     $training->training_objective = $request->training_objective;
-//     // $training->course_thumbnail = $request->course_thumbnail;
-//     $training->course_thumbnail = $courseThumbnailPath;
-//     $training->status = $request->status;
-//     $training->created_by = Auth::id() ?? 0; 
-//     $training->updated_by = Auth::id() ?? 0;
-//     $training->created_at = now(); 
-//     $training->updated_at = now(); 
-
-//     $training->save();
-//     return redirect('/training/list')->with('success', 'Training created successfully!');
-
-// }
-
 
     /**
      * Display the specified resource.
@@ -123,16 +78,58 @@ class TrainingController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $training = Training::findOrFail($id);
+
+        // dd($training);
+        return view('layouts.edit_training', compact('training'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+public function update(Request $request, string $id)
+{
+    // Validate inputs
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'training_category_id' => 'required|integer',
+        'training_overview' => 'required|string',
+        'course_qualification' => 'required|string',
+        'training_objective' => 'required|string',
+        'course_thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'status' => 'required|integer',
+    ]);
+
+    // Find the training
+    $training = Training::findOrFail($id);
+
+    // Handle image upload
+if ($request->hasFile('course_thumbnail')) {
+    $imagePath = $request->file('course_thumbnail')->store('training/thumbnail', 'public');
+    $validated['course_thumbnail'] = $imagePath;
+}
+
+
+
+    // Update other fields
+    $training->name = $validated['name'];
+    $training->training_overview = $validated['training_overview'];
+    $training->training_objective = $validated['training_objective'];
+    $training->course_qualification = $validated['course_qualification'];
+    $training->training_category_id = $validated['training_category_id'];
+    $training->status = $validated['status'];
+
+    // Save the updated training
+    // $training->save();
+
+    // return redirect()->route('training.list')->with('success', 'Training updated successfully.');
+
+    $training->update($validated);
+
+    return redirect('training/list')->with('success', 'Speaker updated successfully!');
+}
+
+
 
     /**
      * Remove the specified resource from storage.
