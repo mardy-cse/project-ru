@@ -63,7 +63,7 @@
         <!-- Profile Image -->
         <label class="form-label mt-3">Profile Image <span class="required">*</span></label>
         <input type="file" name="profile_image" id="profileImage" class="form-control" accept=".jpg,.jpeg" required>
-        <img src="https://via.placeholder.com/70x70?text=Photo" alt="Profile" class="preview-img" id="profilePreview">
+        <img src="{{ asset('images/no-image-found.png') }}" alt="Profile" class="preview-img" id="profilePreview">
         <small class="text-danger">[File Format: *.jpg/.jpeg]</small>
         <div class="invalid-feedback">Profile image is required.</div>
 
@@ -110,7 +110,7 @@
         <!-- Signature -->
         <label class="form-label mt-3">Signature <span class="required">*</span></label>
         <input type="file" name="signature" id="signatureFile" class="form-control" accept=".jpg,.jpeg,.png" required>
-        <img src="https://via.placeholder.com/80x40?text=Sign" alt="Signature" class="preview-img ms-2" id="signaturePreview">
+        <img src="{{ asset('images/no-image-found.png') }}" alt="Signature" class="preview-img ms-2" id="signaturePreview">
         <small class="text-danger d-block">
           [File Format: *.jpg/.jpeg/.png]<br>
           [File Size: &lt;100KB]<br>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BatchesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\TrainingController;
@@ -42,12 +43,18 @@ Route::get('/speaker/{id}/edit', [SpeakersController::class, 'edit']);
 Route::put('/speakers/{id}', [SpeakersController::class, 'update'])->name('speakers.update');
 
 
+// Training
 Route::post('/training', [TrainingController::class, 'store'])->name('training.store');
 Route::get('/training/list', [TrainingController::class, 'showContent']);
 Route::get('/training/add_training', [TrainingController::class, 'showAddTrainingForm']);
 Route::get('/training/{id}/toggle', [TrainingController::class, 'toggleStatus']);
 Route::get('/training/{id}/edit', [TrainingController::class, 'edit']);
 Route::put('/training/{id}', [TrainingController::class, 'update'])->name('training.update');
+
+//Batches
+Route::post('/batch', [BatchesController::class, 'store'])->name('batch.store');
+Route::get('/batch/list', [BatchesController::class, 'showContent']);
+Route::get('/batch/add_new_batch', [BatchesController::class, 'showCreateNewBatchForm']);
 
 
 

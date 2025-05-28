@@ -20,28 +20,25 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-        <h4 class="text-xl font-bold text-gray-900" style="color:white">Speaker List</h4>
+        <h4 class="text-xl font-bold text-gray-900" style="color:white">Batch List</h4>
       </div>
 
       <!-- Right side: button -->
-    <a href="/speaker/add_new" style="text-decoration: none;">
+    <a href="/batch/add_new_batch" style="text-decoration: none;">
   <button class="px-6 py-2 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-black font-semibold border-2 border-gray-300 hover:border-gray-400 bg-white">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
         d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
     </svg>
-    <span class="font-semibold">Add New</span>
+    <span class="font-semibold">Create New Batch</span>
   </button>
 </a>
 
     </div>
   </div>
 </div>
-
-
-      
-      <div class="overflow-x-auto p-6">
-        @include('layouts.speaker_data_table')
+<div class="overflow-x-auto p-6">
+        @include('batches.batch_data_table')
       </div>
     </div>
   </div>

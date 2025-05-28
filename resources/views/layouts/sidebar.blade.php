@@ -23,7 +23,7 @@
           </div>
 
 
-           <div class="relative block w-full">
+           {{-- <div class="relative block w-full">
 
             <a class="dash-sb-menu-item {{ request()->is('speaker_content') || request()->is('add_speaker') || request()->is('speaker/*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/speaker/list">
               <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
@@ -40,10 +40,22 @@
               </span>
               <span class="text-[16px] text-lh-1_5 sb-menu-text">Speaker</span>
             </a>
-          </div>
+          </div> --}}
+<a 
+  href="/speaker/list"
+  style="text-decoration: none;" 
+  class="dash-sb-menu-item {{ request()->is('speaker_content') || request()->is('add_speaker') || request()->is('speaker/*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+>
+  <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+    <i class="fa fa-microphone" style="font-size: 50px;"></i>
+  </span>
+  <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Speaker</span>
+</a>
 
 
-          <div class="relative block w-full">
+
+
+          {{-- <div class="relative block w-full">
 
             <a class="dash-sb-menu-item {{ request()->is('dash-training-course*') || request()->is('training*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/training/list">
               <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
@@ -60,25 +72,35 @@
               </span>
               <span class="text-[16px] text-lh-1_5 sb-menu-text">Training Courses</span>
             </a>
-          </div>
+          </div> --}}
 
-          <div class="relative block w-full">
-            <a class="dash-sb-menu-item w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="dash-certificate.html">
-              <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
-                <svg class="sb-menu-icon h-[50px] w-[50px]" xmlns="http://www.w3.org/2000/svg" width="76" height="76" viewBox="0 0 76 76" fill="none">
-                  <g clip-path="url(#clip0_6_58)">
-                    <path d="M31.4083 1.56958C30.5294 0.646732 29.2111 0.295169 27.9806 0.617435C26.7501 0.939701 25.798 1.92115 25.4757 3.15161L23.1613 12.3069L14.0792 9.74341C12.8488 9.39185 11.5304 9.74341 10.6368 10.637C9.74329 11.5305 9.39173 12.8489 9.74329 14.0793L12.3068 23.1614L3.15149 25.4905C1.92102 25.7981 0.954227 26.7649 0.617313 27.9954C0.280399 29.2258 0.64661 30.5295 1.56946 31.4084L8.33704 38.0002L1.56946 44.592C0.64661 45.4709 0.295047 46.7893 0.617313 48.0198C0.939579 49.2502 1.92102 50.2024 3.15149 50.5247L12.3068 52.8391L9.74329 61.9211C9.39173 63.1516 9.74329 64.47 10.6368 65.3635C11.5304 66.2571 12.8488 66.6086 14.0792 66.2571L23.1613 63.6936L25.4757 72.8489C25.7833 74.0793 26.7501 75.0461 27.9806 75.3831C29.2111 75.72 30.5148 75.3538 31.4083 74.4455L38.0001 67.678L44.5919 74.4455C45.4855 75.3538 46.7892 75.72 48.0197 75.3831C49.2501 75.0461 50.2023 74.0793 50.5245 72.8489L52.839 63.6936L61.921 66.2571C63.1515 66.6086 64.4698 66.2571 65.3634 65.3635C66.257 64.47 66.6085 63.1516 66.257 61.9211L63.6935 52.8391L72.8487 50.5247C74.0792 50.217 75.046 49.2502 75.3829 48.0198C75.7198 46.7893 75.3536 45.4709 74.4454 44.592L67.6779 38.0002L74.4454 31.4084C75.3536 30.5149 75.7198 29.2112 75.3829 27.9807C75.046 26.7502 74.0792 25.7981 72.8487 25.4758L63.6935 23.1614L66.257 14.0793C66.6085 12.8489 66.257 11.5305 65.3634 10.637C64.4698 9.74341 63.1515 9.39185 61.921 9.74341L52.839 12.3069L50.5099 3.15161C50.2023 1.92115 49.2355 0.954349 48.005 0.617435C46.7745 0.280521 45.4708 0.646732 44.5919 1.56958L38.0001 8.33716L31.4083 1.56958Z" fill="black"/>
-                  </g>
-                  <defs>
-                    <clipPath id="clip0_6_58">
-                      <rect width="75" height="75" fill="white" transform="translate(0.5 0.5)"/>
-                    </clipPath>
-                  </defs>
-                </svg>
-              </span>
-              <span class="text-[16px] text-lh-1_5 sb-menu-text">Certificate</span>
-            </a>
-          </div>
+<div class="relative block w-full">
+  <a 
+    href="/training/list"
+    style="text-decoration: none;" 
+    class="dash-sb-menu-item {{ request()->is('dash-training-course*') || request()->is('training*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+  >
+    <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+      <i class="fa fa-users" style="font-size: 50px;"></i>
+    </span>
+    <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Training Courses</span>
+  </a>
+</div>
+
+
+
+<div class="relative block w-full">
+  <a 
+    href="/batch/list"
+    style="text-decoration: none;" 
+    class="dash-sb-menu-item {{ request()->is('batch*') || request()->is('batch*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+  >
+    <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+      <i class="fa fa-calendar" style="font-size: 50px;"></i>
+    </span>
+    <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Batches</span>
+  </a>
+</div>
 
           <div class="relative block w-full">
             <a class="dash-sb-menu-item w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="dash-payment.html">
