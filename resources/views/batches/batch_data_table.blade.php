@@ -22,10 +22,10 @@
 
         <tr>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $batch->training->name ?? 'N/A' }}</td>
+            <td>{{ $categories[$batch->training_id] ?? 'N/A' }}</td>
             <td>{{ $batch->name }}</td>
-            <td>{{ $batch->start_date }}</td>
-            <td>{{ $batch->end_date }}</td>
+            <td>{{ \Carbon\Carbon::parse($batch->start_date)->format('Y-m-d') }}</td>
+            <td>{{ \Carbon\Carbon::parse($batch->end_date)->format('Y-m-d') }}</td>
             <td>{{ \Carbon\Carbon::parse($batch->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($batch->end_time)->format('g:i A') }}</td>
             <td>{{ $batch->number_of_sessions }}</td>
             <td>{{ $batch->venue }}</td>
@@ -56,7 +56,7 @@
                  <a class="btn btn-sm btn-info me-1" title="Open" href="#">
         <i class="fas fa-eye"></i> Open
     </a>
-                <a class="btn btn-sm btn-primary me-1" title="Edit" href="#">
+                <a class="btn btn-sm btn-primary me-1" title="Edit" href="{{ url('/batch/' . $batch->id . '/edit') }}">
                     <i class="fas fa-edit"></i> Edit
                 </a>
                 @if($batch->publication_status == '1')

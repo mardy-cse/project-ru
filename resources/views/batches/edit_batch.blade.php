@@ -31,14 +31,14 @@
   }
 </style>
 
-
-  <div class="border border-success rounded  m-4">
+<div class="border border-success rounded my-4">
   <div class="form-section-header">
-    New Batch
+    Update Batch
   </div>
 
-  <form class="p-4" enctype="multipart/form-data" method="POST" action="{{ route('batch.store') }}" novalidate id="batchForm">
+  <form class="p-4" enctype="multipart/form-data" method="POST" action="{{ route('batch.update', $batch->id) }}" novalidate id="batchForm">
     @csrf
+    @method('PUT')
 
     <div class="row g-4">
       <!-- Left Column -->
@@ -65,7 +65,7 @@
               ];
             @endphp
             @foreach($categories as $id => $label)
-              <option value="{{ $id }}" {{ old('training_id') == $id ? 'selected' : '' }}>
+              <option value="{{ $id }}" {{ old('training_id', $batch->training_id) == $id ? 'selected' : '' }}>
                 {{ $label }}
               </option>
             @endforeach
@@ -83,7 +83,7 @@
             id="name" 
             name="name" 
             class="form-control" 
-            value="{{ old('name') }}" 
+            value="{{ old('name', $batch->name) }}" 
             placeholder="Enter batch name" 
             required
           >
@@ -100,7 +100,7 @@
             id="speaker_name" 
             name="speaker_name" 
             class="form-control" 
-            value="{{ old('speaker_name') }}" 
+            value="{{ old('speaker_name', $batch->speaker_name) }}" 
             placeholder="Enter speaker's name"
             required
           >
@@ -117,7 +117,7 @@
             id="start_date" 
             name="start_date" 
             class="form-control" 
-            value="{{ old('start_date') }}" 
+            value="{{ old('start_date', $batch->start_date->format('Y-m-d')) }}" 
             required
           >
           <div class="invalid-feedback">Please enter the start date.</div>
@@ -133,7 +133,7 @@
             id="end_date" 
             name="end_date" 
             class="form-control" 
-            value="{{ old('end_date') }}" 
+            value="{{ old('end_date', $batch->end_date->format('Y-m-d')) }}" 
             required
           >
           <div class="invalid-feedback">Please enter the end date.</div>
@@ -149,7 +149,9 @@
             id="start_time" 
             name="start_time" 
             class="form-control" 
-            value="{{ old('start_time') }}" 
+            {{-- value="{{ old('start_time', $batch->start_time->format('H:i')) }}"  --}}
+            value="{{ old('start_time', \Carbon\Carbon::parse($batch->start_time)->format('H:i')) }}"
+
             required
           >
           <div class="invalid-feedback">Please enter the start time.</div>
@@ -165,7 +167,9 @@
             id="end_time" 
             name="end_time" 
             class="form-control" 
-            value="{{ old('end_time') }}" 
+            {{-- value="{{ old('end_time', $batch->end_time->format('H:i')) }}"  --}}
+            value="{{ old('end_time', \Carbon\Carbon::parse($batch->end_time)->format('H:i')) }}"
+
             required
           >
           <div class="invalid-feedback">Please enter the end time.</div>
@@ -183,11 +187,11 @@
             required
           >
             <option value="">-- Select Duration --</option>
-            <option value="30">30 Minutes</option>
-            <option value="45">45 Minutes</option>
-            <option value="60">1 Hour</option>
-            <option value="90">1 Hour 30 Minutes</option>
-            <option value="120">2 Hours</option>
+            <option value="30" {{ old('class_duration', $batch->class_duration) == 30 ? 'selected' : '' }}>30 Minutes</option>
+            <option value="45" {{ old('class_duration', $batch->class_duration) == 45 ? 'selected' : '' }}>45 Minutes</option>
+            <option value="60" {{ old('class_duration', $batch->class_duration) == 60 ? 'selected' : '' }}>1 Hour</option>
+            <option value="90" {{ old('class_duration', $batch->class_duration) == 90 ? 'selected' : '' }}>1 Hour 30 Minutes</option>
+            <option value="120" {{ old('class_duration', $batch->class_duration) == 120 ? 'selected' : '' }}>2 Hours</option>
           </select>
           <div class="invalid-feedback">Please select the class duration.</div>
         </div>
@@ -202,7 +206,7 @@
             id="seat_capacity" 
             name="seat_capacity" 
             class="form-control" 
-            value="{{ old('seat_capacity') }}" 
+            value="{{ old('seat_capacity', $batch->seat_capacity) }}" 
             min="1"
             placeholder="Enter number of seats" 
             required
@@ -226,10 +230,10 @@
             class="form-select" 
             required
           >
-            <option value="" disabled {{ old('batch_status') ? '' : 'selected' }}>Select status</option>
-            <option value="1" {{ old('batch_status') == '1' ? 'selected' : '' }}>Active</option>
-            <option value="0" {{ old('batch_status') == '0' ? 'selected' : '' }}>Inactive</option>
-            <option value="2" {{ old('batch_status') == '2' ? 'selected' : '' }}>Pending</option>
+            <option value="" disabled {{ old('batch_status', $batch->batch_status) ? '' : 'selected' }}>Select status</option>
+            <option value="1" {{ old('batch_status', $batch->batch_status) == 1 ? 'selected' : '' }}>Active</option>
+            <option value="0" {{ old('batch_status', $batch->batch_status) == 0 ? 'selected' : '' }}>Inactive</option>
+            <option value="2" {{ old('batch_status', $batch->batch_status) == 2 ? 'selected' : '' }}>Pending</option>
           </select>
           <div class="invalid-feedback">Please select a batch status.</div>
         </div>
@@ -244,7 +248,7 @@
             id="number_of_sessions" 
             name="number_of_sessions" 
             class="form-control" 
-            value="{{ old('number_of_sessions') }}" 
+            value="{{ old('number_of_sessions', $batch->number_of_sessions) }}" 
             min="1" 
             required
           >
@@ -263,7 +267,7 @@
                 id="total_session_hours" 
                 name="total_session_hours" 
                 class="form-control" 
-                value="{{ old('total_session_hours') }}" 
+                value="{{ old('total_session_hours', $batch->total_session_hours) }}" 
                 min="0"
                 placeholder="Hours"
                 required
@@ -276,7 +280,7 @@
                 id="total_session_minutes" 
                 name="total_session_minutes" 
                 class="form-control" 
-                value="{{ old('total_session_minutes') }}" 
+                value="{{ old('total_session_minutes', $batch->total_session_minutes) }}" 
                 min="0" max="59"
                 placeholder="Minutes"
                 required
@@ -296,7 +300,7 @@
             id="enrollment_deadline" 
             name="enrollment_deadline" 
             class="form-control" 
-            value="{{ old('enrollment_deadline') }}" 
+            value="{{ old('enrollment_deadline', $batch->enrollment_deadline->format('Y-m-d')) }}" 
             required
           >
           <div class="invalid-feedback">Please enter the enrollment deadline.</div>
@@ -312,7 +316,7 @@
             id="expected_start_date" 
             name="expected_start_date" 
             class="form-control" 
-            value="{{ old('expected_start_date') }}" 
+            value="{{ old('expected_start_date', $batch->expected_start_date->format('Y-m-d')) }}" 
             required
           >
           <div class="invalid-feedback">Please enter the expected starting date.</div>
@@ -325,10 +329,10 @@
           </label>
           <select id="venue" name="venue" class="form-select" required>
             <option value="" disabled selected>Select venue</option>
-            <option value="Conference Hall A" {{ old('venue') == 'Conference Hall A' ? 'selected' : '' }}>Conference Hall A</option>
-            <option value="Room B202" {{ old('venue') == 'Room B202' ? 'selected' : '' }}>Room B202</option>
-            <option value="Auditorium" {{ old('venue') == 'Auditorium' ? 'selected' : '' }}>Auditorium</option>
-            <option value="Online" {{ old('venue') == 'Online' ? 'selected' : '' }}>Online</option>
+            <option value="Conference Hall A" {{ old('venue', $batch->venue) == 'Conference Hall A' ? 'selected' : '' }}>Conference Hall A</option>
+            <option value="Room B202" {{ old('venue', $batch->venue) == 'Room B202' ? 'selected' : '' }}>Room B202</option>
+            <option value="Auditorium" {{ old('venue', $batch->venue) == 'Auditorium' ? 'selected' : '' }}>Auditorium</option>
+            <option value="Online" {{ old('venue', $batch->venue) == 'Online' ? 'selected' : '' }}>Online</option>
           </select>
           <div class="invalid-feedback">Please select a venue.</div>
         </div>
@@ -340,13 +344,13 @@
           </label>
           <select id="session_day" name="session_day" class="form-select" required>
             <option value="" disabled selected>Select session day</option>
-            <option value="Monday" {{ old('session_day') == 'Monday' ? 'selected' : '' }}>Monday</option>
-            <option value="Tuesday" {{ old('session_day') == 'Tuesday' ? 'selected' : '' }}>Tuesday</option>
-            <option value="Wednesday" {{ old('session_day') == 'Wednesday' ? 'selected' : '' }}>Wednesday</option>
-            <option value="Thursday" {{ old('session_day') == 'Thursday' ? 'selected' : '' }}>Thursday</option>
-            <option value="Friday" {{ old('session_day') == 'Friday' ? 'selected' : '' }}>Friday</option>
-            <option value="Saturday" {{ old('session_day') == 'Saturday' ? 'selected' : '' }}>Saturday</option>
-            <option value="Sunday" {{ old('session_day') == 'Sunday' ? 'selected' : '' }}>Sunday</option>
+            <option value="Monday" {{ old('session_day', $batch->session_day) == 'Monday' ? 'selected' : '' }}>Monday</option>
+            <option value="Tuesday" {{ old('session_day', $batch->session_day) == 'Tuesday' ? 'selected' : '' }}>Tuesday</option>
+            <option value="Wednesday" {{ old('session_day', $batch->session_day) == 'Wednesday' ? 'selected' : '' }}>Wednesday</option>
+            <option value="Thursday" {{ old('session_day', $batch->session_day) == 'Thursday' ? 'selected' : '' }}>Thursday</option>
+            <option value="Friday" {{ old('session_day', $batch->session_day) == 'Friday' ? 'selected' : '' }}>Friday</option>
+            <option value="Saturday" {{ old('session_day', $batch->session_day) == 'Saturday' ? 'selected' : '' }}>Saturday</option>
+            <option value="Sunday" {{ old('session_day', $batch->session_day) == 'Sunday' ? 'selected' : '' }}>Sunday</option>
           </select>
           <div class="invalid-feedback">Please select a session day.</div>
         </div>
@@ -358,9 +362,9 @@
           </label>
           <select id="visible_platform" name="visible_platform" class="form-select" required>
             <option value="" disabled selected>Select platform</option>
-            <option value="web" {{ old('visible_platform') == 'web' ? 'selected' : '' }}>Web</option>
-            <option value="mobile" {{ old('visible_platform') == 'mobile' ? 'selected' : '' }}>Mobile</option>
-            <option value="both" {{ old('visible_platform') == 'both' ? 'selected' : '' }}>Both</option>
+            <option value="web" {{ old('visible_platform', $batch->visible_platform) == 'web' ? 'selected' : '' }}>Web</option>
+            <option value="mobile" {{ old('visible_platform', $batch->visible_platform) == 'mobile' ? 'selected' : '' }}>Mobile</option>
+            <option value="both" {{ old('visible_platform', $batch->visible_platform) == 'both' ? 'selected' : '' }}>Both</option>
           </select>
           <div class="invalid-feedback">Please select a visible platform.</div>
         </div>
@@ -376,9 +380,9 @@
             class="form-select" 
             required
           >
-            <option value="" disabled {{ old('publication_status') ? '' : 'selected' }}>Select status</option>
-            <option value="1" {{ old('publication_status') == '1' ? 'selected' : '' }}>Published</option>
-            <option value="0" {{ old('publication_status') == '0' ? 'selected' : '' }}>Unpublished</option>
+            <option value="" disabled {{ old('publication_status', $batch->publication_status) ? '' : 'selected' }}>Select status</option>
+            <option value="1" {{ old('publication_status', $batch->publication_status) == 1 ? 'selected' : '' }}>Published</option>
+            <option value="0" {{ old('publication_status', $batch->publication_status) == 0 ? 'selected' : '' }}>Unpublished</option>
           </select>
           <div class="invalid-feedback">Please select the publication status.</div>
         </div>
@@ -389,12 +393,11 @@
     <!-- Action Buttons -->
     <div class="mt-4 d-flex justify-content-between">
       <a href="/batch/list" class="btn btn-secondary">✖ Close</a>
-      <button type="submit" class="btn btn-success">Save</button>
+      <button type="submit" class="btn btn-success">Update</button>
     </div>
 
   </form>
 </div>
-
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
