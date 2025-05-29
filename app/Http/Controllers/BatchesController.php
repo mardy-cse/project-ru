@@ -107,10 +107,11 @@ public function store(Request $request)
         $batch = Batches::findOrFail($id);
         return view('batches.edit_batch', compact('batch'));
     }
-    
+
     public function open(string $id)
     {
         $batch = Batches::findOrFail($id);
+        // dd($batch);
         return view('batches.batch_info', compact('batch'));
     }
 
