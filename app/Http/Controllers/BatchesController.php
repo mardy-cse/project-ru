@@ -142,7 +142,7 @@ public function store(Request $request)
         'venue' => 'required|string|max:255',
         'session_day' => 'required|string|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
 
-        'batch_status' => 'required|in:0,1,2',
+        'batch_status' => 'required|in:0,1',
         'visible_platform' => 'required|in:web,mobile,both',
         'publication_status' => 'required|in:0,1',
     ]);

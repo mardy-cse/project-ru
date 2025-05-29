@@ -227,9 +227,8 @@
             required
           >
             <option value="" disabled {{ old('batch_status') ? '' : 'selected' }}>Select status</option>
-            <option value="1" {{ old('batch_status') == '1' ? 'selected' : '' }}>Active</option>
-            <option value="0" {{ old('batch_status') == '0' ? 'selected' : '' }}>Inactive</option>
-            <option value="2" {{ old('batch_status') == '2' ? 'selected' : '' }}>Pending</option>
+            <option value="1" {{ old('batch_status') == '1' ? 'selected' : '' }}>On Going</option>
+            <option value="0" {{ old('batch_status') == '0' ? 'selected' : '' }}>Completed</option>
           </select>
           <div class="invalid-feedback">Please select a batch status.</div>
         </div>
