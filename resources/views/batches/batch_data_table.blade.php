@@ -37,25 +37,10 @@
     @endif
 </td>
 
-{{-- <td>
-                <a class="btn btn-sm btn-primary me-1" title="Edit" href="#">
-                    <i class="fas fa-edit"></i> Edit
-                </a>
-                @if($speaker->status == 'active')
-                    <a href="#" class="btn btn-sm btn-warning" title="Deactivate">
-                        <i class="fas fa-ban"></i> Deactivate
-                    </a>
-                @else
-                    <a href="#" class="btn btn-sm btn-success" title="Activate">
-                        <i class="fas fa-check"></i> Activate
-                    </a>
-                @endif
-            </td> --}}
-
              <td>
-                 <a class="btn btn-sm btn-info me-1" title="Open" href="#">
-        <i class="fas fa-eye"></i> Open
-    </a>
+                 <a class="btn btn-sm btn-info me-1" title="Open" href="{{ url('/batch/' . $batch->id . '/open') }}">
+                   <i class="fas fa-eye"></i> Open
+                </a>
                 <a class="btn btn-sm btn-primary me-1" title="Edit" href="{{ url('/batch/' . $batch->id . '/edit') }}">
                     <i class="fas fa-edit"></i> Edit
                 </a>
