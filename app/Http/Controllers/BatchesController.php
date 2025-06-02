@@ -10,30 +10,10 @@ use App\Models\Speakers;
 
 class BatchesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
 public function store(Request $request)
 {
-    // Validate input
     $request->validate([
-        // 'training_id' => 'required|exists:trainings,id',
         'name' => 'required|string|max:255',
         'speaker_name' => 'required|string|max:255',
 
@@ -86,31 +66,12 @@ public function store(Request $request)
     $batch->visible_platform = $request->visible_platform;
     $batch->publication_status = $request->publication_status;
 
-    $batch->created_by = Auth::id(); // Optional: requires user to be logged in
+    $batch->created_by = Auth::id(); 
     $batch->save();
 
     return redirect('/batch/list')->with('success', 'Batch created successfully!');
 
 }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    // public function edit(string $id)
-    // {
-    //     $batch = Batches::findOrFail($id);
-    //     return view('batches.edit_batch', compact('batch'));
-    // }
-
-
 
     public function open(string $id)
     {
@@ -119,19 +80,9 @@ public function store(Request $request)
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, string $id)
-    // {
-    //     //
-    // }
-
     public function update(Request $request, $id)
 {
-    // Validate input
     $request->validate([
-        // 'training_id' => 'required|exists:trainings,id',
         'name' => 'required|string|max:255',
         'speaker_name' => 'required|string|max:255',
 
@@ -160,7 +111,6 @@ public function store(Request $request)
     // Find existing batch
     $batch = Batches::findOrFail($id);
 
-    // dd($batch);
 
     // Update fields
     $batch->training_id = $request->training_id;
@@ -188,7 +138,7 @@ public function store(Request $request)
     $batch->visible_platform = $request->visible_platform;
     $batch->publication_status = $request->publication_status;
 
-    $batch->updated_by = Auth::id(); // Optional: if you track who updated
+    $batch->updated_by = Auth::id(); 
     $batch->save();
 
     // Simple version
@@ -196,37 +146,11 @@ public function store(Request $request)
 }
 
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-
-
      public function showContent()
     {
         $batch = Batches::all();
-          $categories = [
-                1 => 'Web Development',
-                2 => 'App Development',
-                3 => 'Data Science',
-                4 => 'Machine Learning',
-                5 => 'Cybersecurity',
-                6 => 'Cloud Computing',
-                7 => 'DevOps',
-                8 => 'Networking',
-                9 => 'System Administration'
-              ];
-        return view('batches.batch', compact('batch', 'categories'));
+        return view('batches.batch', compact('batch'));
     }
-
-    // public function showCreateNewBatchForm()
-    // {
-    //     return view('batches.create_new_batch');
-    // }
 
 public function showCreateNewBatchForm()
 {
@@ -239,8 +163,8 @@ public function showCreateNewBatchForm()
 public function edit(string $id)
 {
     $batch = Batches::findOrFail($id);
-    $trainings = Training::all(); // Object হিসেবে, pluck না করে
-    $speakers = Speakers::where('status', 'active')->get(); // showCreateNewBatchForm এর মতো
+    $trainings = Training::all(); 
+    $speakers = Speakers::where('status', 'active')->get(); 
     return view('batches.edit_batch', compact('batch', 'trainings', 'speakers'));
 }
 

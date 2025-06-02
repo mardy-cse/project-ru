@@ -58,6 +58,68 @@
     <!-- Custom Scripts -->
     <script src="{{ asset('js/main-script.js') }}" defer></script>
 
+    <!-- Default DataTable Initialization -->
+    <script>
+    $(document).ready(function() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // Initialize DataTable for #myTable
+        if ($('#myTable').length) {
+            let table = new DataTable('#myTable', {
+                responsive: true,
+                lengthChange: true,
+                autoWidth: false,
+                pageLength: 10,
+                order: [[ 0, "asc" ]],
+                language: {
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                    infoEmpty: "Showing 0 to 0 of 0 entries",
+                    infoFiltered: "(filtered from _MAX_ total entries)",
+                    paginate: {
+                        first: "First",
+                        last: "Last",
+                        next: "Next",
+                        previous: "Previous"
+                    }
+                }
+            });
+        }
+
+        // Initialize DataTable for any table with class 'display'
+        $('.display').each(function() {
+            if (!$.fn.DataTable.isDataTable(this)) {
+                let table = new DataTable(this, {
+                    responsive: true,
+                    lengthChange: true,
+                    autoWidth: false,
+                    pageLength: 10
+                });
+            }
+        });
+    });
+    </script>
+
+
+
+
     <!-- Select2 Init -->
     <script>
         $(document).ready(function () {
@@ -70,27 +132,67 @@
         });
     </script>
 
-<script>
-toastr.options = {
-    "closeButton": true,
-    "progressBar": true,
-    "positionClass": "toast-top-center",
-    "timeOut": "2000"
-};
 
-@if(session('success'))
-    toastr.success('{{ session('success') }}');
-@endif
-@if(session('error'))
-    toastr.error('{{ session('error') }}');
-@endif
-@if(session('warning'))
-    toastr.warning('{{ session('warning') }}');
-@endif
-@if(session('info'))
-    toastr.info('{{ session('info') }}');
-@endif
-</script>
+
+
+
+
+
+
+    <!-- Toastr Configuration -->
+    <script>
+    toastr.options = {
+        "closeButton": false,
+        "progressBar": true,
+        "positionClass": "toast-top-center",
+        "timeOut": "4000"
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Custom CSS for width
+    $('<style>')
+        .prop('type', 'text/css')
+        .html(`
+            #toast-container.toast-top-center {
+                width: 600px !important;
+                left: 50% !important;
+                margin-left: -300px !important;
+            }
+            #toast-container > div {
+                width: 100% !important;
+                padding: 15px 20px !important;
+            }
+        `)
+        .appendTo('head');
+
+    @if(session('success'))
+        toastr.success('{{ session('success') }}');
+    @endif
+    @if(session('error'))
+        toastr.error('{{ session('error') }}');
+    @endif
+    @if(session('warning'))
+        toastr.warning('{{ session('warning') }}');
+    @endif
+    @if(session('info'))
+        toastr.info('{{ session('info') }}');
+    @endif
+    </script>
+
+    <!-- Page Specific Scripts -->
+    @yield('scripts')
 </body>
 
 </html>
