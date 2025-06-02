@@ -22,8 +22,11 @@
 
         <tr>
             <td>{{ $index + 1 }}</td>
-            <td>{{ $categories[$batch->training_id] ?? 'N/A' }}</td>
-            <td>{{ $batch->name }}</td>
+            <td>{{ $batch->training->name ?? 'N/A' }}</td>
+
+
+            <td>{{ Str::limit($batch->name, 50, '...') }}</td>
+
             <td>{{ \Carbon\Carbon::parse($batch->start_date)->format('Y-m-d') }}</td>
             <td>{{ \Carbon\Carbon::parse($batch->end_date)->format('Y-m-d') }}</td>
             <td>{{ \Carbon\Carbon::parse($batch->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($batch->end_time)->format('g:i A') }}</td>

@@ -60,16 +60,20 @@
   </a>
 </div>
 
-          <div class="relative block w-full">
-            <a class="dash-sb-menu-item w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="dash-payment.html">
-              <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
-                <svg class="sb-menu-icon h-[50px] w-[50px]" xmlns="http://www.w3.org/2000/svg" width="76" height="60" viewBox="0 0 76 60" fill="none">
-                  <path d="M8.83333 0.833374C4.23698 0.833374 0.5 4.57035 0.5 9.16671V13.3334H75.5V9.16671C75.5 4.57035 71.763 0.833374 67.1667 0.833374H8.83333ZM75.5 25.8334H0.5V50.8334C0.5 55.4297 4.23698 59.1667 8.83333 59.1667H67.1667C71.763 59.1667 75.5 55.4297 75.5 50.8334V25.8334ZM15.0833 42.5H23.4167C24.5625 42.5 25.5 43.4375 25.5 44.5834C25.5 45.7292 24.5625 46.6667 23.4167 46.6667H15.0833C13.9375 46.6667 13 45.7292 13 44.5834C13 43.4375 13.9375 42.5 15.0833 42.5ZM29.6667 44.5834C29.6667 43.4375 30.6042 42.5 31.75 42.5H48.4167C49.5625 42.5 50.5 43.4375 50.5 44.5834C50.5 45.7292 49.5625 46.6667 48.4167 46.6667H31.75C30.6042 46.6667 29.6667 45.7292 29.6667 44.5834Z" fill="black"/>
-                </svg>
-              </span>
-              <span class="text-[16px] text-lh-1_5 sb-menu-text">Payment</span>
-            </a>
-          </div>
+<div class="relative block w-full">
+  <a 
+    {{-- href="/training/list" --}}
+    href="#"
+    style="text-decoration: none;" 
+    class="dash-sb-menu-item {{ request()->is('attendance*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+  >
+    <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+      <i class="fa fa-users" style="font-size: 50px;"></i>
+    </span>
+    <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Attendance</span>
+  </a>
+</div>
+
         </nav>
       </div>
     </div>

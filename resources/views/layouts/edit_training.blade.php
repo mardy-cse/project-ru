@@ -71,7 +71,27 @@
       </div>
 
       {{-- Category --}}
+
       <div class="row mb-3">
+  <div class="col-md-6">
+    <label for="training_category_id" class="form-label fw-bold">
+      Category Name <span class="required">*</span>
+    </label>
+    <select name="training_category_id" id="training_category_id" class="form-select" required>
+      <option value="">Select Category</option>
+      @foreach($trainingCategory as $category)
+     <option value="{{ $category->id }}"
+    {{ (old('training_category_id', $training->training_category_id ?? '') == $category->id) ? 'selected' : '' }}>
+    {{ $category->category_name }}
+</option>
+
+      @endforeach
+    </select>
+    <div class="invalid-feedback">Please select a category.</div>
+  </div>
+</div>
+
+      {{-- <div class="row mb-3">
         <div class="col-md-6">
           <label for="training_category_id" class="form-label fw-bold">Category Name <span class="required">*</span></label>
           <select name="training_category_id" id="training_category_id" class="form-select" required>
@@ -95,7 +115,7 @@
           </select>
           <div class="invalid-feedback">Please select a category.</div>
         </div>
-      </div>
+      </div> --}}
 
       {{-- Profile Image --}}
       <div class="row mb-3">

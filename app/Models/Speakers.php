@@ -20,6 +20,7 @@ class Speakers extends Model
         'signature',
         'status',
         'link',
+        'exparties_categories_id',
     ];
 
     protected $casts = [
@@ -27,6 +28,7 @@ class Speakers extends Model
         // 'expertise' => 'array',
         // 'experience_years' => 'integer',
         // 'total_projects' => 'integer',
+        'exparties_categories_id' => 'array',
     ];
 
     public function getProfileImageUrlAttribute()

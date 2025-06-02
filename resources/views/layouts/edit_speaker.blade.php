@@ -73,10 +73,23 @@
 
       <!-- Right Column -->
       <div class="col-md-6">
+
+        <!-- Expertise -->
+        <label for="categorySelect">Select Expertise <span class="required">*</span></label>
+<select name="exparties_categories_id[]" id="categorySelect" class="form-control select2" multiple required>
+  {{-- @foreach($trainingCategories as $category)
+    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+  @endforeach --}}
+</select>
+        <div class="invalid-feedback">Please select at least one expertise.</div>
+
+
+        <!-- Email -->
         <label class="form-label">Email <span class="required">*</span></label>
         <input type="email" name="email" class="form-control" placeholder="Enter email address" value="{{ old('email', $speaker->email) }}" required>
         <div class="invalid-feedback">Enter a valid email address.</div>
 
+        <!-- Gender -->
         <label class="form-label mt-3">Gender <span class="required">*</span></label>
         <select name="gender" class="form-select" required>
           <option value="">Select Gender</option>
@@ -86,13 +99,14 @@
         </select>
         <div class="invalid-feedback">Please select a gender.</div>
 
+        <!-- Organization -->
         <label class="form-label mt-3">Organization <span class="required">*</span></label>
         <input type="text" name="organization" class="form-control" placeholder="Enter organization name" value="{{ old('organization', $speaker->organization) }}" required>
         <div class="invalid-feedback">Organization name is required.</div>
 
+        <!-- Signature -->
         <label class="form-label mt-3">Signature</label>
         <input type="file" name="signature" id="signatureFile" class="form-control" accept=".jpg,.jpeg,.png">
-        {{-- <img src="{{ asset($speaker->signature ?? 'https://via.placeholder.com/300x80?text=Sign') }}" alt="Signature" class="signature-img" id="signaturePreview"> --}}
          <img src="{{ $speaker->signature ? asset('storage/' . $speaker->signature) : 'https://via.placeholder.com/70x70?text=Photo' }}" alt="Profile" class="preview-img" id="profilePreview">
         <small class="text-danger d-block">
           [File Format: *.jpg/.jpeg/.png]<br>
@@ -100,6 +114,7 @@
           [Dimensions: Height: 80px, Width: 300px]
         </small>
 
+        <!-- Link -->
         <label class="form-label mt-3">Link</label>
         <input type="url" name="link" class="form-control" placeholder="Enter website/social media link" value="{{ old('link', $speaker->link) }}">
       </div>

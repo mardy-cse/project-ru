@@ -70,7 +70,7 @@
       </div>
 
       {{-- Category --}}
-      <div class="row mb-3">
+      {{-- <div class="row mb-3">
   <div class="col-md-6">
     <label for="training_category_id" class="form-label fw-bold">Category Name <span class="required">*</span></label>
     <select name="training_category_id" id="training_category_id" class="form-select" required>
@@ -96,7 +96,20 @@
     </select>
     <div class="invalid-feedback">Please select a category.</div>
   </div>
+</div> --}}
+
+<div class="mb-3">
+    <label for="training_category_id" class="form-label fw-bold">
+        Training Category <span class="text-danger">*</span>
+    </label>
+    <select name="training_category_id" id="training_category_id" class="form-select" required>
+        <option value="">Select a Category</option>
+        @foreach ($trainingCategory as $category)
+            <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+        @endforeach
+    </select>
 </div>
+
 
       {{-- Profile Image --}}
       <div class="row mb-3">

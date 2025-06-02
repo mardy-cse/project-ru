@@ -62,6 +62,16 @@ Route::get('/batch/{id}/togglePublishStatus', [BatchesController::class, 'toggle
 
 
 
+//Attendance
+Route::get('/attendance/list', [BatchesController::class, 'showContent']);
+
+
+
+//Certificate
+
+
+
+
 
 
 

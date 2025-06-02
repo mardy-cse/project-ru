@@ -45,33 +45,20 @@
       <div class="col-md-6" style="padding: 20px;">
 
         {{-- training_id --}}
-        <div class="mb-3">
-          <label for="training_id" class="form-label fw-bold">
-            Training Name <span class="required">*</span>
-          </label>
-          <select id="training_id" name="training_id" class="form-select" required>
-            <option value="">Select Training Category</option>
-            @php
-              $categories = [
-                1 => 'Web Development',
-                2 => 'App Development',
-                3 => 'Data Science',
-                4 => 'Machine Learning',
-                5 => 'Cybersecurity',
-                6 => 'Cloud Computing',
-                7 => 'DevOps',
-                8 => 'Networking',
-                9 => 'System Administration'
-              ];
-            @endphp
-            @foreach($categories as $id => $label)
-              <option value="{{ $id }}" {{ old('training_id', $batch->training_id) == $id ? 'selected' : '' }}>
-                {{ $label }}
-              </option>
-            @endforeach
-          </select>
-          <div class="invalid-feedback">Please select a training category.</div>
-        </div>
+   <div class="mb-3">
+  <label for="training_id" class="form-label fw-bold">
+    Training Name <span class="required">*</span>
+  </label>
+  <select id="training_id" name="training_id" class="form-select" required>
+    <option value="">Select Training Category</option>
+    @foreach($trainings as $id => $name)
+      <option value="{{ $id }}" {{ old('training_id', $batch->training_id) == $id ? 'selected' : '' }}>
+        {{ $name }}
+      </option>
+    @endforeach
+  </select>
+  <div class="invalid-feedback">Please select a training category.</div>
+</div>
 
         {{-- name --}}
         <div class="mb-3">
@@ -91,21 +78,37 @@
         </div>
 
         {{-- Name of Speaker --}}
-        <div class="mb-3">
-          <label for="speaker_name" class="form-label fw-bold">
-            Name of Speaker <span class="required">*</span>
-          </label>
-          <input 
-            type="text" 
-            id="speaker_name" 
-            name="speaker_name" 
-            class="form-control" 
-            value="{{ old('speaker_name', $batch->speaker_name) }}" 
-            placeholder="Enter speaker's name"
-            required
-          >
-          <div class="invalid-feedback">Please enter the name of the speaker.</div>
-        </div>
+        {{-- <div class="mb-3">
+  <label for="speaker_name" class="form-label fw-bold">
+    Name of Speaker <span class="required">*</span>
+  </label>
+  <select id="speaker_name" name="speaker_name" class="form-select select2" required>
+    <option value="">Select a Speaker</option>
+    @foreach($speakers as $id => $name)
+      <option value="{{ $id }}" {{ old('speaker_name', $batch->speaker_name) == $id ? 'selected' : '' }}>
+        {{ $name }}
+      </option>
+    @endforeach
+  </select>
+  <div class="invalid-feedback">Please select the name of the speaker.</div>
+</div> --}}
+
+{{-- Name of Speaker --}}
+<div class="mb-3">
+  <label for="speaker_name" class="form-label fw-bold">
+    Name of Speaker <span class="required">*</span>
+  </label>
+  <select id="speaker_name" name="speaker_name" class="form-select select2" required>
+    <option value="">Select a Speaker</option>
+    @foreach($speakers as $speaker)
+      <option value="{{ $speaker->name }}" {{ old('speaker_name', $batch->speaker_name) == $speaker->name ? 'selected' : '' }}>
+        {{ $speaker->name }}
+      </option>
+    @endforeach
+  </select>
+  <div class="invalid-feedback">Please select the name of the speaker.</div>
+</div>
+
 
         {{-- Start Date --}}
         <div class="mb-3">
@@ -399,6 +402,29 @@
 </div>
 
 <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    const trainingSelect = document.getElementById('training_id');
+    const speakerSelect = document.getElementById('speaker_name');
+    const allSpeakerOptions = Array.from(speakerSelect.options).slice(1); // exclude placeholder
+
+    trainingSelect.addEventListener('change', function () {
+        const selectedCategoryId = this.selectedOptions[0].dataset.category;
+        
+        // Clear and reset speaker options
+        speakerSelect.innerHTML = '<option value="">Select a Speaker</option>';
+
+        allSpeakerOptions.forEach(option => {
+            const categories = JSON.parse(option.dataset.categories || '[]');
+            if (categories.includes(selectedCategoryId)) {
+                speakerSelect.appendChild(option);
+            }
+        });
+    });
+});
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('batchForm');
   

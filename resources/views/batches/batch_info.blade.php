@@ -10,7 +10,7 @@
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 mb-4">
 
       <!-- Card Header -->
-      <div class="px-4 py-2 border-bottom" style="background-color: green; color: white;">
+      <div class="px-4 py-2 border-bottom bg-success text-white">
         <div class="d-flex align-items-center gap-2">
           <svg class="me-2" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -21,65 +21,48 @@
       </div>
 
       <!-- Card Body -->
-      <div class="row m-4 p-2 border" style="border-color: rgb(212, 210, 210);">
+
+      <div class="row m-4 p-2 border border-light">
         <!-- Left Column -->
         <div class="col-md-6 mb-3">
-@php
-  $categories = [
-    1 => 'Web Development',
-    2 => 'App Development',
-    3 => 'Data Science',
-    4 => 'Machine Learning',
-    5 => 'Cybersecurity',
-    6 => 'Cloud Computing',
-    7 => 'DevOps',
-    8 => 'Networking',
-    9 => 'System Administration'
-  ];
-@endphp
-
-<div class="row mb-3">
-  <div class="col-md-4"><strong>Training Name</strong></div>
-  <div class="col-md-8">: {{ $categories[$batch->training_id] ?? 'N/A' }}</div>
-</div>
-
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>Batch Name</strong></div>
-<div class="col-md-8">: {{ old('name', $batch->name) }}</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>Start Date</strong></div>
-<div class="col-md-8">: {{ old('start_date', $batch->start_date->format('Y-m-d')) }}</div>
-          </div>
+          @php
+            $leftFields = [
+              'Training Name' => $batch->training->name,
+              'Batch Name' => $batch->name,
+              'Start Date' => $batch->start_date->format('Y-m-d')
+            ];
+          @endphp
+          
+          @foreach($leftFields as $label => $value)
+            <div class="row mb-3">
+              <div class="col-md-4"><strong>{{ $label }}</strong></div>
+              <div class="col-md-8">: {{ $value }}</div>
+            </div>
+          @endforeach
         </div>
 
         <!-- Right Column -->
         <div class="col-md-6 mb-3">
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>Total Session</strong></div>
-            <div class="col-md-8">: {{ old('number_of_sessions', $batch->number_of_sessions) }}</div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-md-4"><strong>End Date</strong></div>
-            <div class="col-md-8">: {{ old('end_date', $batch->end_date->format('Y-m-d')) }}</div>
-          </div>
           @php
-  $statusLabels = [
-    1 => 'On Going',
-    0 => 'Completed'
-  ];
-@endphp
-
-<div class="row mb-3">
-  <div class="col-md-4"><strong>Status</strong></div>
-  <div class="col-md-8">: {{ $statusLabels[$batch->batch_status] ?? 'N/A' }}</div>
-</div>
-
+            $statusLabels = [1 => 'On Going', 0 => 'Completed'];
+            $rightFields = [
+              'Total Session' => $batch->number_of_sessions,
+              'End Date' => $batch->end_date->format('Y-m-d'),
+              'Status' => $statusLabels[$batch->batch_status] ?? 'N/A'
+            ];
+          @endphp
+          
+          @foreach($rightFields as $label => $value)
+            <div class="row mb-3">
+              <div class="col-md-4"><strong>{{ $label }}</strong></div>
+              <div class="col-md-8">: {{ $value }}</div>
+            </div>
+          @endforeach
         </div>
       </div>
 
       <!-- Action Buttons -->
-      <div class="m-4 p-2 d-flex justify-content-start border" style="background-color: aliceblue; border-color: rgb(212, 210, 210);">
+      <div class="m-4 p-2 d-flex justify-content-start border bg-light border-light">
         <a href="/batch/list" class="btn btn-secondary">✖ Close</a>
       </div>
 

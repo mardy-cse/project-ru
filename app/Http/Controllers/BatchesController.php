@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Batches;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Training;
+use App\Models\Speakers;
 
 
 class BatchesController extends Controller
@@ -102,16 +104,17 @@ public function store(Request $request)
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        $batch = Batches::findOrFail($id);
-        return view('batches.edit_batch', compact('batch'));
-    }
+    // public function edit(string $id)
+    // {
+    //     $batch = Batches::findOrFail($id);
+    //     return view('batches.edit_batch', compact('batch'));
+    // }
+
+
 
     public function open(string $id)
     {
         $batch = Batches::findOrFail($id);
-        // dd($batch);
         return view('batches.batch_info', compact('batch'));
     }
 
@@ -205,7 +208,6 @@ public function store(Request $request)
      public function showContent()
     {
         $batch = Batches::all();
-        // dd($batch);
           $categories = [
                 1 => 'Web Development',
                 2 => 'App Development',
@@ -220,10 +222,28 @@ public function store(Request $request)
         return view('batches.batch', compact('batch', 'categories'));
     }
 
-    public function showCreateNewBatchForm()
-    {
-        return view('batches.create_new_batch');
-    }
+    // public function showCreateNewBatchForm()
+    // {
+    //     return view('batches.create_new_batch');
+    // }
+
+public function showCreateNewBatchForm()
+{
+    // $trainings = Training::pluck('name', 'id');
+    // $speakers = Speakers::pluck('name', 'id');
+    $trainings = Training::all();
+    $speakers = Speakers::where('status', 'active')->get();
+    return view('batches.create_new_batch', compact('trainings', 'speakers'));
+}
+
+
+public function edit(string $id)
+{
+    $batch = Batches::findOrFail($id);
+    $trainings = Training::pluck('name', 'id');
+    $speakers = Speakers::all();  
+    return view('batches.edit_batch', compact('batch', 'trainings', 'speakers'));
+}
 
     public function togglePublishStatus($id)
 {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Training;
+use App\Models\TrainingCategory;
 
 class TrainingController extends Controller
 {
@@ -35,7 +36,6 @@ class TrainingController extends Controller
         'training_overview' => 'required|string',
         'course_qualification' => 'required|string',
         'training_objective' => 'required|string',
-        // 'course_thumbnail' => 'nullable|file|image|max:2048',
         'course_thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'status' => 'required|integer',
     ]);
@@ -76,13 +76,14 @@ class TrainingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        $training = Training::findOrFail($id);
+public function edit(string $id)
+{
+    $training = Training::findOrFail($id);
+    $trainingCategory = TrainingCategory::all();
 
-        // dd($training);
-        return view('layouts.edit_training', compact('training'));
-    }
+    return view('layouts.edit_training', compact('training', 'trainingCategory'));
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -141,14 +142,18 @@ if ($request->hasFile('course_thumbnail')) {
 
         public function showContent()
     {
-        $training = Training::all();
+        // $training = Training::all();
+        $training = Training::latest()->get();
         return view('layouts.training', compact('training'));
     }
 
 
     public function showAddTrainingForm()
     {
-        return view('layouts.add_training');
+        $trainingCategory = TrainingCategory::all();
+        // dd($trainingCategory);
+        return view('layouts.add_training', compact('trainingCategory'));
+
     }
 
 public function toggleStatus($id)
