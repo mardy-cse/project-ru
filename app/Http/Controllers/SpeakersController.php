@@ -67,7 +67,7 @@ Speakers::create($validated);
     public function edit($id)
 {
     $speaker = Speakers::findOrFail($id);
-    $trainingCategories = TrainingCategory::all(); // Add this line
+    $trainingCategories = TrainingCategory::all();
     return view('layouts.edit_speaker', compact('speaker', 'trainingCategories'));
 }
 
@@ -90,7 +90,6 @@ public function update(Request $request, $id)
 
 
         'exparties_categories_id' => 'required|array',
-
 
         'exparties_categories_id.*' => 'string',
     ]);

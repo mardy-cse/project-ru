@@ -50,10 +50,12 @@
     Training Name <span class="required">*</span>
   </label>
   <select id="training_id" name="training_id" class="form-select" required>
-    <option value="">Select Training Category</option>
-    @foreach($trainings as $id => $name)
-      <option value="{{ $id }}" {{ old('training_id', $batch->training_id) == $id ? 'selected' : '' }}>
-        {{ $name }}
+    <option value="">Select Training Name</option>
+    @foreach($trainings as $training)
+      <option value="{{ $training->id }}" 
+              data-category="{{ $training->training_category_id }}"
+              {{ old('training_id', $batch->training_id) == $training->id ? 'selected' : '' }}>
+        {{ $training->name }}
       </option>
     @endforeach
   </select>
@@ -77,21 +79,6 @@
           <div class="invalid-feedback">Batch name is required.</div>
         </div>
 
-        {{-- Name of Speaker --}}
-        {{-- <div class="mb-3">
-  <label for="speaker_name" class="form-label fw-bold">
-    Name of Speaker <span class="required">*</span>
-  </label>
-  <select id="speaker_name" name="speaker_name" class="form-select select2" required>
-    <option value="">Select a Speaker</option>
-    @foreach($speakers as $id => $name)
-      <option value="{{ $id }}" {{ old('speaker_name', $batch->speaker_name) == $id ? 'selected' : '' }}>
-        {{ $name }}
-      </option>
-    @endforeach
-  </select>
-  <div class="invalid-feedback">Please select the name of the speaker.</div>
-</div> --}}
 
 {{-- Name of Speaker --}}
 <div class="mb-3">
@@ -406,21 +393,60 @@
 document.addEventListener('DOMContentLoaded', function () {
     const trainingSelect = document.getElementById('training_id');
     const speakerSelect = document.getElementById('speaker_name');
-    const allSpeakerOptions = Array.from(speakerSelect.options).slice(1); // exclude placeholder
 
-    trainingSelect.addEventListener('change', function () {
-        const selectedCategoryId = this.selectedOptions[0].dataset.category;
-        
-        // Clear and reset speaker options
+
+
+
+    
+    // Store all speakers data (same as create_new_batch.blade.php)
+    const allSpeakers = @json($speakers);
+    const currentSpeaker = "{{ old('speaker_name', $batch->speaker_name) }}";
+    
+    // Function to populate speakers based on category
+    function populateSpeakers(selectedCategoryId, selectCurrentSpeaker = false) {
+        // Clear speaker options
         speakerSelect.innerHTML = '<option value="">Select a Speaker</option>';
+        
 
-        allSpeakerOptions.forEach(option => {
-            const categories = JSON.parse(option.dataset.categories || '[]');
+
+
+
+
+        // If no training selected, don't show any speakers
+        if (!selectedCategoryId) {
+            return;
+        }
+        
+        // Filter and add speakers based on selected training category
+        allSpeakers.forEach(speaker => {
+            const categories = speaker.exparties_categories_id || [];
             if (categories.includes(selectedCategoryId)) {
+                const option = document.createElement('option');
+                option.value = speaker.name;
+                option.textContent = speaker.name;
+                option.setAttribute('data-categories', JSON.stringify(categories));
+                
+                // Select current speaker if editing
+                if (selectCurrentSpeaker && speaker.name === currentSpeaker) {
+                    option.selected = true;
+                }
+                
                 speakerSelect.appendChild(option);
             }
         });
+    }
+    
+    // On training change
+    trainingSelect.addEventListener('change', function () {
+        const selectedCategoryId = this.selectedOptions[0]?.dataset.category;
+        populateSpeakers(selectedCategoryId);
     });
+    
+    // Initialize speakers on page load based on current training
+    const currentTrainingOption = trainingSelect.querySelector('option:checked');
+    if (currentTrainingOption && currentTrainingOption.dataset.category) {
+        populateSpeakers(currentTrainingOption.dataset.category, true);
+    }
 });
 
 

@@ -229,8 +229,6 @@ public function store(Request $request)
 
 public function showCreateNewBatchForm()
 {
-    // $trainings = Training::pluck('name', 'id');
-    // $speakers = Speakers::pluck('name', 'id');
     $trainings = Training::all();
     $speakers = Speakers::where('status', 'active')->get();
     return view('batches.create_new_batch', compact('trainings', 'speakers'));
@@ -240,8 +238,8 @@ public function showCreateNewBatchForm()
 public function edit(string $id)
 {
     $batch = Batches::findOrFail($id);
-    $trainings = Training::pluck('name', 'id');
-    $speakers = Speakers::all();  
+    $trainings = Training::all(); // Object হিসেবে, pluck না করে
+    $speakers = Speakers::where('status', 'active')->get(); // showCreateNewBatchForm এর মতো
     return view('batches.edit_batch', compact('batch', 'trainings', 'speakers'));
 }
 
