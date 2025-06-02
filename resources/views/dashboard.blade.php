@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 
 <body>
@@ -69,15 +70,27 @@
         });
     </script>
 
-    {{-- CKEditor block (uncomment if needed) --}}
-    {{-- 
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-    <script>
-        CKEDITOR.replace('overview');
-        CKEDITOR.replace('why_join');
-        CKEDITOR.replace('best_suited_for');
-    </script> 
-    --}}
+<script>
+toastr.options = {
+    "closeButton": true,
+    "progressBar": true,
+    "positionClass": "toast-top-center",
+    "timeOut": "2000"
+};
+
+@if(session('success'))
+    toastr.success('{{ session('success') }}');
+@endif
+@if(session('error'))
+    toastr.error('{{ session('error') }}');
+@endif
+@if(session('warning'))
+    toastr.warning('{{ session('warning') }}');
+@endif
+@if(session('info'))
+    toastr.info('{{ session('info') }}');
+@endif
+</script>
 </body>
 
 </html>

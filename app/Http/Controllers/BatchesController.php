@@ -191,6 +191,7 @@ public function store(Request $request)
     $batch->updated_by = Auth::id(); // Optional: if you track who updated
     $batch->save();
 
+    // Simple version
     return redirect('/batch/list')->with('success', 'Batch updated successfully!');
 }
 
