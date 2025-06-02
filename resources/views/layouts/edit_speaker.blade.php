@@ -77,9 +77,16 @@
         <!-- Expertise -->
         <label for="categorySelect">Select Expertise <span class="required">*</span></label>
 <select name="exparties_categories_id[]" id="categorySelect" class="form-control select2" multiple required>
-  {{-- @foreach($trainingCategories as $category)
-    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-  @endforeach --}}
+  @foreach($trainingCategories as $category)
+    <option value="{{ $category->id }}" 
+      @if(is_array($speaker->exparties_categories_id) && in_array($category->id, $speaker->exparties_categories_id))
+        selected
+      @elseif(is_string($speaker->exparties_categories_id) && in_array($category->id, json_decode($speaker->exparties_categories_id, true) ?? []))
+        selected
+      @endif>
+      {{ $category->category_name }}
+    </option>
+  @endforeach
 </select>
         <div class="invalid-feedback">Please select at least one expertise.</div>
 
@@ -110,7 +117,7 @@
          <img src="{{ $speaker->signature ? asset('storage/' . $speaker->signature) : 'https://via.placeholder.com/70x70?text=Photo' }}" alt="Profile" class="preview-img" id="profilePreview">
         <small class="text-danger d-block">
           [File Format: *.jpg/.jpeg/.png]<br>
-          [File Size: &lt;100KB]<br>
+          [File Size: <100KB]<br>
           [Dimensions: Height: 80px, Width: 300px]
         </small>
 
@@ -127,7 +134,19 @@
   </form>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 <script>
+$(document).ready(function() {
+    // Initialize Select2
+    $('#categorySelect').select2({
+        placeholder: "Select Expertise",
+        allowClear: true
+    });
+});
+
 (() => {
   'use strict';
   const form = document.getElementById('speakerForm');
@@ -135,34 +154,25 @@
   form.addEventListener('submit', function (event) {
     let isValid = true;
 
-    // Custom manual validation
-    const requiredFields = form.querySelectorAll('[required]');
+    // Remove previous validation classes
+    const fields = form.querySelectorAll('input, select, textarea');
+    fields.forEach(field => {
+      field.classList.remove('is-invalid');
+    });
 
-    requiredFields.forEach(field => {
-      const feedback = field.nextElementSibling;
-      
-      if (!field.checkValidity()) {
+    // Check required fields
+    fields.forEach(field => {
+      if (field.hasAttribute('required') && !field.checkValidity()) {
         field.classList.add('is-invalid');
-        if (feedback && feedback.classList.contains('invalid-feedback')) {
-          feedback.style.display = 'block';
-        }
         isValid = false;
-      } else {
-        field.classList.remove('is-invalid');
-        if (feedback && feedback.classList.contains('invalid-feedback')) {
-          feedback.style.display = 'none';
-        }
       }
     });
 
-    // Signature file size validation
-    const signatureInput = document.getElementById('signatureFile');
-    if (signatureInput.files.length) {
-      const file = signatureInput.files[0];
-      if (file.size > 100 * 1024) {
-        alert('Signature file must be less than 100KB');
-        isValid = false;
-      }
+    // Check if at least one expertise is selected
+    const expertiseSelect = document.getElementById('categorySelect');
+    if (expertiseSelect.selectedOptions.length === 0) {
+      expertiseSelect.classList.add('is-invalid');
+      isValid = false;
     }
 
     if (!isValid) {
@@ -171,15 +181,15 @@
     }
   });
 
-  // Image preview
-  document.getElementById('profileImage').addEventListener('change', function (e) {
+  // Image preview functions
+  document.getElementById('profileImage')?.addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
       document.getElementById('profilePreview').src = URL.createObjectURL(file);
     }
   });
 
-  document.getElementById('signatureFile').addEventListener('change', function (e) {
+  document.getElementById('signatureFile')?.addEventListener('change', function (e) {
     const file = e.target.files[0];
     if (file) {
       const signaturePreview = document.getElementById('signaturePreview');

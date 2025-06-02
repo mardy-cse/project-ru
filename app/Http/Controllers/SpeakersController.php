@@ -30,7 +30,8 @@ public function store(Request $request)
     'status' => 'required|in:active,deactive',
     'link' => 'nullable|url|max:255',
     'exparties_categories_id' => 'required|array',
-    'exparties_categories_id.*' => 'string',
+
+    'exparties_categories_id.*' => 'integer|min:1',
 ]);
 
     
@@ -66,16 +67,18 @@ Speakers::create($validated);
     public function edit($id)
 {
     $speaker = Speakers::findOrFail($id);
-    return view('layouts.edit_speaker', compact('speaker'));
+    $trainingCategories = TrainingCategory::all(); // Add this line
+    return view('layouts.edit_speaker', compact('speaker', 'trainingCategories'));
 }
 
 public function update(Request $request, $id)
 {
     $speaker = Speakers::findOrFail($id);
+    
     $validated = $request->validate([
         'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        'name' => 'required', 'string', 'regex:/^[A-Za-z\s]+$/', 'max:255',
 
+        'name' => 'required|string|max:255',
         'email' => 'required|email|unique:speakers,email,' . $speaker->id,
         'phone' => 'required|string|max:20',
         'designation' => 'required|string|max:255',
@@ -84,19 +87,28 @@ public function update(Request $request, $id)
         'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
         'status' => 'required|in:active,deactive',
         'link' => 'nullable|url|max:255',
+
+
+        'exparties_categories_id' => 'required|array',
+
+
+        'exparties_categories_id.*' => 'string',
     ]);
 
+    // Handle file uploads
+    if ($request->hasFile('profile_image')) {
+        $imagePath = $request->file('profile_image')->store('speakers/profiles', 'public');
+        $validated['profile_image'] = $imagePath; 
+    } else {
+        unset($validated['profile_image']);
+    }
 
-            if ($request->hasFile('profile_image')) {
-    $imagePath = $request->file('profile_image')->store('speakers/profiles', 'public');
-    $validated['profile_image'] = $imagePath; 
-}
-
-if ($request->hasFile('signature')) {
-    $signaturePath = $request->file('signature')->store('speakers/signatures', 'public');
-    $validated['signature'] = $signaturePath; 
-}
-
+    if ($request->hasFile('signature')) {
+        $signaturePath = $request->file('signature')->store('speakers/signatures', 'public');
+        $validated['signature'] = $signaturePath; 
+    } else {
+        unset($validated['signature']);
+    }
 
     $speaker->update($validated);
 
