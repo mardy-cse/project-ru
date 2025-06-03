@@ -61,46 +61,9 @@
     <!-- Default DataTable Initialization -->
     <script>
     $(document).ready(function() {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // Initialize DataTable for #myTable
         if ($('#myTable').length) {
-            let table = new DataTable('#myTable', {
-                responsive: true,
-                lengthChange: true,
-                autoWidth: false,
-                pageLength: 10,
-                order: [[ 0, "asc" ]],
-                language: {
-                    search: "Search:",
-                    lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    infoEmpty: "Showing 0 to 0 of 0 entries",
-                    infoFiltered: "(filtered from _MAX_ total entries)",
-                    paginate: {
-                        first: "First",
-                        last: "Last",
-                        next: "Next",
-                        previous: "Previous"
-                    }
-                }
-            });
+            let table = new DataTable('#myTable');
         }
 
         // Initialize DataTable for any table with class 'display'
@@ -117,9 +80,6 @@
     });
     </script>
 
-
-
-
     <!-- Select2 Init -->
     <script>
         $(document).ready(function () {
@@ -132,13 +92,6 @@
         });
     </script>
 
-
-
-
-
-
-
-
     <!-- Toastr Configuration -->
     <script>
     toastr.options = {
@@ -147,19 +100,6 @@
         "positionClass": "toast-top-center",
         "timeOut": "4000"
     };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // Custom CSS for width
     $('<style>')

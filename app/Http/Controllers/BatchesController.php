@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Training;
 use App\Models\Speakers;
+use App\Models\TrainingParticipant;
 
 
 class BatchesController extends Controller
@@ -75,8 +76,10 @@ public function store(Request $request)
 
     public function open(string $id)
     {
+
+        $participants = TrainingParticipant::where('batch_id', $id)->get();
         $batch = Batches::findOrFail($id);
-        return view('batches.batch_info', compact('batch'));
+        return view('batches.batch_info', compact('batch', 'participants'));
     }
 
 
@@ -154,7 +157,8 @@ public function store(Request $request)
 
 public function showCreateNewBatchForm()
 {
-    $trainings = Training::all();
+    // $trainings = Training::all();
+    $trainings =Training::where('status', '1')->get();
     $speakers = Speakers::where('status', 'active')->get();
     return view('batches.create_new_batch', compact('trainings', 'speakers'));
 }
@@ -163,7 +167,8 @@ public function showCreateNewBatchForm()
 public function edit(string $id)
 {
     $batch = Batches::findOrFail($id);
-    $trainings = Training::all(); 
+    // $trainings = Training::all(); 
+      $trainings =Training::where('status', '1')->get();
     $speakers = Speakers::where('status', 'active')->get(); 
     return view('batches.edit_batch', compact('batch', 'trainings', 'speakers'));
 }
@@ -181,4 +186,36 @@ public function edit(string $id)
     $batch->save();
     return redirect()->back()->with('success', 'Published status updated successfully.');
 }
+
+
+public function toggleParticipantStatus($id)
+{
+    $participant = TrainingParticipant::findOrFail($id);
+
+    $participant->status = $participant->status == '1' ? '0' : '1';
+
+    $participant->save();
+    // return view('batches.batch_info', compact('batch', 'participants'));
+
+    return redirect()->back()->with('success', 'Participant status updated successfully.');
+}
+
+public function updateParticipantStatus($id)
+{
+    $participant = TrainingParticipant::findOrFail($id);
+    $participant->status = $participant->status == '1' ? '0' : '1';
+    $participant->save();
+
+    return redirect()->back()->with('success', 'Participant status updated successfully.');
+}
+
+
+public function approveAllParticipant($id)
+{
+    TrainingParticipant::where('batch_id', $id)
+        ->update(['status' => 1]);
+
+    return redirect()->back()->with('success', 'All participants approved successfully.');
+}
+
 }

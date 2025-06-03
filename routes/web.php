@@ -4,6 +4,7 @@ use App\Http\Controllers\BatchesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\TrainingController;
+use App\Http\Controllers\TrainingParticipantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/speaker/list', [SpeakersController::class, 'showContent']);
@@ -59,6 +60,17 @@ Route::get('/batch/{id}/open', [BatchesController::class, 'open']);
 Route::get('/batch/{id}/edit', [BatchesController::class, 'edit']);
 Route::put('/batch/{id}', [BatchesController::class, 'update'])->name('batch.update');
 Route::get('/batch/{id}/togglePublishStatus', [BatchesController::class, 'togglePublishStatus']);
+Route::get('/participant/{id}/toggle-status', [BatchesController::class, 'toggleParticipantStatus'])->name('participant.toggleStatus');
+Route::get('/participant/approve-all/{id}', [BatchesController::class, 'approveAllParticipant']);
+
+// Route::post('/participant/{id}/update-status', [BatchesController::class, 'updateParticipantStatus']);
+
+
+// Add these routes to your routes/web.php file
+// Route::get('/participants', [TrainingParticipantController::class, 'index'])->name('participants.index');
+// Route::get('/batch/{batchId}/participants', [TrainingParticipantController::class, 'showBatchParticipants'])->name('participants.batch');
+// Route::patch('/participants/{id}/status', [TrainingParticipantController::class, 'updateStatus'])->name('participants.updateStatus');
+
 
 
 
