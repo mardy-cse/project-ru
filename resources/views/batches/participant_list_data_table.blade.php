@@ -32,17 +32,6 @@
   @endif
 </td>
 <td>
-  {{-- <div class="form-check mb-2">
-    <input class="form-check-input" type="radio" name="status_{{ $index + 1 }}" value="1" {{ (int) $user['status'] === 1 ? 'checked' : '' }}>
-    <label class="form-check-label">Approve</label>
-  </div>
-  <div class="form-check">
-    <input class="form-check-input" type="radio" name="status_{{ $index + 1 }}" value="0" {{ (int) $user['status'] === 0 ? 'checked' : '' }}>
-    <label class="form-check-label">Decline</label>
-  </div> --}}
-
-
-  {{-- Working on the logic to toggle the status based on the radio button selection. --}}
 
 @if ($user['status'] == 1)
     <a href="{{ url('/participant/' . $user['id'] . '/toggle-status') }}" class="btn btn-sm btn-warning" title="Decline">

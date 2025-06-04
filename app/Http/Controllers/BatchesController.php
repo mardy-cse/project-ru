@@ -77,7 +77,9 @@ public function store(Request $request)
     public function open(string $id)
     {
 
+        // dd($id);
         $participants = TrainingParticipant::where('batch_id', $id)->get();
+        // dd($participants->all());
         $batch = Batches::findOrFail($id);
         return view('batches.batch_info', compact('batch', 'participants'));
     }

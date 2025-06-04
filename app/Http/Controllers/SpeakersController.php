@@ -124,8 +124,8 @@ public function update(Request $request, $id)
 
     public function showContent()
     {
-        // $speakers = Speakers::all();
         $speakers = Speakers::latest()->get();
+      
         return view('layouts.speaker_content', compact('speakers'));
     }
 
