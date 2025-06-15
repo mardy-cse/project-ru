@@ -77,6 +77,8 @@ Route::get('/participant/approve-all/{id}', [BatchesController::class, 'approveA
 
 //Attendance
 Route::get('/attendance/list', [AttendanceController::class, 'showContent']);
+Route::get('/attendance/details/{id}', [AttendanceController::class, 'openAttendanceDetails']);
+
 
 
 

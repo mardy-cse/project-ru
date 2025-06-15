@@ -64,6 +64,11 @@ class Attendance extends Model
         return $this->belongsTo(Training::class, 'training_id');
     }
 
+       public function participants(): BelongsTo
+    {
+        return $this->belongsTo(TrainingParticipant::class, 'batch_id');
+    }
+
     /**
      * Get the batch associated with this attendance.
      */
@@ -75,10 +80,10 @@ class Attendance extends Model
     /**
      * Get the session associated with this attendance.
      */
-    public function session(): BelongsTo
-    {
-        return $this->belongsTo(Session::class, 'session_id');
-    }
+    // public function session(): BelongsTo
+    // {
+    //     return $this->belongsTo(Session::class, 'session_id');
+    // }
 
     /**
      * Get the user/participant associated with this attendance.

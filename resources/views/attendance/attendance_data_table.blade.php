@@ -32,7 +32,7 @@
             </td>
             <td>{{ $attendance->session_date ? $attendance->session_date->format('Y-m-d') : 'N/A' }}</td>
             <td>{{ $attendance->batch->venue ?? 'N/A' }}</td>
-            {{-- <td>{{ $attendance->session_day ?? 'N/A' }}</td> --}}
+           
             <td>{{ $attendance->session_date ? \Carbon\Carbon::parse($attendance->session_date)->format('l') : 'N/A' }}</td>
 
             <td>{{ $attendance->batch->start_time ? $attendance->batch->start_time : 'N/A' }}</td>
@@ -46,12 +46,12 @@
             </td>
             <td>
 <a 
-{{-- href="{{ url('/attendance/' . $attendance->id . '/edit') }}"  --}}
-href="#" 
-title="Open" 
-style="text-decoration: none; color: rgb(13, 166, 226);">
+    href="{{ url('/attendance/details/' . $attendance->id) }}" 
+    title="Open" 
+    style="text-decoration: none; color: rgb(13, 166, 226);">
     <i class="fas fa-folder"></i> Open
 </a>
+
 
 
 

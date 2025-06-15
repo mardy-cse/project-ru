@@ -84,11 +84,14 @@
 <header id="siteHeader" class="fixed z-30 top-0 left-0 w-full flex justify-between items-center py-2 px-6 lg:pl-0 bg-[#DBF5D0] border-b border-[#EBEEF2] h-[80px]">
   <div class="flex items-center">
     <!-- Logo Section -->
-    <div class="flex items-center justify-center relative h-[80px] w-[100px] lg:w-[270px] px-4">
-      <a href="{{ route('dashboard') }}" class="flex items-center">
-        <img class="w-[120px] max-w-full rounded-sm" src="./assets/images/ba-logo.svg" alt="Logo" width="120">
-      </a>
-    </div>
+<div class="flex items-center justify-center relative h-[80px] w-[100px] lg:w-[270px] px-4">
+  <a href="{{ route('dashboard') }}" class="flex items-center">
+    <img class="w-[120px] max-w-full rounded-sm" src="{{ asset('images/ba-logo.svg') }}" alt="Logo" width="120">
+    {{-- <img class="w-[120px] max-w-full rounded-sm" src="{{ asset('images/amar-school-logo.png') }}" alt="Logo" width="120"> --}}
+
+  </a>
+</div>
+
 
     <!-- Mobile Menu Button -->
     <button class="skdSidebarNavBtn text-center text-gray-600 w-6 h-8 p-1 ml-4 focus:outline-none hover:text-[#000B8C] transition-colors">
