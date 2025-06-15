@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Attendance;
+
 
 class AttendanceController extends Controller
 {
@@ -61,4 +63,15 @@ class AttendanceController extends Controller
     {
         //
     }
+
+
+    public function showContent(){
+        // $attendances = Attendance::latest()->get();
+        $attendances = Attendance::all();
+        // dd($attendances->all());
+
+        return view('attendance.attendance', compact('attendances'));
+    }
+
+
 }

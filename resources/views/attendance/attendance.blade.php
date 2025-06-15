@@ -24,7 +24,7 @@
       </div>
 
       <!-- Right side: button -->
-    <a href="/batch/add_new_batch" style="text-decoration: none;">
+    <a href="#" style="text-decoration: none;">
   <button class="px-6 py-2 rounded-xl flex items-center gap-2 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-black font-semibold border-2 border-gray-300 hover:border-gray-400 bg-white">
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -38,7 +38,7 @@
   </div>
 </div>
 <div class="overflow-x-auto p-6">
-        @include('batches.batch_data_table')
+        @include('attendance.attendance_data_table')
       </div>
     </div>
   </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BatchesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SpeakersController;
@@ -75,7 +76,7 @@ Route::get('/participant/approve-all/{id}', [BatchesController::class, 'approveA
 
 
 //Attendance
-Route::get('/attendance/list', [BatchesController::class, 'showContent']);
+Route::get('/attendance/list', [AttendanceController::class, 'showContent']);
 
 
 

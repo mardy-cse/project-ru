@@ -62,8 +62,8 @@
 
 <div class="relative block w-full">
   <a 
-    {{-- href="/training/list" --}}
-    href="#"
+    href="/attendance/list"
+    {{-- href="#" --}}
     style="text-decoration: none;" 
     class="dash-sb-menu-item {{ request()->is('attendance*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
   >
