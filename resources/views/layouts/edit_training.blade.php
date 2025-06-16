@@ -91,31 +91,6 @@
   </div>
 </div>
 
-      {{-- <div class="row mb-3">
-        <div class="col-md-6">
-          <label for="training_category_id" class="form-label fw-bold">Category Name <span class="required">*</span></label>
-          <select name="training_category_id" id="training_category_id" class="form-select" required>
-            <option value="">Select Category</option>
-            @php
-              $categories = [
-                1 => 'Web Development',
-                2 => 'App Development',
-                3 => 'Data Science',
-                4 => 'Machine Learning',
-                5 => 'Cybersecurity',
-                6 => 'Cloud Computing',
-                7 => 'DevOps',
-                8 => 'Networking',
-                9 => 'System Administration'
-              ];
-            @endphp
-            @foreach($categories as $id => $label)
-              <option value="{{ $id }}" {{ old('training_category_id', $training->training_category_id) == $id ? 'selected' : '' }}>{{ $label }}</option>
-            @endforeach
-          </select>
-          <div class="invalid-feedback">Please select a category.</div>
-        </div>
-      </div> --}}
 
       {{-- Profile Image --}}
       <div class="row mb-3">

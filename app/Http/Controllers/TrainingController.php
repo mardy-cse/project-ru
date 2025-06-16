@@ -5,29 +5,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Training;
 use App\Models\TrainingCategory;
+use App\Models\Batches;
+
 
 class TrainingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
      public function store(Request $request)
 {
     $validated = $request->validate([
@@ -65,17 +47,6 @@ class TrainingController extends Controller
 }
 
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
 public function edit(string $id)
 {
     $training = Training::findOrFail($id);
@@ -85,9 +56,6 @@ public function edit(string $id)
 }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
 public function update(Request $request, string $id)
 {
     // Validate inputs
@@ -120,29 +88,13 @@ if ($request->hasFile('course_thumbnail')) {
     $training->training_category_id = $validated['training_category_id'];
     $training->status = $validated['status'];
 
-    // Save the updated training
-    // $training->save();
-
-    // return redirect()->route('training.list')->with('success', 'Training updated successfully.');
-
     $training->update($validated);
 
     return redirect('training/list')->with('success', 'Speaker updated successfully!');
 }
 
-
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
         public function showContent()
     {
-        // $training = Training::all();
         $training = Training::latest()->get();
         return view('layouts.training', compact('training'));
     }
@@ -151,7 +103,6 @@ if ($request->hasFile('course_thumbnail')) {
     public function showAddTrainingForm()
     {
         $trainingCategory = TrainingCategory::all();
-        // dd($trainingCategory);
         return view('layouts.add_training', compact('trainingCategory'));
 
     }
@@ -163,6 +114,16 @@ public function toggleStatus($id)
     $training->save();
     return redirect()->back()->with('success', 'Training status updated successfully.');
 }
+
+
+public function displayTrainingCoursesForUsers(){
+    $batch = Batches::all();
+    $trainingCategory = TrainingCategory::all();
+
+    return view('user_views.trainings.training_courses', compact('batch', 'trainingCategory'));
+}
+
+
 
 }
 
