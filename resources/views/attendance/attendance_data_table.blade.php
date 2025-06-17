@@ -20,10 +20,6 @@
         @foreach($attendances as $index => $attendance)
         <tr>
             <td>{{ $index + 1 }}</td>
-
-
-
-
             <td title="{{ $attendance->training->name ?? 'N/A' }}">
                 {{ Str::limit($attendance->training->name ?? 'N/A', 30, '...') }}
             </td>
