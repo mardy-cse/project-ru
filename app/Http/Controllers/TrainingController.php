@@ -119,8 +119,8 @@ public function toggleStatus($id)
 public function displayTrainingCoursesForUsers(){
     $batch = Batches::all();
     $trainingCategory = TrainingCategory::all();
-
-    return view('user_views.trainings.training_courses', compact('batch', 'trainingCategory'));
+    $allTrainings = Training::all();
+    return view('user_views.trainings.training_courses', compact('batch', 'trainingCategory', 'allTrainings'));
 }
 
 

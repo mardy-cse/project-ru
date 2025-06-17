@@ -206,18 +206,23 @@
     </div>
   </div>
 </div>
+
                 <div x-show="tab === 'tabSkdCourses'" class="tab-content-block">
                   <div class="tab-main-content relative w-full block">
                     <div class="relative w-full block mb-6">
                       <div class="grid grid-cols-1 md:grid-cols-2 gap-[20px] w-full max-w-[440px] md:max-w-[880px] mx-auto">
-                          @foreach($trainingCategory as $trainingCategory)
-                          <div class="course-list-item">
-                          <a href="#">{{ $trainingCategory->category_name}} <span class="text-red-600 font-bold mr-1">1</span></a>
-                          {{-- <a href="#">{{ $trainingCategory->id}} <span class="text-red-600 font-bold mr-1">10</span></a> --}}
-                        </div>
-                          @endforeach
+    @foreach($trainingCategory as $category)
+        <div class="course-list-item">
+            <a href="#">
+                {{ $category->category_name }}
+                <span class="text-red-600 font-bold mr-1">
+                    {{ $category->trainings->count() }}
+                </span>
+            </a>
+        </div>
+    @endforeach
+</div>
 
-                      </div>
                     </div>
                   </div>
                 </div>

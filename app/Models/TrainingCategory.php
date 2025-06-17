@@ -20,6 +20,12 @@ class TrainingCategory extends Model{
     public function updater(){
         return $this->belongsTo(User::class,'updated_by');
     }
+
+    public function trainings()
+{
+    return $this->hasMany(Training::class, 'training_category_id');
+}
+
 }
 
 ?>
