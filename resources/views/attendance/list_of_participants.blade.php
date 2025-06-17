@@ -39,16 +39,36 @@
                                         <span class="badge bg-danger">Absent</span>
                                     @endif
                                 </td>
-                                <td>
+                                {{-- <td>
                                     <a href="{{ url('/training-participant/' . $participant->id . '/view') }}" 
                                        class="btn btn-sm btn-info me-1" title="View">
-                                        <i class="fas fa-eye"></i>
+                                        <i class="fas fa-eye">view</i>
                                     </a>
                                     <a href="{{ url('/training-participant/' . $participant->id . '/edit') }}" 
                                        class="btn btn-sm btn-primary me-1" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                </td>
+                                </td> --}}
+                      <td>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" 
+               name="attendance[{{ $participant->id }}]" 
+               id="present{{ $participant->id }}" 
+               value="present" 
+               {{ $participant->status == 1 ? 'checked' : '' }}>
+        <label class="form-check-label" for="present{{ $participant->id }}">Present</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" 
+               name="attendance[{{ $participant->id }}]" 
+               id="absent{{ $participant->id }}" 
+               value="absent" 
+               {{ $participant->status != 1 ? 'checked' : '' }}>
+        <label class="form-check-label" for="absent{{ $participant->id }}">Absent</label>
+    </div>
+</td>
+
+
                             </tr>
                             @endforeach
                         </tbody>

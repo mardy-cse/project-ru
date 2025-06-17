@@ -87,11 +87,12 @@
   </label>
   <select id="speaker_name" name="speaker_name" class="form-select select2" required>
     <option value="">Select a Speaker</option>
-    @foreach($speakers as $speaker)
-      <option value="{{ $speaker->name }}" {{ old('speaker_name', $batch->speaker_name) == $speaker->name ? 'selected' : '' }}>
-        {{ $speaker->name }}
-      </option>
-    @endforeach
+
+
+
+
+
+    {{-- This will be populated by JavaScript based on training selection --}}
   </select>
   <div class="invalid-feedback">Please select the name of the speaker.</div>
 </div>
@@ -393,25 +394,16 @@
 document.addEventListener('DOMContentLoaded', function () {
     const trainingSelect = document.getElementById('training_id');
     const speakerSelect = document.getElementById('speaker_name');
-
-
-
-
     
-    // Store all speakers data (same as create_new_batch.blade.php)
+    // Store all speakers data
     const allSpeakers = @json($speakers);
-    const currentSpeaker = "{{ old('speaker_name', $batch->speaker_name) }}";
+    const currentSpeakerId = "{{ old('speaker_name', $batch->speaker_name) }}"; // This should be speaker ID
     
     // Function to populate speakers based on category
     function populateSpeakers(selectedCategoryId, selectCurrentSpeaker = false) {
         // Clear speaker options
         speakerSelect.innerHTML = '<option value="">Select a Speaker</option>';
         
-
-
-
-
-
         // If no training selected, don't show any speakers
         if (!selectedCategoryId) {
             return;
@@ -422,12 +414,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const categories = speaker.exparties_categories_id || [];
             if (categories.includes(selectedCategoryId)) {
                 const option = document.createElement('option');
-                option.value = speaker.name;
+                option.value = speaker.id; // Use speaker ID instead of name
                 option.textContent = speaker.name;
                 option.setAttribute('data-categories', JSON.stringify(categories));
                 
                 // Select current speaker if editing
-                if (selectCurrentSpeaker && speaker.name === currentSpeaker) {
+                if (selectCurrentSpeaker && speaker.id == currentSpeakerId) {
                     option.selected = true;
                 }
                 

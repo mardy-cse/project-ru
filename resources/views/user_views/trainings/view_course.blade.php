@@ -57,8 +57,8 @@
                 <div class="trc-course-item-desc w-full block relative">
                   <div class="skd-course-desc flex items-start justify-center flex-col w-full text-left text-[#000000]">
                     <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">Trainer Information</h2>
-                    {{-- <p class="text-[14px] leading-5 py-1 text-left w-full">{{$batch->speaker->name}}</p> --}}
-                    {{-- <p class="text-[14px] leading-5 py-1 text-left w-full">Designation: {{ $batch->speaker->designation }}</p> --}}
+                    <p class="text-[14px] leading-5 py-1 text-left w-full">{{$batch->speaker->name}}</p>
+                    <p class="text-[14px] leading-5 py-1 text-left w-full">Designation: {{ $batch->speaker->designation }}</p>
               
 <p class="text-[14px] leading-5 py-1 text-left w-full">
     Specialization: 

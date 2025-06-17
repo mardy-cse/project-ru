@@ -89,6 +89,18 @@
 
 
 @include('attendance.list_of_participants')
+   <div class="m-4 p-2 d-flex justify-content-between border bg-light border-light">
+  <a href="/attendance/list" class="btn btn-secondary">✖ Close</a>
+
+
+  <div>
+    <a href="#" 
+   class="btn btn-success">
+   Present All
+</a>
+    <a href="#" class="btn btn-success">Save</a>
+  </div>
+</div>
 
 
 @endsection
