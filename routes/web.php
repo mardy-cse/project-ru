@@ -70,6 +70,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Route::get('/training/course', [TrainingController::class, 'displayTrainingCoursesForUsers']);
 
 Route::get('/',[TrainingController::class, 'displayTrainingCoursesForUsers']);
+Route::get('/course/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsers'])->name('course.view');
+
+
+
 
 require __DIR__.'/auth.php';
 

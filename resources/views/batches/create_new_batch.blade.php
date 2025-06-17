@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const categories = speaker.exparties_categories_id || [];
             if (categories.includes(selectedCategoryId)) {
                 const option = document.createElement('option');
-                option.value = speaker.name;
+                option.value = speaker.id;
                 option.textContent = speaker.name;
                 option.setAttribute('data-categories', JSON.stringify(categories));
                 speakerSelect.appendChild(option);

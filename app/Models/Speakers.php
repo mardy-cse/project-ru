@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Speakers extends Model
 {
@@ -46,4 +47,18 @@ class Speakers extends Model
         }
         return 'https://via.placeholder.com/80x40?text=Sign';
     }
+
+    public function speaker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+ // Speaker.php (Model)
+public function getExpartiesCategoriesNamesAttribute()
+{
+    $ids = $this->exparties_categories_id; // This is assumed to be an array
+
+    return \App\Models\TrainingCategory::whereIn('id', $ids)->pluck('name')->toArray();
+}
+
 }

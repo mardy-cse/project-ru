@@ -1,6 +1,5 @@
 @include('user_views.trainings.training_course_header')
 
-
 <div>
     <!-- CSS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -176,27 +175,30 @@
                     <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">
                       Total Hours: {{ $batch->class_duration }}
                     </p>
-                    {{-- <p>Course Thamnail url: {{$batch->training?->course_thumbnail ?? 'null' }}</p> --}}
                   </div>
                 </div>
-                {{-- <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">{{ $batch->training->name}}</h2> --}}
-                <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">{{ $batch->name }}</h2>
-                {{-- <p class="text-[14px] leading-5 py-1 text-left w-full">Batch: {{ $course->batch }}</p>
-                <p class="text-[14px] leading-5 py-1 text-left w-full">Status: {{ $course->status }}</p>
-                <p class="text-[14px] leading-5 py-1 text-left w-full">Training Medium: {{ $course->medium }}</p> --}}
+                <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">{{ $batch->training->name}}</h2>
+    
+                <p class="text-[14px] leading-5 py-1 text-left w-full">Batch: {{ $batch->name }}</p>
+                <p class="text-[14px] leading-5 py-1 text-left w-full">
+  Status: {{ $batch->batch_status == 1 ? 'ONGOING' : ($batch->batch_status == 0 ? 'COMPLETE' : 'PENDING') }}
+</p>
+
+                <p class="text-[14px] leading-5 py-1 text-left w-full">Training Medium: {{ $batch->venue  }}</p>
                 <p class="text-[14px] leading-5 py-1 text-left w-full text-[#892626]">Registration Ends: {{ \Carbon\Carbon::parse($batch->enrollment_deadline)->format('d-M-Y') }}</p>
               </div>
             </div>
           </div>
-          <a class="h-[40px] absolute bottom-[10px] right-[10px] rounded-lg bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300 text-white flex items-center justify-center gap-2 w-full max-w-[170px] md:w-[140px] text-[16px] py-2 px-4" href="#">
-            <span class="text-[16px]">View</span>
-            <span class="inline-block">
-              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 19.7498C15.608 19.7498 19.75 15.6088 19.75 10.4998C19.75 5.39182 15.608 1.24982 10.5 1.24982C5.392 1.24982 1.25 5.39182 1.25 10.4998C1.25 15.6088 5.392 19.7498 10.5 19.7498Z" stroke="#F9FAFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                <path d="M9.05762 13.971L12.5436 10.5L9.05762 7.02901" stroke="#F9FAFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-            </span>
-          </a>
+         <a class="h-[40px] absolute bottom-[10px] right-[10px] rounded-lg bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300 text-white flex items-center justify-center gap-2 w-full max-w-[170px] md:w-[140px] text-[16px] py-2 px-4" href="{{ route('course.view', $batch->id) }}">
+    <span class="text-[16px]">View</span>
+    <span class="inline-block">
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 19.7498C15.608 19.7498 19.75 15.6088 19.75 10.4998C19.75 5.39182 15.608 1.24982 10.5 1.24982C5.392 1.24982 1.25 5.39182 1.25 10.4998C1.25 15.6088 5.392 19.7498 10.5 19.7498Z" stroke="#F9FAFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M9.05762 13.971L12.5436 10.5L9.05762 7.02901" stroke="#F9FAFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+    </span>
+</a>
+
         </div>
         @endforeach
 
@@ -211,6 +213,7 @@
                           @foreach($trainingCategory as $trainingCategory)
                           <div class="course-list-item">
                           <a href="#">{{ $trainingCategory->category_name}} <span class="text-red-600 font-bold mr-1">1</span></a>
+                          {{-- <a href="#">{{ $trainingCategory->id}} <span class="text-red-600 font-bold mr-1">10</span></a> --}}
                         </div>
                           @endforeach
 

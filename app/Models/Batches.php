@@ -83,6 +83,11 @@ class Batches extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+    public function speaker(): BelongsTo
+    {
+        return $this->belongsTo(Speakers::class, 'speaker_name');
+    }
+
 
     /**
      * Scope a query to only include active batches.

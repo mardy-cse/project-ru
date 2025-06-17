@@ -125,6 +125,17 @@ public function displayTrainingCoursesForUsers(){
 
 
 
+public function viewTrainingCoursesForUsers($id){
+    $batch = Batches::with('training')->findOrFail($id);
+    if ($batch->speaker && $batch->speaker->exparties_categories_id) {
+        $batch->speaker->category_names = \App\Models\TrainingCategory::whereIn('id', $batch->speaker->exparties_categories_id)
+            ->pluck('category_name')
+            ->toArray();
+    }
+
+    return view('user_views.trainings.view_course', compact('batch'));
+}
+
 }
 
 
