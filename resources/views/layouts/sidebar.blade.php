@@ -3,9 +3,8 @@
         <nav class="relative">
           <div class="relative block w-full">
 
+            <!-- Dashboard - সবার জন্য -->
             <a class="dash-sb-menu-item {{ request()->is('dashboardcontent') || request()->is('dashboard') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black" href="/dashboardcontent">
-
-            
               <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
                 <svg class="sb-menu-icon h-[50px] w-[50px]" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 76 75" fill="none">
                   <g clip-path="url(#clip0_6_41)">
@@ -21,58 +20,62 @@
               <span class="text-[16px] text-lh-1_5 sb-menu-text">Dash Board</span>
             </a>
           </div>
-<a 
-  href="/speaker/list"
-  style="text-decoration: none;" 
-  class="dash-sb-menu-item {{ request()->is('speaker_content') || request()->is('add_speaker') || request()->is('speaker/*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
->
-  <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
-    <i class="fa fa-microphone" style="font-size: 50px;"></i>
-  </span>
-  <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Speaker</span>
-</a>
 
-<div class="relative block w-full">
-  <a 
-    href="/training/list"
-    style="text-decoration: none;" 
-    class="dash-sb-menu-item {{ request()->is('dash-training-course*') || request()->is('training*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
-  >
-    <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
-      <i class="fa fa-users" style="font-size: 50px;"></i>
-    </span>
-    <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Training Courses</span>
-  </a>
-</div>
+          <!-- Admin Only Menu Items (role_id = 1) -->
+          @if(auth()->user()->role_id == 1)
+            <a 
+              href="/speaker/list"
+              style="text-decoration: none;" 
+              class="dash-sb-menu-item {{ request()->is('speaker_content') || request()->is('add_speaker') || request()->is('speaker/*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+            >
+              <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+                <i class="fa fa-microphone" style="font-size: 50px;"></i>
+              </span>
+              <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Speaker</span>
+            </a>
 
+            <div class="relative block w-full">
+              <a 
+                href="/training/list"
+                style="text-decoration: none;" 
+                class="dash-sb-menu-item {{ request()->is('dash-training-course*') || request()->is('training*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+              >
+                <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+                  <i class="fa fa-users" style="font-size: 50px;"></i>
+                </span>
+                <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Training Courses</span>
+              </a>
+            </div>
 
+            <div class="relative block w-full">
+              <a 
+                href="/batch/list"
+                style="text-decoration: none;" 
+                class="dash-sb-menu-item {{ request()->is('batch*') || request()->is('batch*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+              >
+                <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+                  <i class="fa fa-calendar" style="font-size: 50px;"></i>
+                </span>
+                <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Batches</span>
+              </a>
+            </div>
 
-<div class="relative block w-full">
-  <a 
-    href="/batch/list"
-    style="text-decoration: none;" 
-    class="dash-sb-menu-item {{ request()->is('batch*') || request()->is('batch*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
-  >
-    <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
-      <i class="fa fa-calendar" style="font-size: 50px;"></i>
-    </span>
-    <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Batches</span>
-  </a>
-</div>
+            <div class="relative block w-full">
+              <a 
+                href="/attendance/list"
+                style="text-decoration: none;" 
+                class="dash-sb-menu-item {{ request()->is('attendance*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+              >
+                <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+                  <i class="fa fa-users" style="font-size: 50px;"></i>
+                </span>
+                <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Attendance</span>
+              </a>
+            </div>
+          @endif
 
-<div class="relative block w-full">
-  <a 
-    href="/attendance/list"
-    {{-- href="#" --}}
-    style="text-decoration: none;" 
-    class="dash-sb-menu-item {{ request()->is('attendance*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
-  >
-    <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
-      <i class="fa fa-users" style="font-size: 50px;"></i>
-    </span>
-    <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Attendance</span>
-  </a>
-</div>
+          <!-- User Menu Items (role_id = 2) - শুধু Dashboard থাকবে -->
+          {{-- User দের জন্য কোন additional menu না থাকলে এই section empty রাখুন --}}
 
         </nav>
       </div>
