@@ -7,11 +7,23 @@ use App\Http\Controllers\SpeakersController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\TrainingParticipantController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-// Public routes (no authentication required)
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+
+
+
+
+// Root route - Login check করে redirect করবে
+Route::get('/', function () {
+
+    if (Auth::check()) {
+        // User login থাকলে dashboard এ redirect
+        return redirect('/dashboardcontent');
+    } else {
+        // User login না থাকলে training courses দেখাবে
+        return app(TrainingController::class)->displayTrainingCoursesForUsers();
+    }
+});
 
 
 // All other routes require authentication
@@ -68,7 +80,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 //User routes without authentication
 
-Route::get('/',[TrainingController::class, 'displayTrainingCoursesForUsers']);
+
 Route::get('/course/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsers'])->name('course.view');
 
 
