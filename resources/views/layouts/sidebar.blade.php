@@ -21,6 +21,22 @@
             </a>
           </div>
 
+          <!-- User Only Menu Items (role_id = 2) -->
+          @if(auth()->user()->role_id == 2)
+            <div class="relative block w-full">
+              <a 
+                href="/training/courses"
+                style="text-decoration: none;" 
+                class="dash-sb-menu-item {{ request()->is('dash-training-course*') || request()->is('training*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+              >
+                <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
+                  <i class="fa fa-users" style="font-size: 50px;"></i>
+                </span>
+                <span style="font-size: 16px; line-height: 1.5;" class="sb-menu-text">Training Courses</span>
+              </a>
+            </div>
+          @endif
+
           <!-- Admin Only Menu Items (role_id = 1) -->
           @if(auth()->user()->role_id == 1)
             <a 
@@ -73,9 +89,6 @@
               </a>
             </div>
           @endif
-
-          <!-- User Menu Items (role_id = 2) - শুধু Dashboard থাকবে -->
-          {{-- User দের জন্য কোন additional menu না থাকলে এই section empty রাখুন --}}
 
         </nav>
       </div>

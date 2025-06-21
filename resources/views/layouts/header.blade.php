@@ -6,8 +6,6 @@
 <div class="flex items-center justify-center relative h-[80px] w-[100px] lg:w-[270px] px-4">
   <a href="{{ route('dashboard') }}" class="flex items-center">
     <img class="w-[120px] max-w-full rounded-sm" src="{{ asset('images/amar-school-logo.png') }}" alt="Logo" width="120">
-    {{-- <img class="w-[120px] max-w-full rounded-sm" src="{{ asset('images/amar-school-logo.png') }}" alt="Logo" width="120"> --}}
-
   </a>
 </div>
 
@@ -62,30 +60,6 @@
           <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
         </div>
         
-        <!-- Menu Items -->
-        {{-- <div class="py-1">
-          <a href="#" 
-             class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-[#DBF5D0] hover:text-[#000B8C] transition-colors">
-            <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-            </svg>
-            My Profile
-          </a>
-        </div>
-        
-        <!-- Logout Section -->
-        <div class="py-1">
-          <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" 
-                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-[#DBF5D0] hover:text-[#000B8C] transition-colors">
-              <svg class="w-4 h-4 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2h6a2 2 0 012 2v2"></path>
-              </svg>
-              Logout
-            </button>
-          </form>
-        </div> --}}
 
         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}

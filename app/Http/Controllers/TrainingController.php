@@ -125,6 +125,15 @@ public function displayTrainingCoursesForUsers(){
 
 
 
+public function TrainingCoursesForUsers(){
+    $batch = Batches::all();
+    $trainingCategory = TrainingCategory::all();
+    $allTrainings = Training::all();
+    return view('user_views.trainings.user_training_view', compact('batch', 'trainingCategory', 'allTrainings'));
+}
+
+
+
 public function viewTrainingCoursesForUsers($id){
     $batch = Batches::with('training')->findOrFail($id);
     if ($batch->speaker && $batch->speaker->exparties_categories_id) {

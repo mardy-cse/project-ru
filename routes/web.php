@@ -25,6 +25,13 @@ Route::get('/', function () {
     }
 });
 
+    Route::get('/training/courses', [TrainingController::class, 'TrainingCoursesForUsers']);
+
+    //     Route::get('/dashboardcontent', function () {
+    //     return view('user_views.trainings.user_training');
+    // })->name('dashboard');
+
+
 
 // All other routes require authentication
 Route::middleware(['auth', 'verified'])->group(function () {
