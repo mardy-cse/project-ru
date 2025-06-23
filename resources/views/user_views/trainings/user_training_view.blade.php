@@ -192,7 +192,9 @@
               </div>
             </div>
           </div>
-         <a class="h-[40px] absolute bottom-[10px] right-[10px] rounded-lg bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300 text-white flex items-center justify-center gap-2 w-full max-w-[170px] md:w-[140px] text-[16px] py-2 px-4" href="#">
+         <a class="h-[40px] absolute bottom-[10px] right-[10px] rounded-lg bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300 text-white flex items-center justify-center gap-2 w-full max-w-[170px] md:w-[140px] text-[16px] py-2 px-4" 
+
+         href="{{ route('userCourse.view', $batch->id) }}">
     <span class="text-[16px]">View</span>
     <span class="inline-block">
         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">

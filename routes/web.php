@@ -13,23 +13,18 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-// Root route - Login check করে redirect করবে
+
 Route::get('/', function () {
 
     if (Auth::check()) {
-        // User login থাকলে dashboard এ redirect
+
         return redirect('/dashboardcontent');
     } else {
-        // User login না থাকলে training courses দেখাবে
+ 
         return app(TrainingController::class)->displayTrainingCoursesForUsers();
     }
 });
 
-    Route::get('/training/courses', [TrainingController::class, 'TrainingCoursesForUsers']);
-
-    //     Route::get('/dashboardcontent', function () {
-    //     return view('user_views.trainings.user_training');
-    // })->name('dashboard');
 
 
 
@@ -40,6 +35,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboardcontent', function () {
         return view('layouts.dashboardcontent');
     })->name('dashboard');
+
+    // Training courses route (now requires authentication)
+    Route::get('/training/courses', [TrainingController::class, 'TrainingCoursesForUsers']);
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -90,9 +88,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/course/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsers'])->name('course.view');
 
+Route::get('/course/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsers'])->name('userCourse.view');
+
 
 
 
 require __DIR__.'/auth.php';
-
-

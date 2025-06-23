@@ -126,6 +126,7 @@ public function displayTrainingCoursesForUsers(){
 
 
 public function TrainingCoursesForUsers(){
+  
     $batch = Batches::all();
     $trainingCategory = TrainingCategory::all();
     $allTrainings = Training::all();
@@ -143,6 +144,17 @@ public function viewTrainingCoursesForUsers($id){
     }
 
     return view('user_views.trainings.view_course', compact('batch'));
+}
+
+public function viewTrainingCoursesForUsersAfterLogin($id){
+    $batch = Batches::with('training')->findOrFail($id);
+    if ($batch->speaker && $batch->speaker->exparties_categories_id) {
+        $batch->speaker->category_names = \App\Models\TrainingCategory::whereIn('id', $batch->speaker->exparties_categories_id)
+            ->pluck('category_name')
+            ->toArray();
+    }
+
+    return view('user_views.trainings.user_view_course', compact('batch'));
 }
 
 }
