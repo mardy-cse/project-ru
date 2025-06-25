@@ -88,7 +88,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::get('/course/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsers'])->name('course.view');
 
-Route::get('/course/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsers'])->name('userCourse.view');
+Route::get('/courses/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsersAfterLogin'])->name('userCourse.view');
 
 
 

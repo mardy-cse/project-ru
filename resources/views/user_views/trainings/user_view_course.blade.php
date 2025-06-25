@@ -1,5 +1,6 @@
 @extends('dashboard')
 
+@section('content')
 <div>
         <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -9,56 +10,66 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
-      <main id="mainContent" class="skd-course-view flex-1 overflow-x-hidden overflow-y-auto bg-[#F9FAFC]">
-      <div class="container mx-auto px-6 py-8">
-        <div class="flex flex-wrap w-full gap-[20px] lg:flex-nowrap">
-          <div class="skd-card-col flex flex-col flex-wrap gap-[20px] relative w-full md:min-w-[340px] max-w-[400px]">
-            <div class="trc-course-item relative w-full rounded-[8px] bg-white border border-[#85C16D] py-[10px] px-[10px]">
-              <div class="relative z-10 flex flex-col h-full items-start justify-start text-center pb-[20px]">
-                <div class="trc-course-item-img h-[175px] block w-full mb-4">
-                  <img src="{{ asset('storage/' . ($batch->training->course_thumbnail ?? 'assets/images/dash-course-img.png')) }}" alt="Training Image" class="w-full h-full object-cover">
-                </div>
-                <div class="trc-course-item-desc w-full block relative">
-                  <div class="skd-course-desc flex items-start justify-center flex-col w-full text-left text-[#000000]">
-                    <div class="flex flex-col gap-2 flex-wrap mb-2 w-full">
-                      <div class="relative pl-[24px] inline-block mr-4">
-                        <span class="absolute left-0 top-[2px] h-[16px] w-[16px] bg-[#00A65A] rounded-sm block"></span>
-                        <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">
-                          Durations: {{ \Carbon\Carbon::parse($batch->start_date)->format('d-M-Y') }} to {{ \Carbon\Carbon::parse($batch->end_date)->format('d-M-Y') }}
+
+
+
+
+
+
+
+
+
+      <main id="mainContent" class="skd-course-view ml-0 lg:ml-[120px] xl:ml-[140px] pt-[80px] min-h-screen bg-[#F9FAFC]">
+        <div class="container mx-auto px-4 sm:px-6 py-8 max-w-7xl">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 xl:gap-8">
+            <div class="lg:col-span-1 space-y-6">
+              <div class="trc-course-item relative w-full rounded-[8px] bg-white border border-[#85C16D] py-[10px] px-[10px]">
+                <div class="relative z-10 flex flex-col h-full items-start justify-start text-center pb-[20px]">
+                  <div class="trc-course-item-img h-[175px] block w-full mb-4">
+                      <img src="{{ asset('storage/' . ($batch->training->course_thumbnail ?? 'assets/images/dash-course-img.png')) }}" alt="Training Image" class="w-full h-full object-cover rounded">
+                    </div>
+                    <div class="trc-course-item-desc w-full block relative">
+                      <div class="skd-course-desc flex items-start justify-center flex-col w-full text-left text-[#000000]">
+                        <div class="flex flex-col gap-2 flex-wrap mb-2 w-full">
+                          <div class="relative pl-[24px] inline-block mr-4">
+                            <span class="absolute left-0 top-[2px] h-[16px] w-[16px] bg-[#00A65A] rounded-sm block"></span>
+                            <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">
+                              Durations: {{ \Carbon\Carbon::parse($batch->start_date)->format('d-M-Y') }} to {{ \Carbon\Carbon::parse($batch->end_date)->format('d-M-Y') }}
+                            </p>
+                          </div>
+                          <div class="relative pl-[24px] inline-block mr-4">
+                            <span class="absolute left-0 top-[2px] h-[16px] w-[16px] bg-[#00A65A] rounded-sm block"></span>
+                            <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">
+                              Total Hours: {{ $batch->class_duration }}
+                            </p>
+                          </div>
+                        </div>
+                        <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">{{ $batch->training->name }}</h2>
+                        <p class="text-[14px] leading-5 py-1 text-left w-full">Batch: {{ $batch->name }}</p>
+                        <p class="text-[14px] leading-5 py-1 text-left w-full">
+                          Status: {{ $batch->batch_status == 1 ? 'ONGOING' : ($batch->batch_status == 0 ? 'COMPLETE' : 'PENDING') }}
                         </p>
-                      </div>
-                      <div class="relative pl-[24px] inline-block mr-4">
-                        <span class="absolute left-0 top-[2px] h-[16px] w-[16px] bg-[#00A65A] rounded-sm block"></span>
-                        <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">
-                          Total Hours: {{ $batch->class_duration }}
+                        <p class="text-[14px] leading-5 py-1 text-left w-full">Training Medium: {{ $batch->venue }}</p>
+                        <p class="text-[14px] leading-5 py-1 text-left w-full text-[#892626]">
+                          Registration Ends: {{ \Carbon\Carbon::parse($batch->enrollment_deadline)->format('d-M-Y') }}
                         </p>
                       </div>
                     </div>
-                    <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">{{ $batch->training->name }}</h2>
-                    <p class="text-[14px] leading-5 py-1 text-left w-full">Batch: {{ $batch->name }}</p>
-                    <p class="text-[14px] leading-5 py-1 text-left w-full">
-                      Status: {{ $batch->batch_status == 1 ? 'ONGOING' : ($batch->batch_status == 0 ? 'COMPLETE' : 'PENDING') }}
-                    </p>
-                    <p class="text-[14px] leading-5 py-1 text-left w-full">Training Medium: {{ $batch->venue }}</p>
-                    <p class="text-[14px] leading-5 py-1 text-left w-full text-[#892626]">
-                      Registration Ends: {{ \Carbon\Carbon::parse($batch->enrollment_deadline)->format('d-M-Y') }}
-                    </p>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div class="trc-course-item relative w-full rounded-[8px] bg-white border border-[#85C16D] py-[10px] px-[10px]">
-              <div class="relative z-10 flex flex-col h-full items-start justify-start text-center pb-[20px]">
-                <div class="trc-course-item-img h-[200px] block w-full mb-4">
+                <div class="trc-course-item relative w-full rounded-[8px] bg-white border border-[#85C16D] py-[10px] px-[10px]">
+                  <div class="relative z-10 flex flex-col h-full items-start justify-start text-center pb-[20px]">
+                    <div class="trc-course-item-img h-[200px] block w-full mb-4">
                
-                  <img src="{{ asset('storage/' . ($batch->speaker->profile_image ?? 'assets/images/dash-course-img.png')) }}" alt="Training Image" class="w-full h-full object-cover">
-                </div>
-                <div class="trc-course-item-desc w-full block relative">
-                  <div class="skd-course-desc flex items-start justify-center flex-col w-full text-left text-[#000000]">
-                    <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">Trainer Information</h2>
-                    <p class="text-[14px] leading-5 py-1 text-left w-full">{{$batch->speaker->name}}</p>
-                    <p class="text-[14px] leading-5 py-1 text-left w-full">Designation: {{ $batch->speaker->designation }}</p>
+
+                      <img src="{{ asset('storage/' . ($batch->speaker->profile_image ?? 'assets/images/dash-course-img.png')) }}" alt="Training Image" class="w-full h-full object-cover rounded">
+                    </div>
+                    <div class="trc-course-item-desc w-full block relative">
+                      <div class="skd-course-desc flex items-start justify-center flex-col w-full text-left text-[#000000]">
+                        <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">Trainer Information</h2>
+                        <p class="text-[14px] leading-5 py-1 text-left w-full">{{$batch->speaker->name}}</p>
+                        <p class="text-[14px] leading-5 py-1 text-left w-full">Designation: {{ $batch->speaker->designation }}</p>
               
 <p class="text-[14px] leading-5 py-1 text-left w-full">
     Specialization: 
@@ -69,14 +80,18 @@
     @endif
 </p>
 
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="skd-card-col flex flex-col flex-wrap gap-[20px] relative w-full md:min-w-[350px]">
-           <div class="trc-course-item relative w-full rounded-[8px] bg-white border border-[#85C16D] py-[10px] px-[10px]">
+
+
+
+            <div class="lg:col-span-2 space-y-6">
+              <div class="trc-course-item relative w-full rounded-[8px] bg-white border border-[#85C16D] py-[10px] px-[10px]">
 
   <div class="w-full mb-4">
     <h3 class="text-[#85C16D] text-[18px] font-normal mb-1">Overview</h3>
@@ -133,12 +148,16 @@
                       </thead>
                       <tbody>
                         <tr class="bg-[#FCFCFC]">
-                          <td class="text-center">{{ $batch->session_day ?? 'Sunday' }}</td>
-                          <td class="text-center">
+
+
+                          <td class="text-center py-2">{{ $batch->session_day ?? 'Sunday' }}</td>
+                          <td class="text-center py-2">
   {{ ($batch->start_time ?? '04:00 PM') . ' to ' . ($batch->end_time ?? '05:00 PM') }}</td>
 
-                          <td class="text-center">{{ $batch->venue ?? 'Online' }}</td>
-                          <td class="text-center">{{ $batch->seat_capacity ?? '85' }}</td>
+
+
+                          <td class="text-center py-2">{{ $batch->venue ?? 'Online' }}</td>
+                          <td class="text-center py-2">{{ $batch->seat_capacity ?? '85' }}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -147,8 +166,10 @@
               </div>
             </div>
 
-            <div class="w-full mb-4">
-              <div class="adm-enroll-box w-full max-w-[620px] rounded-md p-[20px] lg:px-[30px] flex flex-col flex-wrap relative text-[#686868] bg-[#DBF5D0]">
+
+
+            <div class="w-full">
+              <div class="adm-enroll-box w-full rounded-md p-[20px] lg:px-[30px] flex flex-col flex-wrap relative text-[#686868] bg-[#DBF5D0]">
                 <div class="block w-full text-left mb-6 relative">
                   <h2 class="text-[#3C8DBC] text-[20px] font-semibold">Admission Is Going On</h2>
                   <p class="text-[15px] text-lh-1_5">Enroll now to {{ $batch->training->name }} courses as per your suitable time.</p>
