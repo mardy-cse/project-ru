@@ -174,11 +174,33 @@
                         <div class="adm-enroll-box w-full rounded-md p-[20px] lg:px-[30px] flex flex-col flex-wrap relative text-[#686868] bg-[#DBF5D0]">
                             <div class="block w-full text-left mb-6 relative">
                                 @if(isset($isEnrolled) && $isEnrolled)
+                                    @php
+                                        $enrollment = \App\Models\TrainingParticipant::where('batch_id', $batch->id)
+                                            ->where('email', Auth::user()->email)
+                                            ->first();
+                                        $isApproved = $enrollment && $enrollment->status;
+                                    @endphp
+                                    
                                     <h2 class="text-[#28a745] text-[20px] font-semibold flex items-center">
                                         <i class="fas fa-check-circle mr-2"></i>
                                         You are Enrolled!
                                     </h2>
                                     <p class="text-[15px] text-lh-1_5">You have successfully enrolled in {{ $batch->training->name }} course.</p>
+                                    
+                                    {{-- Enrollment Status Badge --}}
+                                    <div class="mt-3">
+                                        @if($isApproved)
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                <i class="fas fa-check mr-2"></i>
+                                                Enrollment Approved
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-clock mr-2"></i>
+                                                Pending Approval
+                                            </span>
+                                        @endif
+                                    </div>
                                 @else
                                     <h2 class="text-[#3C8DBC] text-[20px] font-semibold">Admission Is Going On</h2>
                                     <p class="text-[15px] text-lh-1_5">Enroll now to {{ $batch->training->name }} courses as per your suitable time.</p>
@@ -215,17 +237,11 @@
                                     <p class="text-[15px] text-lh-1_5">Course Fee {{ $batch->venue }} <br>BDT {{ $batch->course_fee ?? '5,000' }}</p>
                                     
                                     @if(isset($isEnrolled) && $isEnrolled)
-                                        {{-- Cancel Enrollment Button --}}
-                                        <form action="{{ route('training.cancel', $batch->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                onclick="return confirm('Are you sure you want to cancel your enrollment? This action cannot be undone.')"
-                                                class="flex items-center justify-center py-[5px] px-[15px] bg-[#dc3545] text-[16px] leading-tight text-white font-normal rounded-md mt-4 h-[40px] hover:bg-[#c82333] transition-all ease-in-out duration-300">
-                                                <i class="fas fa-times mr-2"></i>
-                                                Cancel Enrollment
-                                            </button>
-                                        </form>
+                                        {{-- Enrolled Status Display - Button Style --}}
+                                        <div class="flex items-center justify-center py-[8px] px-[20px] bg-gradient-to-r from-[#28a745] to-[#20c997] text-[16px] leading-tight text-white font-semibold rounded-lg mt-4 h-[45px] shadow-lg border-2 border-[#1e7e34] cursor-default transform transition-all duration-200 hover:shadow-xl">
+                                            <i class="fas fa-check-circle mr-3 text-lg"></i>
+                                            <span class="tracking-wide">Enrolled</span>
+                                        </div>
                                     @else
                                         @php
                                             $enrolledCount = \App\Models\TrainingParticipant::where('batch_id', $batch->id)
