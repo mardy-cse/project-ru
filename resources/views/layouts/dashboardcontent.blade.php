@@ -2,7 +2,7 @@
 
 @section('content')
     <main id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-[#f8f9fd]">
-      <div class="container mx-auto px-6 py-8">
+      <div class="w-full max-w-none px-4 md:px-6 lg:px-8 py-6 md:py-8">
         
         @if(Auth::user()->isAdmin())
           {{-- Admin Dashboard Content --}}
