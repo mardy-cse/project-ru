@@ -34,7 +34,7 @@ return new class extends Migration
             $table->timestamps();
             
             // Foreign key constraints
-            $table->foreign('training_id')->references('id')->on('trainings')->onDelete('cascade');
+            $table->foreign('training_id')->references('id')->on('training')->onDelete('cascade');
             $table->foreign('batch_id')->references('id')->on('batches')->onDelete('cascade');
             $table->foreign('marked_by')->references('id')->on('users')->onDelete('set null');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');

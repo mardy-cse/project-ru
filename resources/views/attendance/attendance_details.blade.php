@@ -118,13 +118,13 @@
             
             <div class="m-4 p-2 d-flex justify-content-between border bg-light border-light">
                 <a href="/attendance/list" class="btn btn-secondary">
-                    <i class="fas fa-times me-1"></i> Close
+                    <i class="fas fa-arrow-left me-1"></i> Back
                 </a>
 
                 <div>
                     <button type="button" 
                             onclick="markAllPresent()" 
-                            class="btn btn-success me-2">
+                            class="btn btn-success me-3">
                         <i class="fas fa-check-double me-1"></i>
                         Present All
                     </button>
@@ -154,10 +154,52 @@
     // Mark all participants as present
     function markAllPresent() {
         const presentRadios = document.querySelectorAll('input[type="radio"][value="present"]');
+        const total = presentRadios.length;
+        
+        if (total === 0) {
+            alert('No participants found to mark as present');
+            return;
+        }
+        
+        // Mark all as present
         presentRadios.forEach(radio => {
             radio.checked = true;
         });
+        
+        // Show success message
+        const message = document.createElement('div');
+        message.className = 'alert alert-success alert-dismissible fade show';
+        message.innerHTML = `
+            <i class="fas fa-check-circle me-2"></i>
+            All ${total} participants selected as Present. Click Save Attendance to confirm.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.querySelector('.container-fluid').insertBefore(message, document.querySelector('.border.border-success'));
+        
+        // Auto hide message
+        setTimeout(() => {
+            message.style.transition = 'opacity 0.5s ease-out';
+            message.style.opacity = '0';
+            setTimeout(() => message.remove(), 500);
+        }, 3000);
     }
+
+    // Form submission validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const attendanceInputs = document.querySelectorAll('input[name^="attendance["]');
+        let checkedCount = 0;
+        attendanceInputs.forEach(input => {
+            if (input.checked) {
+                checkedCount++;
+            }
+        });
+        
+        if (checkedCount === 0) {
+            e.preventDefault();
+            alert('Please mark attendance for at least one participant');
+            return false;
+        }
+    });
 
     // Auto-hide alerts after 5 seconds
     setTimeout(function() {
@@ -171,11 +213,5 @@
         });
     }, 5000);
 </script>
-
-@endsection
-    <a href="#" class="btn btn-success">Save</a>
-  </div>
-</div>
-
 
 @endsection

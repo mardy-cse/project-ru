@@ -9,6 +9,7 @@ use App\Models\Batches;
 use App\Models\Training;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
 {
@@ -65,8 +66,21 @@ class AttendanceController extends Controller
             $batch = Batches::with('trainingParticipants')->findOrFail($batchId);
             $attendanceData = $request->input('attendance', []);
             
+            // Debug logging
+            Log::info('Attendance Update Debug:', [
+                'batch_id' => $batchId,
+                'attendance_data' => $attendanceData,
+                'batch_training_id' => $batch->training_id ?? 'null',
+                'participants_count' => $batch->trainingParticipants->count()
+            ]);
+            
+            if (empty($attendanceData)) {
+                return back()->with('error', 'No attendance data provided.');
+            }
+            
             DB::beginTransaction();
             
+            $successCount = 0;
             foreach ($attendanceData as $participantId => $status) {
                 $participant = TrainingParticipant::find($participantId);
                 if ($participant && $participant->batch_id == $batchId) {
@@ -76,39 +90,27 @@ class AttendanceController extends Controller
                         'updated_by' => Auth::id()
                     ]);
                     
-                    // Also create/update attendance record
-                    Attendance::updateOrCreate(
-                        [
-                            'batch_id' => $batchId,
-                            'user_id' => $participant->id,
-                            'session_date' => now()->toDateString()
-                        ],
-                        [
-                            'training_id' => $batch->training_id,
-                            'participant_name' => $participant->name,
-                            'participant_email' => $participant->email,
-                            'participant_phone' => $participant->mobile,
-                            'venue' => $batch->venue,
-                            'session_day' => $batch->session_day,
-                            'start_time' => $batch->start_time,
-                            'end_time' => $batch->end_time,
-                            'attendance_status' => $status === 'present' ? 1 : 0,
-                            'marked_by' => Auth::id(),
-                            'marked_at' => now(),
-                            'created_by' => Auth::id(),
-                            'updated_by' => Auth::id()
-                        ]
-                    );
+                    $successCount++;
+                    Log::info('Updated participant:', [
+                        'participant_id' => $participantId,
+                        'status' => $status,
+                        'participant_name' => $participant->name
+                    ]);
                 }
             }
             
             DB::commit();
             
-            return back()->with('success', 'Attendance updated successfully!');
+            return back()->with('success', "Attendance updated successfully for {$successCount} participants!");
             
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Failed to update attendance. Please try again.');
+            Log::error('Attendance Update Error:', [
+                'batch_id' => $batchId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return back()->with('error', 'Failed to update attendance: ' . $e->getMessage());
         }
     }
 
@@ -120,47 +122,77 @@ class AttendanceController extends Controller
         try {
             $batch = Batches::with('trainingParticipants')->findOrFail($batchId);
             
+            if ($batch->trainingParticipants->count() === 0) {
+                return back()->with('error', 'No participants found in this batch.');
+            }
+            
             DB::beginTransaction();
             
+            $totalCount = $batch->trainingParticipants->count();
             foreach ($batch->trainingParticipants as $participant) {
-                // Update participant status
                 $participant->update([
-                    'status' => 1,
+                    'status' => 1, // Mark as Present
                     'updated_by' => Auth::id()
                 ]);
-                
-                // Create/update attendance record
-                Attendance::updateOrCreate(
-                    [
-                        'batch_id' => $batchId,
-                        'user_id' => $participant->id,
-                        'session_date' => now()->toDateString()
-                    ],
-                    [
-                        'training_id' => $batch->training_id,
-                        'participant_name' => $participant->name,
-                        'participant_email' => $participant->email,
-                        'participant_phone' => $participant->mobile,
-                        'venue' => $batch->venue,
-                        'session_day' => $batch->session_day,
-                        'start_time' => $batch->start_time,
-                        'end_time' => $batch->end_time,
-                        'attendance_status' => 1,
-                        'marked_by' => Auth::id(),
-                        'marked_at' => now(),
-                        'created_by' => Auth::id(),
-                        'updated_by' => Auth::id()
-                    ]
-                );
             }
             
             DB::commit();
             
-            return back()->with('success', 'All participants marked as present!');
+            return back()->with('success', "All {$totalCount} participants marked as Present!");
             
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Failed to mark attendance. Please try again.');
+            Log::error('Mark All Present Error:', [
+                'batch_id' => $batchId,
+                'error' => $e->getMessage()
+            ]);
+            return back()->with('error', 'Failed to mark attendance: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Mark only absent participants as present (safer option)
+     */
+    public function markRemainingPresent($batchId)
+    {
+        try {
+            $batch = Batches::with('trainingParticipants')->findOrFail($batchId);
+            
+            if ($batch->trainingParticipants->count() === 0) {
+                return back()->with('error', 'No participants found in this batch.');
+            }
+            
+            // Get only absent participants
+            $absentParticipants = $batch->trainingParticipants->where('status', 0);
+            
+            if ($absentParticipants->count() === 0) {
+                return back()->with('info', 'All participants are already marked as Present!');
+            }
+            
+            DB::beginTransaction();
+            
+            foreach ($absentParticipants as $participant) {
+                $participant->update([
+                    'status' => 1,
+                    'updated_by' => Auth::id()
+                ]);
+            }
+            
+            DB::commit();
+            
+            $presentCount = $batch->trainingParticipants->where('status', 1)->count();
+            $message = "{$absentParticipants->count()} remaining participants marked as Present. ";
+            $message .= "Total Present: {$presentCount}";
+            
+            return back()->with('success', $message);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Mark Remaining Present Error:', [
+                'batch_id' => $batchId,
+                'error' => $e->getMessage()
+            ]);
+            return back()->with('error', 'Failed to mark attendance: ' . $e->getMessage());
         }
     }
 
