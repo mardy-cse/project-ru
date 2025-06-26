@@ -48,13 +48,19 @@
                 <div class="col-md-6">
                     <div class="input-group">
                         <input type="text" 
-                               value="{{ \Carbon\Carbon::parse($attendance->session_date)->format('d-M-Y') }}" 
+                               value="{{ \Carbon\Carbon::now()->format('d-M-Y') }}" 
                                disabled 
                                class="form-control bg-light"/>
                         <span class="input-group-text bg-light">
                             <i class="fas fa-calendar"></i>
                         </span>
                     </div>
+                </div>
+                <div class="col-md-4">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Current Date (Auto-generated)
+                    </small>
                 </div>
             </div>
 
@@ -112,29 +118,97 @@
                 </div>
             </div>
 
-            <br>
-
-            @include('attendance.list_of_participants')
-            
-            <div class="m-4 p-2 d-flex justify-content-between border bg-light border-light">
-                <a href="/attendance/list" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i> Back
-                </a>
-
-                <div>
-                    <button type="button" 
-                            onclick="markAllPresent()" 
-                            class="btn btn-success me-3">
-                        <i class="fas fa-check-double me-1"></i>
-                        Present All
-                    </button>
+            <!-- Batch Status Check -->
+            <div class="row align-items-center mb-3 ps-5">
+                <div class="col-md-2">
+                    <label class="form-label fw-bold mb-0">Batch Status:</label>
+                </div>
+                <div class="col-md-10">
+                    @php
+                        $currentDate = \Carbon\Carbon::now();
+                        $batchStartDate = \Carbon\Carbon::parse($attendance->batch->start_date);
+                        $batchEndDate = \Carbon\Carbon::parse($attendance->batch->end_date);
+                        $isBatchStarted = $currentDate->gte($batchStartDate);
+                        $isBatchEnded = $currentDate->gt($batchEndDate);
+                    @endphp
                     
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save me-1"></i>
-                        Save Attendance
-                    </button>
+                    @if($isBatchEnded)
+                        <span class="badge bg-secondary fs-6 me-2">
+                            <i class="fas fa-flag-checkered me-1"></i>Batch Completed
+                        </span>
+                        <small class="text-muted">
+                            Ended on {{ $batchEndDate->format('d-M-Y') }}
+                        </small>
+                    @elseif($isBatchStarted)
+                        <span class="badge bg-success fs-6 me-2">
+                            <i class="fas fa-play me-1"></i>Batch Running
+                        </span>
+                        <small class="text-muted">
+                            Started on {{ $batchStartDate->format('d-M-Y') }}
+                        </small>
+                    @else
+                        <span class="badge bg-warning fs-6 me-2">
+                            <i class="fas fa-clock me-1"></i>Batch Not Started Yet
+                        </span>
+                        <small class="text-muted">
+                            Will start on {{ $batchStartDate->format('d-M-Y') }}
+                        </small>
+                    @endif
                 </div>
             </div>
+
+            <br>
+
+            @php
+                $currentDate = \Carbon\Carbon::now();
+                $batchStartDate = \Carbon\Carbon::parse($attendance->batch->start_date);
+                $isBatchStarted = $currentDate->gte($batchStartDate);
+            @endphp
+
+            @if($isBatchStarted)
+                @include('attendance.list_of_participants')
+                
+                <div class="m-4 p-2 d-flex justify-content-between border bg-light border-light">
+                    <a href="/attendance/list" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Back
+                    </a>
+
+                    <div>
+                        <button type="button" 
+                                onclick="markAllPresent()" 
+                                class="btn btn-success me-3">
+                            <i class="fas fa-check-double me-1"></i>
+                            Present All
+                        </button>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>
+                            Save Attendance
+                        </button>
+                    </div>
+                </div>
+            @else
+                <!-- Batch Not Started Yet -->
+                <div class="m-4 p-5 text-center">
+                    <div class="mb-4">
+                        <i class="fas fa-calendar-times text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="text-warning mb-3">Batch Not Started Yet</h4>
+                    <p class="text-muted mb-3">
+                        This batch is scheduled to start on <strong>{{ $batchStartDate->format('d-M-Y') }}</strong>
+                    </p>
+                    <p class="text-muted mb-4">
+                        Attendance can only be managed after the batch starts.
+                    </p>
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Starting in:</strong> {{ $batchStartDate->diffForHumans() }}
+                    </div>
+                    <a href="/attendance/list" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Attendance List
+                    </a>
+                </div>
+            @endif
         </form>
     </div>
 </div>

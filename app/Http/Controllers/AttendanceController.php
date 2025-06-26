@@ -46,12 +46,15 @@ class AttendanceController extends Controller
         $batch = Batches::with(['training', 'trainingParticipants'])->findOrFail($batchId);
         $participants = $batch->trainingParticipants;
         
-        // Create a dummy attendance object for display
+        // Create attendance object with current date
         $attendance = (object) [
             'id' => $batch->id,
             'training' => $batch->training,
             'batch' => $batch,
-            'session_date' => $batch->start_date
+            'session_date' => now()->toDateString(), // Current date
+            'current_date' => now(),
+            'batch_start_date' => $batch->start_date,
+            'batch_end_date' => $batch->end_date
         ];
         
         return view('attendance.attendance_details', compact('attendance', 'participants'));
@@ -65,12 +68,20 @@ class AttendanceController extends Controller
         try {
             $batch = Batches::with('trainingParticipants')->findOrFail($batchId);
             $attendanceData = $request->input('attendance', []);
+            $currentDate = now()->toDateString();
+            $batchStartDate = \Carbon\Carbon::parse($batch->start_date);
+            
+            // Check if batch has started
+            if (now()->lt($batchStartDate)) {
+                return back()->with('error', 'Cannot mark attendance. Batch has not started yet.');
+            }
             
             // Debug logging
             Log::info('Attendance Update Debug:', [
                 'batch_id' => $batchId,
                 'attendance_data' => $attendanceData,
-                'batch_training_id' => $batch->training_id ?? 'null',
+                'session_date' => $currentDate,
+                'batch_start_date' => $batch->start_date,
                 'participants_count' => $batch->trainingParticipants->count()
             ]);
             
@@ -94,6 +105,7 @@ class AttendanceController extends Controller
                     Log::info('Updated participant:', [
                         'participant_id' => $participantId,
                         'status' => $status,
+                        'session_date' => $currentDate,
                         'participant_name' => $participant->name
                     ]);
                 }
@@ -101,7 +113,7 @@ class AttendanceController extends Controller
             
             DB::commit();
             
-            return back()->with('success', "Attendance updated successfully for {$successCount} participants!");
+            return back()->with('success', "Attendance updated successfully for {$successCount} participants on " . now()->format('d-M-Y') . "!");
             
         } catch (\Exception $e) {
             DB::rollBack();
@@ -121,6 +133,12 @@ class AttendanceController extends Controller
     {
         try {
             $batch = Batches::with('trainingParticipants')->findOrFail($batchId);
+            $batchStartDate = \Carbon\Carbon::parse($batch->start_date);
+            
+            // Check if batch has started
+            if (now()->lt($batchStartDate)) {
+                return back()->with('error', 'Cannot mark attendance. Batch has not started yet.');
+            }
             
             if ($batch->trainingParticipants->count() === 0) {
                 return back()->with('error', 'No participants found in this batch.');
@@ -138,57 +156,11 @@ class AttendanceController extends Controller
             
             DB::commit();
             
-            return back()->with('success', "All {$totalCount} participants marked as Present!");
+            return back()->with('success', "All {$totalCount} participants marked as Present for " . now()->format('d-M-Y') . "!");
             
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Mark All Present Error:', [
-                'batch_id' => $batchId,
-                'error' => $e->getMessage()
-            ]);
-            return back()->with('error', 'Failed to mark attendance: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Mark only absent participants as present (safer option)
-     */
-    public function markRemainingPresent($batchId)
-    {
-        try {
-            $batch = Batches::with('trainingParticipants')->findOrFail($batchId);
-            
-            if ($batch->trainingParticipants->count() === 0) {
-                return back()->with('error', 'No participants found in this batch.');
-            }
-            
-            // Get only absent participants
-            $absentParticipants = $batch->trainingParticipants->where('status', 0);
-            
-            if ($absentParticipants->count() === 0) {
-                return back()->with('info', 'All participants are already marked as Present!');
-            }
-            
-            DB::beginTransaction();
-            
-            foreach ($absentParticipants as $participant) {
-                $participant->update([
-                    'status' => 1,
-                    'updated_by' => Auth::id()
-                ]);
-            }
-            
-            DB::commit();
-            
-            $presentCount = $batch->trainingParticipants->where('status', 1)->count();
-            $message = "{$absentParticipants->count()} remaining participants marked as Present. ";
-            $message .= "Total Present: {$presentCount}";
-            
-            return back()->with('success', $message);
-            
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Mark Remaining Present Error:', [
                 'batch_id' => $batchId,
                 'error' => $e->getMessage()
             ]);

@@ -78,7 +78,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance/details/{id}', [AttendanceController::class, 'openAttendanceDetails'])->name('attendance.details');
     Route::post('/attendance/update/{id}', [AttendanceController::class, 'updateAttendance'])->name('attendance.update');
     Route::post('/attendance/mark-all-present/{id}', [AttendanceController::class, 'markAllPresent'])->name('attendance.markAllPresent');
-    Route::post('/attendance/mark-remaining-present/{id}', [AttendanceController::class, 'markRemainingPresent'])->name('attendance.markRemainingPresent');
+
     Route::get('/attendance/report/{id}', [AttendanceController::class, 'generateReport'])->name('attendance.report');
 
     // Certificate routes (when you add them)
