@@ -186,10 +186,28 @@
 
                 <p class="text-[14px] leading-5 py-1 text-left w-full">Training Medium: {{ $batch->venue  }}</p>
                 <p class="text-[14px] leading-5 py-1 text-left w-full text-[#892626]">Registration Ends: {{ \Carbon\Carbon::parse($batch->enrollment_deadline)->format('d-M-Y') }}</p>
+                
+                {{-- Enrollment Status for logged in users --}}
+                @if(Auth::check())
+                    @php
+                        $isEnrolled = \App\Models\TrainingParticipant::where('batch_id', $batch->id)
+                            ->where('email', Auth::user()->email)
+                            ->exists();
+                    @endphp
+                    @if($isEnrolled)
+                        <div class="mt-2">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                <i class="fas fa-check-circle mr-1"></i>
+                                Enrolled
+                            </span>
+                        </div>
+                    @endif
+                @endif
               </div>
             </div>
           </div>
-         <a class="h-[40px] absolute bottom-[10px] right-[10px] rounded-lg bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300 text-white flex items-center justify-center gap-2 w-full max-w-[170px] md:w-[140px] text-[16px] py-2 px-4" href="{{ route('course.view', $batch->id) }}">
+         <a class="h-[40px] absolute bottom-[10px] right-[10px] rounded-lg bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300 text-white flex items-center justify-center gap-2 w-full max-w-[170px] md:w-[140px] text-[16px] py-2 px-4" 
+            href="{{ Auth::check() ? route('userCourse.view', $batch->id) : route('course.view', $batch->id) }}">
     <span class="text-[16px]">View</span>
     <span class="inline-block">
         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
@@ -230,43 +248,79 @@
                 <div x-show="tab === 'tabSkdMyCourse'" class="tab-content-block">
                   <div class="tab-main-content relative w-full block">
                     <div class="relative w-full block mb-6">
-                      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] w-full">
-                        <div class="trc-course-item relative overflow-hidden w-full rounded-[8px] bg-white border border-[#85C16D] pt-[10px] px-[10px] pb-[70px]">
-                          <div class="relative z-10 flex flex-col h-full items-start justify-start text-center">
-                            <div class="trc-course-item-img h-[175px] block w-full mb-4">
-                              <img src="./assets/images/dash-course-img-03.png" alt="SKD Course Image" class="w-full h-full object-cover">
-                            </div>
-                            <div class="trc-course-item-desc w-full block relative">
-                              <div class="skd-course-desc flex items-start justify-center flex-col w-full text-left text-[#000000]">
-                                <div class="flex flex-col gap-2 flex-wrap mb-2 w-full">
-                                  <div class="relative pl-[24px] inline-block mr-4">
-                                    <span class="absolute left-0 top-[2px] h-[16px] w-[16px] bg-[#00A65A] rounded-sm block"></span>
-                                    <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">Durations: 25-Aug-2024 to 25-Aug-2024</p>
-                                  </div>
-                                  <div class="relative pl-[24px] inline-block mr-4">
-                                    <span class="absolute left-0 top-[2px] h-[16px] w-[16px] bg-[#00A65A] rounded-sm block"></span>
-                                    <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">Total Hours: 01:00</p>
+                      @if(Auth::check() && isset($enrolledBatches) && $enrolledBatches->count() > 0)
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] w-full">
+                          @foreach($enrolledBatches as $enrolledBatch)
+                            <div class="trc-course-item relative overflow-hidden w-full rounded-[8px] bg-white border border-[#28a745] pt-[10px] px-[10px] pb-[70px]">
+                              <div class="relative z-10 flex flex-col h-full items-start justify-start text-center">
+                                <div class="trc-course-item-img h-[175px] block w-full mb-4">
+                                  <img src="{{ asset('storage/' . ($enrolledBatch->training->course_thumbnail ?? 'assets/images/dash-course-img.png')) }}" alt="Training Image" class="w-full h-full object-cover">
+                                </div>
+                                <div class="trc-course-item-desc w-full block relative">
+                                  <div class="skd-course-desc flex items-start justify-center flex-col w-full text-left text-[#000000]">
+                                    <div class="flex items-center justify-between w-full mb-2">
+                                      <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check-circle mr-1"></i>
+                                        Enrolled
+                                      </span>
+                                    </div>
+                                    <div class="flex flex-col gap-2 flex-wrap mb-2 w-full">
+                                      <div class="relative pl-[24px] inline-block mr-4">
+                                        <span class="absolute left-0 top-[2px] h-[16px] w-[16px] bg-[#00A65A] rounded-sm block"></span>
+                                        <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">
+                                          Durations: {{ \Carbon\Carbon::parse($enrolledBatch->start_date)->format('d-M-Y') }} to {{ \Carbon\Carbon::parse($enrolledBatch->end_date)->format('d-M-Y') }}
+                                        </p>
+                                      </div>
+                                      <div class="relative pl-[24px] inline-block mr-4">
+                                        <span class="absolute left-0 top-[2px] h-[16px] w-[16px] bg-[#00A65A] rounded-sm block"></span>
+                                        <p class="text-[13px] leading-3 flex min-h-[20px] items-center text-left">
+                                          Total Hours: {{ $enrolledBatch->class_duration }}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">{{ $enrolledBatch->training->name }}</h2>
+                                    <p class="text-[14px] leading-5 py-1 text-left w-full">Batch: {{ $enrolledBatch->name }}</p>
+                                    <p class="text-[14px] leading-5 py-1 text-left w-full">
+                                      Status: {{ $enrolledBatch->batch_status == 1 ? 'ONGOING' : ($enrolledBatch->batch_status == 0 ? 'COMPLETE' : 'PENDING') }}
+                                    </p>
+                                    <p class="text-[14px] leading-5 py-1 text-left w-full">Training Medium: {{ $enrolledBatch->venue }}</p>
+                                    <p class="text-[14px] leading-5 py-1 text-left w-full text-[#892626]">Registration Ends: {{ \Carbon\Carbon::parse($enrolledBatch->enrollment_deadline)->format('d-M-Y') }}</p>
                                   </div>
                                 </div>
-                                <h2 class="text-[15px] md:text-[16px] leading-2 mt-1 font-medium">GovStack Specification Roadmap: (Interoperability Standards) Introducing RESTful APIs</h2>
-                                <p class="text-[14px] leading-5 py-1 text-left w-full">Batch: BA/SDP/GSR/RA/2024/01</p>
-                                <p class="text-[14px] leading-5 py-1 text-left w-full">Status: Ongoing</p>
-                                <p class="text-[14px] leading-5 py-1 text-left w-full">Training Medium: Online</p>
-                                <p class="text-[14px] leading-5 py-1 text-left w-full text-[#892626]">Registration Ends: 23-Aug-2024</p>
                               </div>
+                              <a class="h-[40px] absolute bottom-[10px] right-[10px] rounded-lg bg-[#28a745] hover:bg-[#1e7e34] transition-all ease-in-out duration-300 text-white flex items-center justify-center gap-2 w-full max-w-[170px] md:w-[140px] text-[16px] py-2 px-4" 
+                                 href="{{ route('userCourse.view', $enrolledBatch->id) }}">
+                                <span class="text-[16px]">View Course</span>
+                                <span class="inline-block">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 19.7498C15.608 19.7498 19.75 15.6088 19.75 10.4998C19.75 5.39182 15.608 1.24982 10.5 1.24982C5.392 1.24982 1.25 5.39182 1.25 10.4998C1.25 15.6088 5.392 19.7498 10.5 19.7498Z" stroke="#F9FAFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M9.05762 13.971L12.5436 10.5L9.05762 7.02901" stroke="#F9FAFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                  </svg>
+                                </span>
+                              </a>
                             </div>
-                          </div>
-                          <a class="h-[40px] absolute bottom-[10px] right-[10px] rounded-lg bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300 text-white flex items-center justify-center gap-2 w-full max-w-[170px] md:w-[140px] text-[16px] py-2 px-4" href="dash-course-view.html">
-                            <span class="text-[16px]">View</span>
-                            <span class="inline-block">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 19.7498C15.608 19.7498 19.75 15.6088 19.75 10.4998C19.75 5.39182 15.608 1.24982 10.5 1.24982C5.392 1.24982 1.25 5.39182 1.25 10.4998C1.25 15.6088 5.392 19.7498 10.5 19.7498Z" stroke="#F9FAFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                <path d="M9.05762 13.971L12.5436 10.5L9.05762 7.02901" stroke="#F9FAFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                              </svg>
-                            </span>
-                          </a>
+                          @endforeach
                         </div>
-                      </div>
+                      @else
+                        <div class="text-center py-8">
+                          <div class="mb-4">
+                            <i class="fas fa-graduation-cap text-6xl text-gray-300"></i>
+                          </div>
+                          <h3 class="text-lg font-medium text-gray-900 mb-2">No Enrolled Courses</h3>
+                          <p class="text-gray-500 mb-4">You haven't enrolled in any courses yet.</p>
+                          @if(Auth::check())
+                            <button x-on:click="tab = 'tabSkdCourseOngoing'" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300">
+                              <i class="fas fa-search mr-2"></i>
+                              Browse Courses
+                            </button>
+                          @else
+                            <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-[#00A65A] hover:bg-[#3C8DBC] transition-all ease-in-out duration-300">
+                              <i class="fas fa-sign-in-alt mr-2"></i>
+                              Login to Enroll
+                            </a>
+                          @endif
+                        </div>
+                      @endif
                     </div>
                   </div>
                 </div>

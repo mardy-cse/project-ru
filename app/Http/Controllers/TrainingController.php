@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Training;
 use App\Models\TrainingCategory;
 use App\Models\Batches;
+use App\Models\TrainingParticipant;
 
 
 class TrainingController extends Controller
@@ -120,7 +121,17 @@ public function displayTrainingCoursesForUsers(){
     $batch = Batches::all();
     $trainingCategory = TrainingCategory::all();
     $allTrainings = Training::all();
-    return view('user_views.trainings.training_courses', compact('batch', 'trainingCategory', 'allTrainings'));
+    
+    // Get enrolled courses for logged-in users
+    $enrolledBatches = collect();
+    if (Auth::check()) {
+        $enrolledBatches = Batches::whereHas('trainingParticipants', function($query) {
+            $query->where('email', Auth::user()->email)
+                  ->where('status', true);
+        })->with(['training', 'speaker'])->get();
+    }
+    
+    return view('user_views.trainings.training_courses', compact('batch', 'trainingCategory', 'allTrainings', 'enrolledBatches'));
 }
 
 
@@ -147,16 +158,105 @@ public function viewTrainingCoursesForUsers($id){
 }
 
 public function viewTrainingCoursesForUsersAfterLogin($id){
-    $batch = Batches::with('training')->findOrFail($id);
-    if ($batch->speaker && $batch->speaker->exparties_categories_id) {
-        $batch->speaker->category_names = \App\Models\TrainingCategory::whereIn('id', $batch->speaker->exparties_categories_id)
-            ->pluck('category_name')
-            ->toArray();
+        $batch = Batches::with(['training', 'speaker'])->findOrFail($id);
+        
+        // Check if user is already enrolled
+        $isEnrolled = false;
+        if (Auth::check()) {
+            $isEnrolled = TrainingParticipant::where('batch_id', $id)
+                ->where('email', Auth::user()->email)
+                ->exists();
+        }
+        
+        if ($batch->speaker && $batch->speaker->exparties_categories_id) {
+            $batch->speaker->category_names = \App\Models\TrainingCategory::whereIn('id', $batch->speaker->exparties_categories_id)
+                ->pluck('category_name')
+                ->toArray();
+        }
+
+        return view('user_views.trainings.user_view_course', compact('batch', 'isEnrolled'));
     }
 
-    return view('user_views.trainings.user_view_course', compact('batch'));
-}
+    /**
+     * Enroll user in a training batch
+     */
+    public function enrollInTraining(Request $request, $batchId)
+    {
+        try {
+            // Check if user is authenticated
+            if (!Auth::check()) {
+                return redirect()->route('login')->with('error', 'Please login to enroll in training.');
+            }
 
+            $user = Auth::user();
+            $batch = Batches::with('training')->findOrFail($batchId);
+
+            // Check if user is already enrolled
+            $existingEnrollment = TrainingParticipant::where('batch_id', $batchId)
+                ->where('email', $user->email)
+                ->first();
+
+            if ($existingEnrollment) {
+                return back()->with('info', 'You are already enrolled in this training.');
+            }
+
+            // Check if batch has available seats
+            $enrolledCount = TrainingParticipant::where('batch_id', $batchId)
+                ->where('status', true)
+                ->count();
+
+            if ($enrolledCount >= $batch->seat_capacity) {
+                return back()->with('error', 'Sorry, this batch is full. No more seats available.');
+            }
+
+            // Create new enrollment
+            TrainingParticipant::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'mobile' => $request->input('mobile', ''),
+                'designation' => $request->input('designation', ''),
+                'organization' => $request->input('organization', ''),
+                'batch_id' => $batchId,
+                'status' => true,
+                'is_training_completed' => false,
+                'created_by' => $user->id,
+                'updated_by' => $user->id
+            ]);
+
+            return back()->with('success', 'Successfully enrolled in ' . $batch->training->name . '!');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to enroll. Please try again.');
+        }
+    }
+
+    /**
+     * Cancel enrollment
+     */
+    public function cancelEnrollment($batchId)
+    {
+        try {
+            if (!Auth::check()) {
+                return redirect()->route('login');
+            }
+
+            $user = Auth::user();
+            $enrollment = TrainingParticipant::where('batch_id', $batchId)
+                ->where('email', $user->email)
+                ->first();
+
+            if (!$enrollment) {
+                return back()->with('error', 'No enrollment found.');
+            }
+
+            $enrollment->delete();
+
+            return back()->with('success', 'Enrollment cancelled successfully.');
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to cancel enrollment. Please try again.');
+        }
+    }
 }
 
 

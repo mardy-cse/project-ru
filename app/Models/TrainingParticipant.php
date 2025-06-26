@@ -39,7 +39,7 @@ class TrainingParticipant extends Model
     // Relationships
     public function batch()
     {
-        return $this->belongsTo(PruneBatchesCommand::class, 'batch_id');
+        return $this->belongsTo(Batches::class, 'batch_id');
     }
     
     // public function team()

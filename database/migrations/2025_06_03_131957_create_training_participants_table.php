@@ -11,9 +11,30 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('training_participants', function (Blueprint $table) {
+        Schema::create('ebs_training_participant', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('email');
+            $table->string('mobile')->nullable();
+            $table->string('designation')->nullable();
+            $table->string('organization')->nullable();
+            $table->unsignedBigInteger('team_id')->nullable();
+            $table->unsignedBigInteger('batch_id');
+            $table->string('certificate_url')->nullable();
+            $table->boolean('is_training_completed')->default(false);
+            $table->boolean('status')->default(true);
+            $table->unsignedBigInteger('created_by');
+            $table->unsignedBigInteger('updated_by');
             $table->timestamps();
+            
+            // Foreign key constraints
+            $table->foreign('batch_id')->references('id')->on('batches')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+            
+            // Indexes
+            $table->index(['email', 'batch_id']);
+            $table->index('batch_id');
         });
     }
 
@@ -22,6 +43,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('training_participants');
+        Schema::dropIfExists('ebs_training_participant');
     }
 };

@@ -83,12 +83,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-//User routes without authentication
-
-
+// Public course view routes
 Route::get('/course/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsers'])->name('course.view');
 
-Route::get('/courses/view/{id}', [TrainingController::class, 'viewTrainingCoursesForUsersAfterLogin'])->name('userCourse.view');
+// Authenticated course view routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/course/view/auth/{id}', [TrainingController::class, 'viewTrainingCoursesForUsersAfterLogin'])->name('userCourse.view');
+    Route::post('/training/enroll/{id}', [TrainingController::class, 'enrollInTraining'])->name('training.enroll');
+    Route::delete('/training/cancel-enrollment/{id}', [TrainingController::class, 'cancelEnrollment'])->name('training.cancel');
+});
 
 
 

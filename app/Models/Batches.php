@@ -90,6 +90,14 @@ class Batches extends Model
 
 
     /**
+     * Get the training participants for this batch.
+     */
+    public function trainingParticipants()
+    {
+        return $this->hasMany(TrainingParticipant::class, 'batch_id');
+    }
+
+    /**
      * Scope a query to only include active batches.
      */
     public function scopeActive($query)

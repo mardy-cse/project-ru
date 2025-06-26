@@ -27,7 +27,7 @@
               <a 
                 href="/training/courses"
                 style="text-decoration: none;" 
-                class="dash-sb-menu-item {{ request()->is('training/courses*') || request()->is('training/*') || request()->routeIs('user.training.*') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
+                class="dash-sb-menu-item {{ request()->is('training/courses*') || request()->is('training/*') || request()->is('course/view/*') || request()->is('courses/view/*') || request()->routeIs('course.view') || request()->routeIs('userCourse.view') ? 'active' : '' }} w-full flex flex-col gap-[10px] relative items-center justify-center my-[1px] py-[20px] px-[10px] text-black"
               >
                 <span class="w-[60px] h-[60px] flex items-center justify-center p-2">
                   <i class="fa fa-users" style="font-size: 50px;"></i>
