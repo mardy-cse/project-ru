@@ -122,13 +122,13 @@ public function displayTrainingCoursesForUsers(){
     $trainingCategory = TrainingCategory::all();
     $allTrainings = Training::all();
     
-    // Get enrolled courses for logged-in users
+    // Get enrolled courses for logged-in users (both pending and approved)
     $enrolledBatches = collect();
     if (Auth::check()) {
         $enrolledBatches = Batches::whereHas('trainingParticipants', function($query) {
-            $query->where('email', Auth::user()->email)
-                  ->where('status', true);
-        })->with(['training', 'speaker'])->get();
+            $query->where('email', Auth::user()->email);
+            // Show both pending (status = false) and approved (status = true) enrollments
+        })->with(['training', 'speaker', 'trainingParticipants'])->get();
     }
     
     return view('user_views.trainings.training_courses', compact('batch', 'trainingCategory', 'allTrainings', 'enrolledBatches'));

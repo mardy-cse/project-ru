@@ -1,15 +1,7 @@
-@include('user_views.trainings.training_course_header')
+@extends('dashboard')
 
-<div>
-    <!-- CSS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<link rel="stylesheet" href="{{ asset('css/style.css') }}">
-<main id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-[#F9FAFC]">
+@section('content')
+    <main id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-[#F9FAFC]">>
       <div class="container mx-auto px-6 py-8">
         <div class="dash-trc-content relative w-full block lg:pt-6">
           <div class="trc-cards-sec block w-full max-w-[1140px] mx-auto">
@@ -251,6 +243,13 @@
                       @if(Auth::check() && isset($enrolledBatches) && $enrolledBatches->count() > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] w-full">
                           @foreach($enrolledBatches as $enrolledBatch)
+                            @php
+                              // Get user's enrollment status for this batch
+                              $userEnrollment = $enrolledBatch->trainingParticipants->where('email', Auth::user()->email)->first();
+                              $enrollmentStatus = $userEnrollment ? ($userEnrollment->status ? 'Approved' : 'Pending') : 'Unknown';
+                              $statusColor = $userEnrollment && $userEnrollment->status ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+                              $statusIcon = $userEnrollment && $userEnrollment->status ? 'fas fa-check-circle' : 'fas fa-clock';
+                            @endphp
                             <div class="trc-course-item relative overflow-hidden w-full rounded-[8px] bg-white border border-[#28a745] pt-[10px] px-[10px] pb-[70px]">
                               <div class="relative z-10 flex flex-col h-full items-start justify-start text-center">
                                 <div class="trc-course-item-img h-[175px] block w-full mb-4">
@@ -259,9 +258,9 @@
                                 <div class="trc-course-item-desc w-full block relative">
                                   <div class="skd-course-desc flex items-start justify-center flex-col w-full text-left text-[#000000]">
                                     <div class="flex items-center justify-between w-full mb-2">
-                                      <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        <i class="fas fa-check-circle mr-1"></i>
-                                        Enrolled
+                                      <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusColor }}">
+                                        <i class="{{ $statusIcon }} mr-1"></i>
+                                        {{ $enrollmentStatus }}
                                       </span>
                                     </div>
                                     <div class="flex flex-col gap-2 flex-wrap mb-2 w-full">
@@ -330,4 +329,4 @@
         </div>
       </div>
     </main>
-</div>
+@endsection

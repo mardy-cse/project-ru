@@ -15,14 +15,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', function () {
-
-    if (Auth::check()) {
-
-        return redirect('/dashboardcontent');
-    } else {
- 
-        return app(TrainingController::class)->displayTrainingCoursesForUsers();
-    }
+    return app(TrainingController::class)->displayTrainingCoursesForUsers();
 });
 
 
@@ -37,7 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     // Training courses route (now requires authentication)
-    Route::get('/training/courses', [TrainingController::class, 'TrainingCoursesForUsers']);
+    Route::get('/training/courses', [TrainingController::class, 'displayTrainingCoursesForUsers'])->name('training.courses');
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
