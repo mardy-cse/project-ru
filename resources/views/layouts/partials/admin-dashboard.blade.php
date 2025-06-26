@@ -100,7 +100,7 @@
       
       <div class="space-y-4">
         <div class="border border-[#E5E5E5] rounded-lg p-4">
-          <h3 class="font-medium text-[16px] text-[#0E0E0E] mb-2">Quick Actions</h3>
+          <h3 class="font-medium text-[14px] md:text-[16px] text-[#0E0E0E] mb-2">Quick Actions</h3>
           <div class="grid grid-cols-1 gap-2">
             <a href="/training/add_training" class="flex items-center gap-2 text-[13px] md:text-[14px] text-[#3C8DBC] hover:text-[#85C16D] transition-colors">
               <i class="fas fa-plus"></i>
