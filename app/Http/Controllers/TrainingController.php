@@ -202,8 +202,7 @@ public function viewTrainingCoursesForUsersAfterLogin($id){
 
             // Check if batch has available seats
             $enrolledCount = TrainingParticipant::where('batch_id', $batchId)
-                ->where('status', true)
-                ->count();
+                ->count(); // Count all enrollments (both pending and approved)
 
             if ($enrolledCount >= $batch->seat_capacity) {
                 return back()->with('error', 'Sorry, this batch is full. No more seats available.');
@@ -217,13 +216,13 @@ public function viewTrainingCoursesForUsersAfterLogin($id){
                 'designation' => $request->input('designation', ''),
                 'organization' => $request->input('organization', ''),
                 'batch_id' => $batchId,
-                'status' => true,
+                'status' => false, // Initially pending, admin needs to approve
                 'is_training_completed' => false,
                 'created_by' => $user->id,
                 'updated_by' => $user->id
             ]);
 
-            return back()->with('success', 'Successfully enrolled in ' . $batch->training->name . '!');
+            return back()->with('success', 'Successfully enrolled in ' . $batch->training->name . '! Your enrollment is pending admin approval.');
 
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to enroll. Please try again.');
