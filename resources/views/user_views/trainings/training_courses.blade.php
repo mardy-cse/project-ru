@@ -1,7 +1,15 @@
-@extends('dashboard')
+@include('user_views.trainings.training_course_header')
 
-@section('content')
-    <main id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-[#F9FAFC]">>
+<div>
+    <!-- CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<link rel="stylesheet" href="{{ asset('css/style.css') }}">
+<main id="mainContent" class="flex-1 overflow-x-hidden overflow-y-auto bg-[#F9FAFC]">>
       <div class="container mx-auto px-6 py-8">
         <div class="dash-trc-content relative w-full block lg:pt-6">
           <div class="trc-cards-sec block w-full max-w-[1140px] mx-auto">
@@ -329,4 +337,4 @@
         </div>
       </div>
     </main>
-@endsection
+</div>

@@ -25,6 +25,7 @@
 
   <!-- User Profile Section -->
   <div class="flex items-center">
+    @auth
     <div class="relative" x-data="{ open: false }">
       <!-- Profile Dropdown Trigger -->
       <button @click="open = !open" class="flex gap-2 items-center py-1 px-3 cursor-pointer flex-nowrap focus:outline-none hover:bg-[#c5e8bc] rounded-full transition-colors">
@@ -78,5 +79,12 @@
         
       </div>
     </div>
+    @else
+    <!-- Login/Register buttons for guests -->
+    <div class="flex items-center space-x-4">
+      <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:text-[#000B8C] transition-colors">Login</a>
+      <a href="{{ route('register') }}" class="bg-[#000B8C] text-white px-4 py-2 rounded-md text-sm hover:bg-[#000080] transition-colors">Register</a>
+    </div>
+    @endauth
   </div>
 </header>

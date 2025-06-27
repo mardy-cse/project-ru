@@ -22,7 +22,7 @@
           </div>
 
           <!-- User Only Menu Items (role_id = 2) -->
-          @if(auth()->user()->role_id == 2)
+          @if(auth()->check() && auth()->user()->role_id == 2)
             <div class="relative block w-full">
               <a 
                 href="/training/courses"
@@ -38,7 +38,7 @@
           @endif
 
           <!-- Admin Only Menu Items (role_id = 1) -->
-          @if(auth()->user()->role_id == 1)
+          @if(auth()->check() && auth()->user()->role_id == 1)
             <a 
               href="/speaker/list"
               style="text-decoration: none;" 

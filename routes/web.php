@@ -29,8 +29,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('layouts.dashboardcontent');
     })->name('dashboard');
 
-    // Training courses route (now requires authentication)
-    Route::get('/training/courses', [TrainingController::class, 'displayTrainingCoursesForUsers'])->name('training.courses');
+    // Training courses route (authenticated version with sidebar)
+    Route::get('/training/courses', [TrainingController::class, 'authenticatedTrainingCoursesForUsers'])->name('training.courses');
 
     // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

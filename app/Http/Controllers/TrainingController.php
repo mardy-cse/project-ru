@@ -256,6 +256,23 @@ public function viewTrainingCoursesForUsersAfterLogin($id){
             return back()->with('error', 'Failed to cancel enrollment. Please try again.');
         }
     }
+
+    public function authenticatedTrainingCoursesForUsers(){
+        $batch = Batches::all();
+        $trainingCategory = TrainingCategory::all();
+        $allTrainings = Training::all();
+        
+        // Get enrolled courses for logged-in users (both pending and approved)
+        $enrolledBatches = collect();
+        if (Auth::check()) {
+            $enrolledBatches = Batches::whereHas('trainingParticipants', function($query) {
+                $query->where('email', Auth::user()->email);
+                // Show both pending (status = false) and approved (status = true) enrollments
+            })->with(['training', 'speaker', 'trainingParticipants'])->get();
+        }
+        
+        return view('user_views.trainings.authenticated_training_courses', compact('batch', 'trainingCategory', 'allTrainings', 'enrolledBatches'));
+    }
 }
 
 
