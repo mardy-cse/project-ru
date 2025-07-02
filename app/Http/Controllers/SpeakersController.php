@@ -34,16 +34,13 @@ public function store(Request $request)
     'exparties_categories_id.*' => 'integer|min:1',
 ]);
 
-    
-
+    // Convert files to Base64
     if ($request->hasFile('profile_image')) {
-        $imagePath = $request->file('profile_image')->store('speakers/profiles', 'public');
-        $validated['profile_image'] = $imagePath; 
+        $validated['profile_image'] = $this->convertToBase64($request->file('profile_image'));
     }
 
     if ($request->hasFile('signature')) {
-        $signaturePath = $request->file('signature')->store('speakers/signatures', 'public');
-        $validated['signature'] = $signaturePath; 
+        $validated['signature'] = $this->convertToBase64($request->file('signature'));
     }
 
 Speakers::create($validated);
@@ -94,17 +91,15 @@ public function update(Request $request, $id)
         'exparties_categories_id.*' => 'string',
     ]);
 
-    // Handle file uploads
+    // Handle file uploads and convert to Base64
     if ($request->hasFile('profile_image')) {
-        $imagePath = $request->file('profile_image')->store('speakers/profiles', 'public');
-        $validated['profile_image'] = $imagePath; 
+        $validated['profile_image'] = $this->convertToBase64($request->file('profile_image'));
     } else {
         unset($validated['profile_image']);
     }
 
     if ($request->hasFile('signature')) {
-        $signaturePath = $request->file('signature')->store('speakers/signatures', 'public');
-        $validated['signature'] = $signaturePath; 
+        $validated['signature'] = $this->convertToBase64($request->file('signature'));
     } else {
         unset($validated['signature']);
     }
@@ -181,7 +176,27 @@ public function toggleStatus($id)
     return redirect()->back()->with('success', 'Speaker status updated successfully.');
 }
 
-
+/**
+ * Convert uploaded file to Base64 string
+ */
+private function convertToBase64($file)
+{
+    try {
+        $fileContent = file_get_contents($file->getRealPath());
+        $mimeType = $file->getMimeType();
+        $base64 = base64_encode($fileContent);
+        
+        // Validate the Base64 string size (should not exceed reasonable limits)
+        if (strlen($base64) > 10485760) { // 10MB limit for Base64
+            throw new \Exception('Image file is too large after Base64 conversion');
+        }
+        
+        return 'data:' . $mimeType . ';base64,' . $base64;
+    } catch (\Exception $e) {
+        \Log::error('Base64 conversion failed: ' . $e->getMessage());
+        throw new \Exception('Failed to process image file');
+    }
+}
 
     
 }

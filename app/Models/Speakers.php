@@ -35,6 +35,11 @@ class Speakers extends Model
     public function getProfileImageUrlAttribute()
     {
         if ($this->profile_image) {
+            // Check if it's already a Base64 string
+            if (strpos($this->profile_image, 'data:image') === 0) {
+                return $this->profile_image;
+            }
+            // Legacy support for file path
             return asset('storage/' . $this->profile_image);
         }
         return 'https://via.placeholder.com/70x70?text=Photo';
@@ -43,6 +48,11 @@ class Speakers extends Model
     public function getSignatureUrlAttribute()
     {
         if ($this->signature) {
+            // Check if it's already a Base64 string
+            if (strpos($this->signature, 'data:image') === 0) {
+                return $this->signature;
+            }
+            // Legacy support for file path
             return asset('storage/' . $this->signature);
         }
         return 'https://via.placeholder.com/80x40?text=Sign';

@@ -65,6 +65,7 @@
         <input type="file" id="profileImage" name="profile_image" class="form-control" accept=".jpg,.jpeg" required>
         <img src="{{ asset('images/no-image-found.png') }}" alt="Profile" class="preview-img" id="profilePreview">
         <small class="text-danger">[File Format: *.jpg/.jpeg]</small>
+        <small class="text-info d-block">[Images are stored as Base64 for better portability]</small>
         <div class="invalid-feedback">Profile image is required.</div>
 
         <!-- Status -->
@@ -124,6 +125,7 @@
           [File Size: &lt;100KB]<br>
           [Dimensions: Height: 80px, Width: 300px]
         </small>
+        <small class="text-info d-block">[Signatures are stored as Base64 for database portability]</small>
         <div class="invalid-feedback">Signature is required.</div>
 
         <!-- Link -->
@@ -168,13 +170,19 @@
       }
     });
 
-    // Profile image type validation
+    // Profile image type and size validation
     const profileInput = document.getElementById('profileImage');
     if (profileInput.files.length) {
       const file = profileInput.files[0];
       const allowedProfileTypes = ['image/jpeg', 'image/jpg'];
       if (!allowedProfileTypes.includes(file.type)) {
         alert('Profile image must be a JPG/JPEG file.');
+        profileInput.classList.add('is-invalid');
+        isValid = false;
+      }
+      // Check file size (max 2MB for profile image)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Profile image must be less than 2MB.');
         profileInput.classList.add('is-invalid');
         isValid = false;
       }
