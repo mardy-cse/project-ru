@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Speakers;
 use App\Models\TrainingCategory;
+use Illuminate\Support\Facades\Log;
 
 class SpeakersController extends Controller
 {
@@ -18,36 +19,97 @@ class SpeakersController extends Controller
 
 public function store(Request $request)
 {
-    $validated = $request->validate([
-    'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    'name' => 'required|string|max:255',
-    'email' => 'required|email|unique:speakers,email',
-    'phone' => 'required|string|max:20',
-    'designation' => 'required|string|max:255',
-    'gender' => 'required|in:male,female,other',
-    'organization' => 'required|string|max:255',
-    'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
-    'status' => 'required|in:active,deactive',
-    'link' => 'nullable|url|max:255',
-    'exparties_categories_id' => 'required|array',
-
-    'exparties_categories_id.*' => 'integer|min:1',
-]);
-
-    // Convert files to Base64
-    if ($request->hasFile('profile_image')) {
-        $validated['profile_image'] = $this->convertToBase64($request->file('profile_image'));
+    // Convert images to Base64 first for preservation
+    $profileImageBase64 = null;
+    $signatureBase64 = null;
+    
+    // Check if we have preserved images from previous validation attempt
+    if (session('old_profile_image')) {
+        $profileImageBase64 = session('old_profile_image');
+    } elseif ($request->hasFile('profile_image')) {
+        try {
+            $profileImageBase64 = $this->convertToBase64($request->file('profile_image'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['profile_image' => 'Failed to process profile image.'])->withInput();
+        }
+    }
+    
+    if (session('old_signature')) {
+        $signatureBase64 = session('old_signature');
+    } elseif ($request->hasFile('signature')) {
+        try {
+            $signatureBase64 = $this->convertToBase64($request->file('signature'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['signature' => 'Failed to process signature image.'])->withInput();
+        }
     }
 
-    if ($request->hasFile('signature')) {
-        $validated['signature'] = $this->convertToBase64($request->file('signature'));
+    try {
+        $validated = $request->validate([
+        'profile_image' => ($request->hasFile('profile_image') || session('old_profile_image') || $request->input('has_preserved_profile_image')) ? 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' : 'required',
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:speakers,email',
+        'phone' => 'required|string|max:20|unique:speakers,phone',
+        'designation' => 'required|string|max:255',
+        'gender' => 'required|in:male,female,other',
+        'organization' => 'required|string|max:255',
+        'signature' => ($request->hasFile('signature') || session('old_signature') || $request->input('has_preserved_signature')) ? 'nullable|image|mimes:jpeg,png,jpg|max:100' : 'required',
+        'status' => 'required|in:active,deactive',
+        'link' => 'nullable|url|max:255',
+        'exparties_categories_id' => 'required|array',
+        'exparties_categories_id.*' => 'integer|min:1',
+        'has_preserved_profile_image' => 'nullable|string',
+        'has_preserved_signature' => 'nullable|string',
+        ], [
+            'name.required' => 'The name field is required.',
+            'email.required' => 'The email field is required.',
+            'email.unique' => 'This email address is already registered with another speaker.',
+            'phone.required' => 'The mobile number field is required.',
+            'phone.unique' => 'This mobile number is already registered with another speaker.',
+            'designation.required' => 'The designation field is required.',
+            'gender.required' => 'The gender field is required.',
+            'organization.required' => 'The organization field is required.',
+            'exparties_categories_id.required' => 'Please select at least one expertise.',
+            'profile_image.required' => 'The profile image field is required.',
+            'signature.required' => 'The signature field is required.',
+            'link.url' => 'Please enter a valid URL (e.g., https://example.com).',
+        ]);
+
+        // Ensure we have images (either uploaded or from session)
+        if (!$profileImageBase64) {
+            return redirect()->back()->withErrors(['profile_image' => 'Profile image is required.'])->withInput();
+        }
+        
+        if (!$signatureBase64) {
+            return redirect()->back()->withErrors(['signature' => 'Signature is required.'])->withInput();
+        }
+
+        // Use the Base64 images
+        $validated['profile_image'] = $profileImageBase64;
+        $validated['signature'] = $signatureBase64;
+
+        // Remove helper fields from validated data
+        unset($validated['has_preserved_profile_image'], $validated['has_preserved_signature']);
+
+        Speakers::create($validated);
+
+        // Clear preserved images from session on success
+        session()->forget(['old_profile_image', 'old_signature']);
+
+        return redirect('speaker/list')->with('success', 'Speaker added successfully!');
+        
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Preserve images in session for redisplay
+        if ($profileImageBase64) {
+            session()->flash('old_profile_image', $profileImageBase64);
+        }
+        if ($signatureBase64) {
+            session()->flash('old_signature', $signatureBase64);
+        }
+        
+        // Re-throw the validation exception to show errors
+        throw $e;
     }
-
-Speakers::create($validated);
-
-
-
-    return redirect('speaker/list')->with('success', 'Speaker added successfully!');
 }
 
 
@@ -72,41 +134,95 @@ public function update(Request $request, $id)
 {
     $speaker = Speakers::findOrFail($id);
     
-    $validated = $request->validate([
-        'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:speakers,email,' . $speaker->id,
-        'phone' => 'required|string|max:20',
-        'designation' => 'required|string|max:255',
-        'gender' => 'required|in:male,female,other',
-        'organization' => 'required|string|max:255',
-        'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
-        'status' => 'required|in:active,deactive',
-        'link' => 'nullable|url|max:255',
-
-
-        'exparties_categories_id' => 'required|array',
-
-        'exparties_categories_id.*' => 'string',
-    ]);
-
-    // Handle file uploads and convert to Base64
-    if ($request->hasFile('profile_image')) {
-        $validated['profile_image'] = $this->convertToBase64($request->file('profile_image'));
-    } else {
-        unset($validated['profile_image']);
+    // Convert images to Base64 first for preservation
+    $profileImageBase64 = null;
+    $signatureBase64 = null;
+    
+    // Check if we have preserved images from previous validation attempt
+    if (session('old_profile_image')) {
+        $profileImageBase64 = session('old_profile_image');
+    } elseif ($request->hasFile('profile_image')) {
+        try {
+            $profileImageBase64 = $this->convertToBase64($request->file('profile_image'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['profile_image' => 'Failed to process profile image.'])->withInput();
+        }
+    }
+    
+    if (session('old_signature')) {
+        $signatureBase64 = session('old_signature');
+    } elseif ($request->hasFile('signature')) {
+        try {
+            $signatureBase64 = $this->convertToBase64($request->file('signature'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['signature' => 'Failed to process signature image.'])->withInput();
+        }
     }
 
-    if ($request->hasFile('signature')) {
-        $validated['signature'] = $this->convertToBase64($request->file('signature'));
-    } else {
-        unset($validated['signature']);
+    try {
+        $validated = $request->validate([
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:speakers,email,' . $speaker->id,
+            'phone' => 'required|string|max:20|unique:speakers,phone,' . $speaker->id,
+            'designation' => 'required|string|max:255',
+            'gender' => 'required|in:male,female,other',
+            'organization' => 'required|string|max:255',
+            'signature' => 'nullable|image|mimes:jpeg,png,jpg|max:100',
+            'status' => 'required|in:active,deactive',
+            'link' => 'nullable|url|max:255',
+            'exparties_categories_id' => 'required|array',
+            'exparties_categories_id.*' => 'string',
+            'has_preserved_profile_image' => 'nullable|string',
+            'has_preserved_signature' => 'nullable|string',
+        ], [
+            'name.required' => 'The name field is required.',
+            'email.required' => 'The email field is required.',
+            'email.unique' => 'This email address is already registered with another speaker.',
+            'phone.required' => 'The mobile number field is required.',
+            'phone.unique' => 'This mobile number is already registered with another speaker.',
+            'designation.required' => 'The designation field is required.',
+            'gender.required' => 'The gender field is required.',
+            'organization.required' => 'The organization field is required.',
+            'exparties_categories_id.required' => 'Please select at least one expertise.',
+            'link.url' => 'Please enter a valid URL (e.g., https://example.com).',
+        ]);
+
+        // Handle file uploads and convert to Base64
+        if ($profileImageBase64) {
+            $validated['profile_image'] = $profileImageBase64;
+        } else {
+            unset($validated['profile_image']);
+        }
+
+        if ($signatureBase64) {
+            $validated['signature'] = $signatureBase64;
+        } else {
+            unset($validated['signature']);
+        }
+
+        // Remove helper fields from validated data
+        unset($validated['has_preserved_profile_image'], $validated['has_preserved_signature']);
+
+        $speaker->update($validated);
+
+        // Clear preserved images from session on success
+        session()->forget(['old_profile_image', 'old_signature']);
+
+        return redirect('speaker/list')->with('success', 'Speaker updated successfully!');
+        
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Preserve images in session for redisplay
+        if ($profileImageBase64) {
+            session()->flash('old_profile_image', $profileImageBase64);
+        }
+        if ($signatureBase64) {
+            session()->flash('old_signature', $signatureBase64);
+        }
+        
+        // Re-throw the validation exception to show errors
+        throw $e;
     }
-
-    $speaker->update($validated);
-
-    return redirect('speaker/list')->with('success', 'Speaker updated successfully!');
 }
 
     /**
@@ -193,7 +309,7 @@ private function convertToBase64($file)
         
         return 'data:' . $mimeType . ';base64,' . $base64;
     } catch (\Exception $e) {
-        \Log::error('Base64 conversion failed: ' . $e->getMessage());
+        Log::error('Base64 conversion failed: ' . $e->getMessage());
         throw new \Exception('Failed to process image file');
     }
 }
