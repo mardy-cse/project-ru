@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
         <tr>
             <th>SN</th>
             <th>Name</th>
+            <th>Thumbnail</th>
             <th>Created By</th>
             <th>Status</th>
             <th>Action</th>
@@ -19,6 +20,30 @@ use Illuminate\Support\Str;
         <tr>
             <td>{{ $index + 1 }}</td>
             <td title="{{ $training->name }}">{{ Str::limit($training->name, 30, '...') }}</td>
+            <td class="text-center">
+                <div class="thumbnail-image-container d-flex justify-content-center">
+                    <div class="position-relative">
+                        @php
+                            $thumbnailUrl = $training->course_thumbnail 
+                                ? asset('storage/' . $training->course_thumbnail) 
+                                : asset('images/no-image-found.png');
+                        @endphp
+                        <img src="{{ $thumbnailUrl }}" 
+                             alt="Training Thumbnail" 
+                             class="border border-2"
+                             style="width: 80px; height: 45px; object-fit: cover; cursor: pointer; transition: all 0.3s ease; border-radius: 8px;"
+                             onclick="showImageModal('{{ $thumbnailUrl }}', '{{ addslashes($training->name) }}')"
+                             onerror="this.src='{{ asset('images/no-image-found.png') }}';"
+                             title="Click to view full image">
+                        
+                        <!-- Add a small indicator for clickable image -->
+                        <div class="position-absolute bottom-0 end-0 bg-primary rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 16px; height: 16px; margin-bottom: -2px; margin-right: -2px; font-size: 8px; color: white;">
+                            <i class="fas fa-expand-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </td>
             <td title="{{ $training->creator->name ?? 'Unknown' }}">
                 {{ Str::limit($training->creator->name ?? 'Unknown', 40, '...') }}
             </td>
