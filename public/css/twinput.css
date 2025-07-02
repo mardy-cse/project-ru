@@ -37,8 +37,17 @@
     min-height: calc(100vh - 140px);
   }
 
+  /* Remove underlines from sidebar menu items */
+  .dash-sb-menu-item,
+  .dash-sb-menu-item:hover,
+  .dash-sb-menu-item:focus,
+  .dash-sb-menu-item:active,
+  .dash-sb-menu-item:visited {
+    text-decoration: none !important;
+  }
+
   .dash-sb-menu-item{
-    @apply text-center text-lh-1_2 transition-all ease-in-out duration-300;
+    @apply text-center text-lh-1_2 transition-all ease-in-out duration-300 no-underline;
   }
   .dash-sb-menu-item.active,
   .dash-sb-menu-item:hover {
