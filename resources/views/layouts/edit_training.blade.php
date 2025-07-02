@@ -2,6 +2,7 @@
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
 <style>
   .form-section-header {
@@ -11,11 +12,52 @@
     font-weight: bold;
   }
   .preview-img {
-    width: 70px;
-    height: 70px;
+    width: 100%;
+    max-width: 800px;
+    height: 450px;
+    object-fit: contain;
+    object-position: center;
+    border: 3px solid #e2e8f0;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f8fafc;
+    display: block;
+  }
+  
+  .preview-img.has-image {
     object-fit: cover;
-    border: 1px solid #ccc;
-    margin-left: 10px;
+  }
+  
+  .preview-img:hover {
+    border-color: #10b981;
+    box-shadow: 0 6px 12px rgba(16, 185, 129, 0.2);
+    transform: scale(1.02);
+  }
+  
+  .thumbnail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    border: 2px dashed #e2e8f0;
+    border-radius: 12px;
+    background-color: #f9fafb;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+  
+  .thumbnail-container:hover {
+    border-color: #10b981;
+    background-color: #f0fdf4;
+  }
+  
+  .thumbnail-label {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 10px;
+    font-weight: 500;
   }
   .required {
     color: red;
@@ -136,22 +178,27 @@
 </div>
 
 
-      {{-- Profile Image --}}
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <label for="course_thumbnail" class="form-label fw-bold">Profile Image <span class="required">*</span></label>
-          <div class="row align-items-center g-3">
-            <div class="col-md-6">
-              <input type="file" name="course_thumbnail" id="course_thumbnail" class="form-control" accept="image/*">
-              <div class="invalid-feedback">Please upload a profile image (jpg/jpeg).</div>
-            </div>
-            <div class="col-md-3">
-             <img src="{{ $training->course_thumbnail ? asset('storage/' . $training->course_thumbnail) : asset('images/no-image-found.png') }}" alt="Profile" class="preview-img" id="profilePreview">
-
-
-            </div>
-            <div class="col-md-12">
-              <small class="text-danger d-block">[File Format: *.jpg/.jpeg]</small>
+      {{-- Training Thumbnail --}}
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <label for="course_thumbnail" class="form-label fw-bold">Training Thumbnail</label>
+          <div class="mb-3">
+            <input type="file" name="course_thumbnail" id="course_thumbnail" class="form-control" accept="image/*">
+            <div class="invalid-feedback">Please upload a training thumbnail (jpg/jpeg/png).</div>
+            <small class="text-muted mt-2 d-block">
+              <i class="fas fa-info-circle me-1"></i>
+              <strong>Recommended size:</strong> 800×450 pixels (16:9 ratio) for best quality
+            </small>
+            <small class="text-danger d-block mt-2">
+              <i class="fas fa-exclamation-triangle me-1"></i>
+              <strong>Supported Formats:</strong> JPG, JPEG, PNG • <strong>Max Size:</strong> 2MB
+            </small>
+          </div>
+          <div class="thumbnail-container">
+            <img src="{{ $training->course_thumbnail ? asset('storage/' . $training->course_thumbnail) : asset('images/no-image-found.png') }}" alt="Training Thumbnail" class="preview-img{{ $training->course_thumbnail ? ' has-image' : '' }}" id="profilePreview">
+            <div class="thumbnail-label">
+              <i class="fas fa-image me-1"></i>
+              Thumbnail Preview (800×450px)
             </div>
           </div>
         </div>
@@ -222,11 +269,17 @@
   });
 
   document.getElementById('course_thumbnail').addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  if (file) {
-    document.getElementById('profilePreview').src = URL.createObjectURL(file);
-  }
-});
+    const file = e.target.files[0];
+    const previewImg = document.getElementById('profilePreview');
+    
+    if (file) {
+      previewImg.src = URL.createObjectURL(file);
+      previewImg.classList.add('has-image');
+    } else {
+      previewImg.src = '{{ asset("images/no-image-found.png") }}';
+      previewImg.classList.remove('has-image');
+    }
+  });
 
 
   (function () {
