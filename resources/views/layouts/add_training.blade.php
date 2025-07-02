@@ -199,20 +199,20 @@
 
       {{-- Training Thumbnail --}}
       <div class="row mb-4">
-        <div class="col-md-12">
+        <div class="col-md-6">
           <label for="course_thumbnail" class="form-label fw-bold">Training Thumbnail <span class="required">*</span></label>
-          <div class="mb-3">
-            <input type="file" name="course_thumbnail" id="course_thumbnail" class="form-control" accept="image/*" required>
-            <div class="invalid-feedback">Please upload a training thumbnail (jpg/jpeg/png).</div>
-            <small class="text-muted mt-2 d-block">
-              <i class="fas fa-info-circle me-1"></i>
-              <strong>Recommended size:</strong> 800×450 pixels (16:9 ratio) for best quality
-            </small>
-            <small class="text-danger d-block mt-2">
-              <i class="fas fa-exclamation-triangle me-1"></i>
-              <strong>Supported Formats:</strong> JPG, JPEG, PNG • <strong>Max Size:</strong> 2MB
-            </small>
-          </div>
+          <input type="file" name="course_thumbnail" id="course_thumbnail" class="form-control" accept="image/*" required>
+          <div class="invalid-feedback">Please upload a training thumbnail (jpg/jpeg/png).</div>
+          <small class="text-muted mt-2 d-block">
+            <i class="fas fa-info-circle me-1"></i>
+            <strong>Recommended size:</strong> 800×450 pixels (16:9 ratio) for best quality
+          </small>
+          <small class="text-danger d-block mt-2">
+            <i class="fas fa-exclamation-triangle me-1"></i>
+            <strong>Supported Formats:</strong> JPG, JPEG, PNG • <strong>Max Size:</strong> 2MB
+          </small>
+        </div>
+        <div class="col-md-12 mt-3">
           <div class="thumbnail-container">
             <img src="{{ asset('images/no-image-found.png') }}" alt="Training Thumbnail" class="preview-img" id="profilePreview">
             <div class="thumbnail-label">
