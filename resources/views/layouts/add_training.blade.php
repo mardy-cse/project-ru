@@ -24,6 +24,50 @@
     border-color: #dc3545 !important;
     background-color: #fff5f5 !important;
   }
+  
+  /* Enhanced textarea styling */
+  .form-control[rows] {
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    line-height: 1.5;
+    padding: 12px 15px;
+  }
+  
+  .form-control[rows]:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    background-color: #f8fffe;
+  }
+  
+  .form-control[rows]:hover {
+    border-color: #10b981;
+  }
+  
+  /* CKEditor specific styling */
+  .ck-editor__editable {
+    min-height: 150px !important;
+    border-radius: 8px !important;
+    border: 2px solid #e2e8f0 !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .ck-editor__editable:focus {
+    border-color: #10b981 !important;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+  }
+  
+  .ck-toolbar {
+    border-radius: 8px 8px 0 0 !important;
+    border: 2px solid #e2e8f0 !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+  
+  .ck-editor {
+    margin-bottom: 1rem;
+  }
+  
   #statusError {
     display: none;
     color: #dc3545;
@@ -51,21 +95,21 @@
       {{-- Overview --}}
       <div class="mb-3">
         <label for="training_overview" class="form-label fw-bold">Overview <span class="required">*</span></label>
-        <textarea id="training_overview" name="training_overview" class="form-control" rows="4" required></textarea>
+        <textarea id="training_overview" name="training_overview" class="form-control" rows="6" style="min-height: 120px; resize: vertical;" required></textarea>
         <div class="invalid-feedback">Overview is required.</div>
       </div>
 
       {{-- Why Join --}}
       <div class="mb-3">
         <label for="training_objective" class="form-label fw-bold">Why Join <span class="required">*</span></label>
-        <textarea id="training_objective" name="training_objective" class="form-control" rows="4" required></textarea>
+        <textarea id="training_objective" name="training_objective" class="form-control" rows="6" style="min-height: 120px; resize: vertical;" required></textarea>
         <div class="invalid-feedback">Please tell why to join.</div>
       </div>
 
       {{-- Best Suited For --}}
       <div class="mb-3">
         <label for="course_qualification" class="form-label fw-bold">This Course is Best Suited For <span class="required">*</span></label>
-        <textarea id="course_qualification" name="course_qualification" class="form-control" rows="4" required></textarea>
+        <textarea id="course_qualification" name="course_qualification" class="form-control" rows="6" style="min-height: 120px; resize: vertical;" required></textarea>
         <div class="invalid-feedback">Please specify best suited for.</div>
       </div>
 
@@ -185,8 +229,32 @@
   // Initialize CKEditors and keep references
   let editors = {};
   ['training_overview', 'training_objective', 'course_qualification'].forEach(id => {
-    ClassicEditor.create(document.querySelector('#' + id))
-      .then(editor => { editors[id] = editor; })
+    ClassicEditor.create(document.querySelector('#' + id), {
+      // Configure editor height and other settings
+      toolbar: {
+        items: [
+          'heading', '|',
+          'bold', 'italic', 'link', '|',
+          'bulletedList', 'numberedList', '|',
+          'outdent', 'indent', '|',
+          'blockQuote', 'insertTable', '|',
+          'undo', 'redo'
+        ]
+      },
+      // Set minimum height for the editing area
+      height: '200px',
+      // Additional configuration
+      placeholder: id === 'training_overview' ? 'Enter detailed overview of the training...' :
+                  id === 'training_objective' ? 'Explain why students should join this training...' :
+                  'Describe who should take this course...'
+    })
+      .then(editor => { 
+        editors[id] = editor;
+        // Set minimum height for the editable area
+        editor.editing.view.change(writer => {
+          writer.setStyle('min-height', '180px', editor.editing.view.document.getRoot());
+        });
+      })
       .catch(error => console.error(error));
   });
 
